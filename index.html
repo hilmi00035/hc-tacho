@@ -5069,16 +5069,34 @@ function micBtnGuncelle(surekliAktif, zonyaUyaniksaDurum){
 /* ══ HEADER'A MİKROFON BUTONU EKLE ══ */
 function micButonuEkle(){
   const hactions = document.querySelector('.hactions');
-  if(!hactions || document.getElementById('mic-btn')) return;
+  if(!hactions) return;
 
-  const btn = document.createElement('button');
-  btn.id = 'mic-btn';
-  btn.className = 'hbtn';
-  btn.textContent = '🎤';
+  let btn = document.getElementById('mic-btn');
+  
+  // Buton yoksa oluştur
+  if(!btn){
+    btn = document.createElement('button');
+    btn.id = 'mic-btn';
+    btn.className = 'hbtn';
+    btn.textContent = '🎤';
+    // Mute butonunun önüne ekle
+    const muteBtn = document.getElementById('mute-btn');
+    if(muteBtn) hactions.insertBefore(btn, muteBtn);
+    else hactions.appendChild(btn);
+  }
+  
+  // Çift event ekleme engeli
+  if(btn.dataset.micReady === '1') return;
+  btn.dataset.micReady = '1';
+  
   btn.title = 'Mikrofon — bas: dinle';
 
   // Tek dokunuş → Mikrofonu aç/kapa (basit mod)
-  btn.addEventListener('click', function(){
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('🎤 Mikrofon butonuna basıldı. sesAktif:', sesAktif);
+    
     if(sesAktif){
       // Dinliyorsa kapat
       if(tanima){ try{ tanima.stop(); }catch(_){} }
@@ -5091,16 +5109,18 @@ function micButonuEkle(){
     } else {
       // Kapalıysa 20 saniyeliğine dinlemeye başla
       sesKilitli = false; // Sürekli mod değil
-      zonyaUyandir();     // Uyanık moda al (20 saniye)
-      sesBaslat();        // Dinlemeye başla
-      if(typeof toast==='function') toast('🎙️ Dinliyorum, komutunuzu söyleyin','ok',3000);
+      try {
+        zonyaUyandir();     // Uyanık moda al (20 saniye)
+        sesBaslat();        // Dinlemeye başla
+        if(typeof toast==='function') toast('🎙️ Dinliyorum, komutunuzu söyleyin','ok',3000);
+      } catch(err) {
+        console.error('Mikrofon başlatma hatası:', err);
+        if(typeof toast==='function') toast('⚠️ Mikrofon hatası: '+err.message,'warn',5000);
+      }
     }
   });
-
-  // Mute butonunun önüne ekle
-  const muteBtn = document.getElementById('mute-btn');
-  if(muteBtn) hactions.insertBefore(btn, muteBtn);
-  else hactions.appendChild(btn);
+  
+  console.log('✓ Mikrofon butonu hazır');
 }
 
 /* ══ BAŞLAT ══ */
