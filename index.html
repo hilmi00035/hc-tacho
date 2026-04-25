@@ -157,8 +157,8 @@
   --green-dim:#0d3320;
   --red:#ef4444;
   --red-dim:#3a0d0d;
-  --orange:#f97316;
-  --orange-dim:#3a1f0d;
+  --orange:#fbbf24;
+  --orange-dim:#3a2f08;
   --blue:#3b82f6;
   --blue-dim:#0d1f3a;
   --purple:#a855f7;
@@ -219,6 +219,24 @@ select{font:inherit}
 .hbtn.gold{color:var(--gold);border-color:var(--gold-dim)}
 #mute-btn{font-size:1.05rem;min-width:36px;text-align:center;padding:6px}
 
+/* GPS butonu — mavi (kapalı) / yeşil (aktif) */
+#gps-btn{
+  font-size:1.1rem; min-width:36px; text-align:center; padding:6px;
+  color:#3b82f6; border-color:#1e40af; background:var(--panel2);
+  transition: all .25s ease;
+}
+#gps-btn.active{
+  color:#10b981; border-color:#059669;
+  background:rgba(16,185,129,.12);
+  box-shadow: 0 0 8px rgba(16,185,129,.5);
+  text-shadow: 0 0 6px rgba(16,185,129,.7);
+  animation: gpsPulse 2s ease-in-out infinite;
+}
+@keyframes gpsPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(16,185,129,.5); }
+  50%      { box-shadow: 0 0 14px rgba(16,185,129,.85); }
+}
+
 /* ══ MODE STRIP ══ */
 .mode-strip{
   display:grid;grid-template-columns:repeat(4,1fr);
@@ -234,7 +252,7 @@ select{font:inherit}
 .mode-btn .ico{font-size:1.2rem;line-height:1}
 .mode-btn.mode-surus.active    {color:var(--green);border-color:var(--green);background:rgba(34,197,94,.06)}
 .mode-btn.mode-dinlenme.active {color:var(--blue);border-color:var(--blue);background:rgba(59,130,246,.06)}
-.mode-btn.mode-calisma.active  {color:var(--orange);border-color:var(--orange);background:rgba(249,115,22,.06)}
+.mode-btn.mode-calisma.active  {color:var(--orange);border-color:var(--orange);background:rgba(251,191,36,.06)}
 .mode-btn.mode-hazir.active    {color:var(--purple);border-color:var(--purple);background:rgba(168,85,247,.06)}
 
 /* ══ PLANNER BAR ══ */
@@ -326,7 +344,7 @@ select{font:inherit}
 .grow:active{opacity:.85}
 .grow.g-ok    {background:var(--panel2)}
 .grow.g-active{background:#081a10}
-.grow.g-warn  {background:#1c1408}
+.grow.g-warn  {background:transparent}
 .grow.g-alert {background:#1a0808}
 .grow.g-done  {background:#081020}
 
@@ -358,7 +376,7 @@ select{font:inherit}
   padding:2px 6px;border-radius:2px;
   background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.3);
 }
-.vbadge.warn{background:var(--orange-dim);color:var(--orange);border-color:rgba(249,115,22,.3)}
+.vbadge.warn{background:var(--orange-dim);color:var(--orange);border-color:rgba(251,191,36,.3); display:none !important}
 .vbadge.ok  {background:var(--green-dim);color:var(--green);border-color:rgba(34,197,94,.3)}
 .vbadge.info{background:var(--blue-dim);color:var(--blue);border-color:rgba(59,130,246,.3)}
 
@@ -445,7 +463,7 @@ select{font:inherit}
 .tl-dur {font-family:var(--mono);font-size:.82rem;color:var(--sub);margin-top:1px}
 .tl-flag{font-family:var(--sans);font-size:.8rem;font-weight:700;padding:2px 5px;border-radius:2px}
 .tl-flag.viol{background:var(--red-dim);color:var(--red)}
-.tl-flag.warn{background:var(--orange-dim);color:var(--orange)}
+.tl-flag.warn{background:var(--orange-dim);color:var(--orange); display:none !important}
 .tl-flag.ok  {background:var(--green-dim);color:var(--green)}
 
 /* İhlal listesi */
@@ -683,7 +701,7 @@ select{font:inherit}
 .d-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.68rem;font-weight:600}
 .db-drive{background:rgba(34,197,94,.12);color:#22c55e}
 .db-rest{background:rgba(59,130,246,.12);color:#3b82f6}
-.db-work{background:rgba(249,115,22,.12);color:#f97316}
+.db-work{background:rgba(251,191,36,.12);color:#fbbf24}
 .db-wait{background:rgba(86,86,112,.2);color:#7a9bbc}
 .db-ferry{background:rgba(6,182,212,.12);color:#06b6d4}
 .db-train{background:rgba(168,85,247,.12);color:#a855f7}
@@ -867,7 +885,7 @@ select{font:inherit}
 .d-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.68rem;font-weight:600}
 .db-drive{background:rgba(34,197,94,.12);color:#22c55e}
 .db-rest{background:rgba(59,130,246,.12);color:#3b82f6}
-.db-work{background:rgba(249,115,22,.12);color:#f97316}
+.db-work{background:rgba(251,191,36,.12);color:#fbbf24}
 .db-wait{background:rgba(86,86,112,.2);color:#7a9bbc}
 .db-ferry{background:rgba(6,182,212,.12);color:#06b6d4}
 .db-train{background:rgba(168,85,247,.12);color:#a855f7}
@@ -1029,7 +1047,7 @@ select{font:inherit}
 .gps-mola-btn.kisa{background:rgba(59,130,246,.1);border-color:var(--blue);color:var(--blue)}
 .gps-mola-btn.orta{background:rgba(34,197,94,.1);border-color:var(--green);color:var(--green)}
 .gps-mola-btn.uzun{background:rgba(240,180,41,.1);border-color:var(--gold);color:var(--gold)}
-.gps-mola-btn.devam{background:rgba(249,115,22,.1);border-color:var(--orange);color:var(--orange)}
+.gps-mola-btn.devam{background:rgba(251,191,36,.1);border-color:var(--orange);color:var(--orange)}
 #gps-mola-sure{font-family:var(--mono);font-size:2rem;color:var(--text);margin:10px 0;font-weight:700}
 </style>
 </head>
@@ -1057,7 +1075,7 @@ select{font:inherit}
     <small id="live-date">—</small>
   </div>
   <div class="hactions">
-    <button id="mic-btn" class="hbtn" title="Mikrofon — bas/konuş">🎤</button>
+    <button id="gps-btn" class="hbtn" title="GPS göstergesi">🛰️</button>
     <button id="mute-btn" class="hbtn gold">🔊</button>
     <button id="reset-btn" class="hbtn">↺</button>
   </div>
@@ -1697,7 +1715,7 @@ select{font:inherit}
   <div class="d-debt-grid">
     <div class="d-debt-box"><div class="d-db-lbl">Toplam Borç</div><div class="d-db-val" id="d-debt-tot" style="color:#ef4444">0 saat</div></div>
     <div class="d-debt-box"><div class="d-db-lbl">Son Tarih</div><div class="d-db-val" id="d-debt-dead" style="color:#f0b429">—</div></div>
-    <div class="d-debt-box"><div class="d-db-lbl">Açık Borç</div><div class="d-db-val" id="d-debt-cnt" style="color:#f97316">0</div></div>
+    <div class="d-debt-box"><div class="d-db-lbl">Açık Borç</div><div class="d-db-val" id="d-debt-cnt" style="color:#fbbf24">0</div></div>
     <div class="d-debt-box"><div class="d-db-lbl">Durum</div><div class="d-db-val" id="d-debt-stat" style="color:#22c55e">Borçsuz</div></div>
   </div>
   <div class="d-card">
@@ -1904,7 +1922,7 @@ const K=Object.freeze({
   TEN_MAX:2,SHORT_MAX:3,
 });
 
-const MC={surus:'#22c55e',dinlenme:'#3b82f6',calisma:'#f97316',hazir:'#a855f7'};
+const MC={surus:'#22c55e',dinlenme:'#3b82f6',calisma:'#fbbf24',hazir:'#a855f7'};
 const ML={surus:'Sürüş',dinlenme:'Mola/İstirahat',calisma:'Çalışma',hazir:'Hazır Bekleme'};
 const DAYS=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
 
@@ -2071,7 +2089,10 @@ function speak(txt,urg='normal'){
 
 /* ══ TOAST ══ */
 function toast(msg,type='warn',dur=3800){
+  // Turuncu (warn) uyarılar artık gösterilmez — kullanıcı tercihi
+  if(type === 'warn') return;
   const el=document.getElementById('toast');
+  if(!el) return;
   el.textContent=msg;el.className='show '+type;
   if(_toastT)clearTimeout(_toastT);
   _toastT=setTimeout(()=>{el.className='';},dur);
@@ -2096,6 +2117,8 @@ function restTarget(){
 
 /* ══ İHLAL KAYDET ══ */
 function addViolation(type,desc,sev='L1'){
+  // L1 (uyarı/turuncu) seviyesindeki kayıtlar gizlendi — sadece L2/L3 (gerçek ihlal) kaydedilsin
+  if(sev === 'L1') return;
   // Aynı tip ihlali son 30 saniye içinde tekrar kaydetme
   const now=Date.now();
   const son=S.violations.filter(v=>v.type===type&&(now-v.ts)<30000);
@@ -2324,7 +2347,8 @@ function commitLog(endMs){
 function normalizeLeave(next){
   if(next==='dinlenme'||S.mode!=='dinlenme')return;
   // Mola modundan çıkınca eksik mola kontrolü yap
-  if(S.stats.pause>0&&S.stats.pause<restTarget()){
+  // Sadece anlamlı süre için (>= 60 saniye) — çok kısa süreli yanlış tıklamalar uyarı vermesin
+  if(S.stats.pause>=60 && S.stats.pause<restTarget()){
     checkEksikMola();
   }
   if(S.stats.pause>=restTarget()){
@@ -2351,7 +2375,14 @@ function setMode(next){
   const now=Date.now();
   commitLog(now);
   if(next==='dinlenme'&&S.mode!=='dinlenme'){
-    S.stats.pause=0;S.splitPhase=0;S.alerts.restDone=false;
+    S.stats.pause=0;S.splitPhase=0;
+    S.alerts.restDone=false;
+    // Mola başlayınca eski uyarı bayraklarını da temizle (yanlış kırmızı uyarı önle)
+    S.alerts.shiftWarned=false;
+    S.alerts.shiftDone=false;
+    S.alerts.driveWarned=false;
+    S.alerts.weekWarned=false;
+    S.alerts.workdayWarned=false;
     speak('Mola başladı.','normal');toast('🛌 Mola başladı','info');
   }
   // ★ 1) Varış molası düzeltmesi: drive=0 ise yeni gün, ihlal sayma
@@ -2378,7 +2409,11 @@ function setMode(next){
 
 /* ══ MOLA TİPİ ══ */
 function setRestType(type){
-  S.restType=type;S.stats.pause=0;S.splitPhase=0;S.alerts.restDone=false;
+  S.restType=type;S.stats.pause=0;S.splitPhase=0;
+  S.alerts.restDone=false;
+  // Mola tipi değişince eski uyarı bayraklarını da temizle
+  S.alerts.shiftWarned=false;
+  S.alerts.shiftDone=false;
   document.querySelectorAll('.ro').forEach(b=>b.classList.toggle('sel',b.dataset.rest===type));
   renderAll();save();
   const lbl={kisa_mola:'15+30 dk bölünmüş mola.',uzun_mola:'45 dk tam mola.',
@@ -2491,6 +2526,34 @@ function setGauge(key,current,limit,defColor){
   rowEl&&rowEl.classList.remove('g-ok','g-active','g-warn','g-alert','g-done');
   remEl.classList.remove('wo','wr','wl');
   let badgeHtml='';
+  
+  // ★ MOLA için TERS mantık: dolması iyi, eksik kalması kötü
+  if(key==='pause'){
+    const remain = Math.max(0, limit - current);
+    if(ratio >= 1){
+      // Mola tamamlandı — YEŞİL
+      barEl.style.background='var(--green)';
+      remEl.textContent='TAMAM';
+      remEl.style.color='var(--green)';
+      rowEl&&rowEl.classList.add('g-done');
+      badgeHtml='<span class="vbadge ok">✓ TAMAMLANDI</span>';
+    } else if(current > 0){
+      // Mola devam ediyor — MAVİ NORMAL (uyarı yok)
+      barEl.style.background=defColor||'var(--blue)';
+      remEl.textContent=fmtHM(remain);
+      rowEl&&rowEl.classList.add('g-active');
+      badgeHtml='<span class="vbadge ok">⏸ DEVAM EDİYOR</span>';
+    } else {
+      // Henüz başlamadı
+      barEl.style.background='var(--sub)';
+      remEl.textContent=fmtHM(limit);
+      rowEl&&rowEl.classList.add('g-ok');
+    }
+    if(badgeEl)badgeEl.innerHTML=badgeHtml;
+    return;
+  }
+  
+  // Diğer ölçümler (sürüş, mesai, blok) — limit aşımı kötü
   if(ratio>=1){
     barEl.style.background='var(--red)';
     remEl.textContent='LİMİT';remEl.classList.add('wl');
@@ -2527,7 +2590,7 @@ function ringHTML(label,current,limit,color){
   let col=color;
   if(ratio>=1)col='#ef4444';
   else if(ratio>=0.9)col='#ef4444';
-  else if(ratio>=0.75)col='#f97316';
+  else if(ratio>=0.75)col='#fbbf24';
   return `<div class="ring-wrap">
     <svg class="ring-svg" width="72" height="72" viewBox="0 0 72 72">
       <circle cx="36" cy="36" r="${r}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/>
@@ -2550,7 +2613,7 @@ function weekChartHTML(data,label7,maxH=52){
     const h=Math.round((v/maxVal)*maxH);
     let color='var(--orange)';
     if(v>=K.DRIVE_DAY)color='var(--red)';
-    else if(v>=K.DRIVE_DAY*0.9)color='#f97316';
+    else if(v>=K.DRIVE_DAY*0.9)color='#fbbf24';
     else if(v===0)color='var(--border)';
     return `<div class="wc-col" onclick="gunDetayAc(${i})" style="cursor:pointer;min-height:55px;touch-action:manipulation;">
       <div class="wc-bar-wrap"><div class="wc-bar" style="height:${h}px;background:${color}"></div></div>
@@ -2959,7 +3022,7 @@ window.gunDetayAc = function(gunIdx){
   let renk = '#22c55e';
   if(ratio >= 1) renk = '#ef4444';
   else if(ratio >= 0.9) renk = '#ef4444';
-  else if(ratio >= 0.75) renk = '#f97316';
+  else if(ratio >= 0.75) renk = '#fbbf24';
 
   // Kalkış / Varış
   const kalkisUlke = S.selections.startCountry || '';
@@ -3004,7 +3067,7 @@ window.gunDetayAc = function(gunIdx){
   const legendItems = [
     {mode:'surus',    label:'Sürüş',         val:toplamSurus,   c:'#22c55e'},
     {mode:'dinlenme', label:'Mola/İstirahat', val:toplamMola,    c:'#3b82f6'},
-    {mode:'calisma',  label:'Çalışma',        val:toplamCalisma, c:'#f97316'},
+    {mode:'calisma',  label:'Çalışma',        val:toplamCalisma, c:'#fbbf24'},
     {mode:'hazir',    label:'Hazır Bekleme',  val:toplamHazir,   c:'#a855f7'},
   ].filter(x=>x.val>0);
 
@@ -3026,7 +3089,7 @@ window.gunDetayAc = function(gunIdx){
       const tarihKisa=l.start?fmtDate(l.start):'';
       let rozet='';
       if(l.mode==='dinlenme'&&(l.dur||0)<K.BREAK_SHORT&&(l.dur||0)>0){
-        rozet=`<span style="font-family:var(--sans);font-size:.75rem;padding:3px 9px;border-radius:8px;background:#f97316;color:#fff;font-weight:900;letter-spacing:.5px;">KISA MOLA</span>`;
+        rozet=`<span style="font-family:var(--sans);font-size:.75rem;padding:3px 9px;border-radius:8px;background:#fbbf24;color:#fff;font-weight:900;letter-spacing:.5px;">KISA MOLA</span>`;
       } else if(l.mode==='surus'&&(l.dur||0)>=K.SHIFT){
         rozet=`<span style="font-family:var(--sans);font-size:.75rem;padding:3px 9px;border-radius:8px;background:#ef4444;color:#fff;font-weight:900;letter-spacing:.5px;">BLOK AŞIM</span>`;
       }
@@ -3256,7 +3319,7 @@ function renderTachoChart(){
   }
 
   // Renk ve sembol haritası
-  const modRenk={surus:'#22c55e',dinlenme:'#3b82f6',calisma:'#f97316',hazir:'#a855f7'};
+  const modRenk={surus:'#22c55e',dinlenme:'#3b82f6',calisma:'#fbbf24',hazir:'#a855f7'};
   const modSym={surus:'⊙',dinlenme:'⊢',calisma:'☐',hazir:'▽'};
 
   bar.innerHTML='';
@@ -3384,7 +3447,7 @@ function renderTachoChart(){
         const mark=document.createElement('div');
         mark.className='tc-ihlal-mark';
         mark.title=(v.desc||v.type)+' · '+fmtTime(v.ts);
-        mark.style.cssText=`position:absolute;left:${pct}%;top:0;bottom:0;width:3px;background:#f97316;box-shadow:0 0 6px rgba(249,115,22,.9);z-index:9;pointer-events:none;transform:translateX(-1.5px);`;
+        mark.style.cssText=`position:absolute;left:${pct}%;top:0;bottom:0;width:3px;background:#fbbf24;box-shadow:0 0 6px rgba(251,191,36,.9);z-index:9;pointer-events:none;transform:translateX(-1.5px);`;
         bar.appendChild(mark);
       }
     });
@@ -3602,7 +3665,7 @@ const DCTR=[
 /* ── Mod tanımları ── */
 const DMOD={
   drive: {label:'Sürüş',     ico:'🚗', color:'#22c55e', cls:'db-drive', yasal:'drive'},
-  work:  {label:'Çalışma',   ico:'🔨', color:'#f97316', cls:'db-work',  yasal:'work'},
+  work:  {label:'Çalışma',   ico:'🔨', color:'#fbbf24', cls:'db-work',  yasal:'work'},
   wait:  {label:'Bekleme',   ico:'✋', color:'#f0b429', cls:'db-wait',  yasal:'wait'},
   rest:  {label:'Dinlenme',  ico:'🛏', color:'#3b82f6', cls:'db-rest',  yasal:'rest'},
   ferry: {label:'Feribot',   ico:'🚢', color:'#06b6d4', cls:'db-ferry', yasal:'rest'},
@@ -3819,7 +3882,7 @@ function dSetGauge(vid,fid,val,warn,soft,hard){
   const ve=g(vid),fe=g(fid);if(!ve||!fe)return;
   ve.textContent=hm(val);
   fe.style.width=Math.min(100,(val/hard)*100).toFixed(1)+'%';
-  const col=val>=hard?'#ef4444':val>=soft?'#f97316':val>=warn?'#f0b429':'#22c55e';
+  const col=val>=hard?'#ef4444':val>=soft?'#fbbf24':val>=warn?'#f0b429':'#22c55e';
   fe.style.background=col;
   ve.style.color=col;
 }
@@ -4876,7 +4939,7 @@ let zonyaUyaniklikTimer = null;     // Zonya ne kadar süre aktif kalacak
 const ZONYA_UYANIK_SURE = 20000;    // 20 saniye (komut için bekleme süresi - mobilde uzun tut)
 
 // Zonya'yı uyandır
-function zonyaUyandir(){
+window.zonyaUyandir = function(){
   zonyaUyaniksa = true;
   if(zonyaUyaniklikTimer) clearTimeout(zonyaUyaniklikTimer);
   zonyaUyaniklikTimer = setTimeout(() => {
@@ -4884,7 +4947,9 @@ function zonyaUyandir(){
     micBtnGuncelle(sesKilitli);  // butonu güncelle (pasif dinlemeye dön)
   }, ZONYA_UYANIK_SURE);
   micBtnGuncelle(sesKilitli, true); // uyanık durumu buton renginde göster
-}
+};
+// Geri uyumluluk — iç kod da kullanabilsin
+function zonyaUyandir(){ return window.zonyaUyandir(); }
 
   tanima.onstart = function(){
     sesAktif = true;
@@ -5095,24 +5160,25 @@ function micButonuEkle(){
   btn.addEventListener('click', function(e){
     e.preventDefault();
     e.stopPropagation();
-    console.log('🎤 Mikrofon butonuna basıldı. sesAktif:', sesAktif);
+    console.log('🎤 Mikrofon butonuna basıldı.');
     
-    if(sesAktif){
+    const aktifMi = (typeof sesAktif !== 'undefined' && sesAktif);
+    
+    if(aktifMi){
       // Dinliyorsa kapat
-      if(tanima){ try{ tanima.stop(); }catch(_){} }
-      sesKilitli = false;
-      sesAktif = false;
-      zonyaUyaniksa = false;
-      if(zonyaUyaniklikTimer) clearTimeout(zonyaUyaniklikTimer);
-      micBtnGuncelle(false);
+      try{ if(typeof tanima !== 'undefined' && tanima){ tanima.stop(); } }catch(_){}
+      if(typeof window.sesDurdur === 'function') window.sesDurdur();
       if(typeof toast==='function') toast('🎤 Mikrofon kapalı','warn',2000);
     } else {
-      // Kapalıysa 20 saniyeliğine dinlemeye başla
-      sesKilitli = false; // Sürekli mod değil
+      // Kapalıysa dinlemeye başla
       try {
-        zonyaUyandir();     // Uyanık moda al (20 saniye)
-        sesBaslat();        // Dinlemeye başla
-        if(typeof toast==='function') toast('🎙️ Dinliyorum, komutunuzu söyleyin','ok',3000);
+        if(typeof window.zonyaUyandir === 'function') window.zonyaUyandir();
+        if(typeof window.sesBaslat === 'function') {
+          window.sesBaslat();
+          if(typeof toast==='function') toast('🎙️ Dinliyorum, komutunuzu söyleyin','ok',3000);
+        } else {
+          if(typeof toast==='function') toast('⚠️ Ses fonksiyonu bulunamadı','warn',3000);
+        }
       } catch(err) {
         console.error('Mikrofon başlatma hatası:', err);
         if(typeof toast==='function') toast('⚠️ Mikrofon hatası: '+err.message,'warn',5000);
@@ -5124,15 +5190,42 @@ function micButonuEkle(){
 }
 
 /* ══ BAŞLAT ══ */
+/* ══ GPS GÖSTERGE BUTONU ══ */
+function gpsButonuHazirla(){
+  const btn = document.getElementById('gps-btn');
+  if(!btn || btn.dataset.ready === '1') return;
+  btn.dataset.ready = '1';
+
+  // Kayıtlı durumu yükle
+  let aktif = localStorage.getItem('gps_aktif') === '1';
+  if(aktif) btn.classList.add('active');
+  btn.title = aktif ? 'GPS aktif (kapatmak için bas)' : 'GPS kapalı (açmak için bas)';
+
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    aktif = !aktif;
+    if(aktif){
+      btn.classList.add('active');
+      btn.title = 'GPS aktif (kapatmak için bas)';
+      localStorage.setItem('gps_aktif','1');
+      if(typeof toast==='function') toast('🛰️ GPS aktif','ok',1800);
+    } else {
+      btn.classList.remove('active');
+      btn.title = 'GPS kapalı (açmak için bas)';
+      localStorage.setItem('gps_aktif','0');
+      if(typeof toast==='function') toast('🛰️ GPS kapalı','warn',1800);
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function(){
   const bootBtn = document.getElementById('boot-btn');
   if(bootBtn){
     bootBtn.addEventListener('click', function(){
-      setTimeout(micButonuEkle, 600);
-      // Basit mod: Zonya kapalı başlar. Kullanıcı mikrofona basınca açılır.
+      setTimeout(gpsButonuHazirla, 400);
     }, {once:true});
   } else {
-    micButonuEkle();
+    gpsButonuHazirla();
   }
 });
 
