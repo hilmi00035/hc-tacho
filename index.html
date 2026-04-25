@@ -1969,6 +1969,7 @@ function freshS(){
   return{
     mode:null,isMuted:false,audioUnlocked:false,
     lastTickMs:Date.now(),selectedPage:'daily',
+    lastDayKey:null,
     restType:'uzun_mola',splitPhase:0,
     extendedDriveApplied:false,
     modeStartMs:null,
@@ -2132,12 +2133,45 @@ function addViolation(type,desc,sev='L1'){
 function sync(){
   const now=Date.now();
   if(!S.lastTickMs||S.lastTickMs<=0||S.lastTickMs>now){
-    S.lastTickMs=now; return;
+    S.lastTickMs=now; 
+    if(!S.lastDayKey) S.lastDayKey = gunAnahtari(now);
+    return;
   }
   const diff=Math.min(86400, Math.floor((now-S.lastTickMs)/1000));
   if(diff<=0) return;
   S.lastTickMs += diff * 1000;
   applyS(diff);
+  
+  // ★ GECE YARISI GEÇİŞİ — Yeni gün başladıysa günlük sayaçları sıfırla
+  const yeniGunKey = gunAnahtari(now);
+  if(S.lastDayKey && S.lastDayKey !== yeniGunKey){
+    // Önceki günden farklı bir gündeyiz — günlük sayaçları sıfırla
+    yeniGunBaslat();
+  }
+  S.lastDayKey = yeniGunKey;
+}
+
+function gunAnahtari(ms){
+  const d = new Date(ms);
+  return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+}
+
+function yeniGunBaslat(){
+  // Günlük (drive, shift, workday) sayaçları sıfırla — sürüş bloğu HARİÇ
+  // Mesai zaten otomatik kapanmadıysa kullanıcı bilgilendirilsin
+  S.stats.drive = 0;
+  S.stats.workday = 0;
+  S.stats.pause = 0;
+  S.extendedDriveApplied = false;
+  S.alerts = {
+    shiftWarned:false, shiftDone:false,
+    driveWarned:false, driveDone:false,
+    restDone:false, workdayWarned:false, workdayOverAnnounced:false,
+    weekWarn:false, weekOver:false, dweekOver:false,
+    weekRestWarn:false, weekRestDone:false
+  };
+  // toast bilgilendirme
+  if(typeof toast === 'function') toast('🌅 Yeni gün başladı — günlük sayaçlar sıfırlandı','info',3500);
 }
 
 function applyS(sec){
@@ -2147,14 +2181,39 @@ function applyS(sec){
     S.stats.week += sec; S.stats.dweek += sec;
     if(_weekView === 1) S.stats.week1 += sec; else S.stats.week2 += sec;
 
-    let d = new Date();
-    let gunIndex = d.getDay();
-    let takvimIndeksi = (gunIndex === 0) ? 6 : gunIndex - 1;
-
-    if(S.weekView === 1) {
-      S.stats.dailyDrive[takvimIndeksi] = (S.stats.dailyDrive[takvimIndeksi] || 0) + sec;
-    } else {
-      S.stats.dailyDriveW2[takvimIndeksi] = (S.stats.dailyDriveW2[takvimIndeksi] || 0) + sec;
+    // ★ GÜN GEÇİŞİ DESTEĞİ — Sürüşü doğru güne yaz
+    // sec saniye, S.lastTickMs'den önceki ana kadar uzanır
+    // Eğer bu süre birden fazla günü kapsıyorsa, her güne kendi payını yazalım
+    const tickEnd = S.lastTickMs || Date.now();
+    const tickStart = tickEnd - sec * 1000;
+    
+    let kalan = sec;
+    let kursorMs = tickStart;
+    
+    // Maksimum 8 gün geçiş (güvenlik) — pratikte 1-2 olmalı
+    let kontrol = 0;
+    while(kalan > 0 && kontrol++ < 8){
+      const d = new Date(kursorMs);
+      // O günün gece yarısı (sonraki gün başlangıcı)
+      const gunSonu = new Date(d);
+      gunSonu.setHours(24, 0, 0, 0);
+      const gunSonuMs = gunSonu.getTime();
+      
+      // Bu gün için yazılacak saniye sayısı
+      const buGun_sn = Math.min(kalan, Math.ceil((gunSonuMs - kursorMs) / 1000));
+      
+      // Hangi takvim indeksine?
+      let gunIndex = d.getDay();
+      let takvimIndeksi = (gunIndex === 0) ? 6 : gunIndex - 1;
+      
+      if(S.weekView === 1) {
+        S.stats.dailyDrive[takvimIndeksi] = (S.stats.dailyDrive[takvimIndeksi] || 0) + buGun_sn;
+      } else {
+        S.stats.dailyDriveW2[takvimIndeksi] = (S.stats.dailyDriveW2[takvimIndeksi] || 0) + buGun_sn;
+      }
+      
+      kalan -= buGun_sn;
+      kursorMs = gunSonuMs;
     }
 
     checkDriveAlerts();
@@ -5196,25 +5255,42 @@ function gpsButonuHazirla(){
   if(!btn || btn.dataset.ready === '1') return;
   btn.dataset.ready = '1';
 
-  // Kayıtlı durumu yükle
-  let aktif = localStorage.getItem('gps_aktif') === '1';
-  if(aktif) btn.classList.add('active');
-  btn.title = aktif ? 'GPS aktif (kapatmak için bas)' : 'GPS kapalı (açmak için bas)';
-
-  btn.addEventListener('click', function(e){
-    e.preventDefault();
-    aktif = !aktif;
+  // Görünümü güncelleme yardımcısı (gerçek gpsAktif değişkeniyle senkron)
+  function gorunumGuncelle(){
+    const aktif = (typeof gpsAktif !== 'undefined' && gpsAktif === true);
     if(aktif){
       btn.classList.add('active');
       btn.title = 'GPS aktif (kapatmak için bas)';
-      localStorage.setItem('gps_aktif','1');
-      if(typeof toast==='function') toast('🛰️ GPS aktif','ok',1800);
     } else {
       btn.classList.remove('active');
       btn.title = 'GPS kapalı (açmak için bas)';
-      localStorage.setItem('gps_aktif','0');
-      if(typeof toast==='function') toast('🛰️ GPS kapalı','warn',1800);
     }
+  }
+  
+  // Açılışta mevcut durumu göster
+  gorunumGuncelle();
+  // Her 2 saniyede bir senkronla (ayarlar bölümünden açılırsa da güncellesin)
+  setInterval(gorunumGuncelle, 2000);
+
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    const aktif = (typeof gpsAktif !== 'undefined' && gpsAktif === true);
+    if(aktif){
+      // Açıksa GERÇEK GPS sistemini kapat
+      if(typeof window.gpsDurdur === 'function'){
+        window.gpsDurdur();
+      }
+    } else {
+      // Kapalıysa GERÇEK GPS sistemini başlat
+      if(typeof window.gpsBaslat === 'function'){
+        window.gpsBaslat();
+      } else {
+        if(typeof toast==='function') toast('⚠️ GPS sistemi hazır değil','warn',2500);
+      }
+    }
+    // Tıklamadan hemen sonra görünümü güncelle (kullanıcı geri bildirim alsın)
+    setTimeout(gorunumGuncelle, 300);
+    setTimeout(gorunumGuncelle, 1500);
   });
 }
 
