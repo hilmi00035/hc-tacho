@@ -2022,6 +2022,8 @@ function freshS(){
 }
 
 let S=freshS();
+window.S = S; // GPS motoru gibi diğer scope'lardan erişim için
+window.K = K;
 let tickId=null,_edLock=false,_toastT=null;
 let _weekView=1;
 
@@ -2030,6 +2032,7 @@ function save(){
   try{localStorage.setItem(SK,JSON.stringify(S));}
   catch(e){console.warn('save err',e);}
 }
+window.save = save;
 function sN(v,fb=0){const n=Number(v);return Number.isFinite(n)&&n>=0?n:fb;}
 
 function load(){
@@ -2112,6 +2115,7 @@ function speak(txt,urg='normal'){
     syn.speak(u);
   }catch(e){console.warn('tts',e);}
 }
+window.speak = speak;
 
 /* ══ TOAST ══ */
 function toast(msg,type='warn',dur=3800){
@@ -2123,6 +2127,7 @@ function toast(msg,type='warn',dur=3800){
   if(_toastT)clearTimeout(_toastT);
   _toastT=setTimeout(()=>{el.className='';},dur);
 }
+window.toast = toast;
 
 /* ══ FORMAT ══ */
 function fmtClk(s){
@@ -2461,6 +2466,8 @@ function setMode(next){
   else if(S.selectedPage==='dtco'&&typeof dtcoPageRender==='function') dtcoPageRender();
   save();
 }
+// ★ Global erişim — GPS motorundan çağrılabilsin
+window.setMode = setMode;
 
 /* ══ MOLA TİPİ ══ */
 function setRestType(type){
@@ -2475,6 +2482,7 @@ function setRestType(type){
     gunluk_kisa:'9 saatlik günlük istirahat.',gunluk_tam:'11 saatlik günlük istirahat.'};
   speak(lbl[type]||'Mola başladı.','normal');
 }
+window.setRestType = setRestType;
 
 /* ══ GÜN SONU ══ */
 function handleEndOfDay(){
@@ -3613,6 +3621,7 @@ function renderAll(){
   const mi=document.getElementById('mute-btn');
   if(mi)mi.textContent=S.isMuted?'🔇':'🔊';
 }
+window.renderAll = renderAll;
 
 /* ══ BOOT ══ */
 function bootSystem(){
@@ -3698,6 +3707,9 @@ function startTicker(){
   if(tickId)clearInterval(tickId);
   tickId=setInterval(()=>{checkDayRollover();sync();renderAll();},K.TICK);
 }
+// Global erişim için
+window.startTicker = startTicker;
+window.tickerCalisiyorMu = function(){ return tickId !== null && tickId !== undefined; };
 
 /* ══ EVENTS ══ */
 function bindEvents(){
@@ -4537,7 +4549,17 @@ document.addEventListener('DOMContentLoaded',function(){
 (function(){
 'use strict';
 
+// Ana sistem scope'larından gelen referanslar (window üzerinden)
+function getS(){ return window.S; }
+
 let gpsAktif = false;
+// ★ window.gpsAktif ile senkronize et — diğer scope'lar (üst bar GPS butonu) okuyabilsin
+window.gpsAktif = false;
+function setGpsAktif(v){
+  gpsAktif = !!v;
+  window.gpsAktif = gpsAktif;
+}
+
 let gpsWatchId = null;
 let sonHiz = 0;
 let durusBaslangic = null;
@@ -4551,7 +4573,8 @@ const HIZ_LIMIT = 90; // Maksimum izin verilen hız (km/h)
 
 /* ── HIZ BİLGİ KARTI ── */
 function hizKartGuncelle(hiz){
-  if(typeof S === 'undefined' || !S.stats) return;
+  const S = getS();
+  if(!S || !S.stats) return;
   const bugun = new Date();
   const bugunKey = bugun.getFullYear()+'-'+(bugun.getMonth()+1)+'-'+bugun.getDate();
   
@@ -4638,37 +4661,72 @@ function durusEsik(){return 0;} // Anında tepki
 /* ── GPS Başlat ── */
 window.gpsBaslat = function(){
   if(!navigator.geolocation){
-    alert('Tarayıcınız GPS desteklemiyor.');return;
+    alert('Tarayıcınız GPS desteklemiyor.');
+    return;
   }
+  
+  // ★ HEMEN aktif olarak işaretle — kullanıcı hemen geri bildirim alsın
+  setGpsAktif(true);
+  
+  // Kullanıcı butona bastığında hızlı görsel tepki
+  const bar = document.getElementById('gps-durum-bar');
+  if(bar) bar.classList.add('aktif');
+  const bb = document.getElementById('gps-baslat-btn');
+  const bd = document.getElementById('gps-durdur-btn');
+  if(bb) bb.style.display='none';
+  if(bd) bd.style.display='block';
+  const ad = document.getElementById('gps-ayar-durum');
+  if(ad){ad.textContent='🟢 Aktif';ad.style.color='var(--green)';}
+  if(typeof window.toast==='function') window.toast('📡 GPS başlatılıyor...','ok',2000);
+  
+  // ★ TAKO SİSTEMİNİ AKTİVE ET
+  const S = getS();
+  if(S && !S.audioUnlocked) S.audioUnlocked = true;
+  const bootEl = document.getElementById('boot');
+  if(bootEl) bootEl.style.display = 'none';
+  if(typeof window.startTicker === 'function') window.startTicker();
+  if(S) S.lastTickMs = Date.now();
+  if(typeof window.renderAll === 'function') window.renderAll();
+  
+  // Şimdi gerçek GPS izni iste
   navigator.geolocation.getCurrentPosition(
-    function(){
-      gpsAktif = true;
+    function(pos){
+      // BAŞARILI — watchPosition başlat
       durusBaslangic = null;
       durusSoruldu = false;
       gpsWatchId = navigator.geolocation.watchPosition(
         gpsGuncelle, gpsHata,
         {enableHighAccuracy:true, maximumAge:3000, timeout:10000}
       );
-      const bar = document.getElementById('gps-durum-bar');
-      if(bar) bar.classList.add('aktif');
-      const bb = document.getElementById('gps-baslat-btn');
-      const bd = document.getElementById('gps-durdur-btn');
-      if(bb) bb.style.display='none';
-      if(bd) bd.style.display='block';
-      const ad = document.getElementById('gps-ayar-durum');
-      if(ad){ad.textContent='🟢 Aktif';ad.style.color='var(--green)';}
       gpsInterval = setInterval(gpsUIGuncelle, 3000);
-      if(typeof toast==='function') toast('📡 GPS Takip Başladı','ok',3000);
-      if(typeof speak==='function') speak('GPS takip aktif. İyi yolculuklar.','normal');
+      if(typeof window.toast==='function') window.toast('📡 GPS Aktif — sinyal alındı','ok',2500);
+      if(typeof window.speak==='function') window.speak('GPS aktif.','normal');
+      if(typeof window.save === 'function') window.save();
     },
-    function(){ alert('GPS izni reddedildi. Ayarlardan konum iznini açın.'); },
-    {enableHighAccuracy:true}
+    function(err){
+      // BAŞARISIZ — geri al
+      console.error('GPS hatası:', err);
+      setGpsAktif(false);
+      if(bar) bar.classList.remove('aktif');
+      if(bb) bb.style.display='block';
+      if(bd) bd.style.display='none';
+      if(ad){ad.textContent='Pasif';ad.style.color='var(--sub)';}
+      
+      let mesaj = 'GPS başlatılamadı.';
+      if(err.code === 1) mesaj = 'Konum izni reddedildi. Tarayıcı ayarlarından konum iznini açın.';
+      else if(err.code === 2) mesaj = 'Konum servisi kullanılamıyor. GPS açık mı?';
+      else if(err.code === 3) mesaj = 'GPS sinyali alınamadı (zaman aşımı). Açık alanda tekrar deneyin.';
+      
+      alert('⚠️ ' + mesaj);
+      if(typeof window.toast==='function') window.toast('❌ ' + mesaj,'warn',5000);
+    },
+    {enableHighAccuracy:true, timeout:15000, maximumAge:0}
   );
 };
 
 /* ── GPS Durdur ── */
 window.gpsDurdur = function(){
-  gpsAktif = false;
+  setGpsAktif(false);
   if(gpsWatchId!==null){navigator.geolocation.clearWatch(gpsWatchId);gpsWatchId=null;}
   if(gpsInterval){clearInterval(gpsInterval);gpsInterval=null;}
   const bar=document.getElementById('gps-durum-bar');
@@ -4712,16 +4770,21 @@ function gpsGuncelle(pos){
     }
     const bilgi=document.getElementById('gps-bilgi');
     if(bilgi) bilgi.textContent = '🚛 Sürüş — ' + Math.round(sonHiz) + ' km/h';
-    if(typeof S!=='undefined' && S.mode!=='surus'){
-      if(typeof setMode==='function') setMode('surus');
-      if(typeof toast==='function') toast('🚛 GPS: Sürüş başladı','ok',2500);
+    // ★ window.S ve window.setMode üzerinden — IIFE scope sorununu önler
+    const S = getS();
+    if(S && S.mode !== 'surus'){
+      if(typeof window.setMode === 'function'){
+        window.setMode('surus');
+        if(typeof window.toast === 'function') window.toast('🚛 GPS: Sürüş başladı','ok',2500);
+      }
     }
   } else {
     // DURUŞ — anında mola sorusu
     if(durusBaslangic === null){
       durusBaslangic = Date.now();
       durusSoruldu = false;
-      if(typeof S!=='undefined' && S.mode==='surus'){
+      const S = getS();
+      if(S && S.mode === 'surus'){
         gpsMolaSor();
         durusSoruldu = true;
       }
@@ -5429,9 +5492,9 @@ function gpsButonuHazirla(){
   if(!btn || btn.dataset.ready === '1') return;
   btn.dataset.ready = '1';
 
-  // Görünümü güncelleme yardımcısı (gerçek gpsAktif değişkeniyle senkron)
+  // Görünümü güncelleme yardımcısı (window.gpsAktif ile senkron)
   function gorunumGuncelle(){
-    const aktif = (typeof gpsAktif !== 'undefined' && gpsAktif === true);
+    const aktif = (window.gpsAktif === true);
     if(aktif){
       btn.classList.add('active');
       btn.title = 'GPS aktif (kapatmak için bas)';
@@ -5443,28 +5506,39 @@ function gpsButonuHazirla(){
   
   // Açılışta mevcut durumu göster
   gorunumGuncelle();
-  // Her 2 saniyede bir senkronla (ayarlar bölümünden açılırsa da güncellesin)
-  setInterval(gorunumGuncelle, 2000);
+  // Her 1.5 saniyede bir senkronla (ayarlar bölümünden açılırsa da güncellesin)
+  setInterval(gorunumGuncelle, 1500);
 
   btn.addEventListener('click', function(e){
     e.preventDefault();
-    const aktif = (typeof gpsAktif !== 'undefined' && gpsAktif === true);
+    e.stopPropagation();
+    const aktif = (window.gpsAktif === true);
+    
     if(aktif){
-      // Açıksa GERÇEK GPS sistemini kapat
+      // ★ Açıksa → ANINDA mavi yap (görsel tepki)
+      btn.classList.remove('active');
+      btn.title = 'GPS kapalı (açmak için bas)';
+      // GERÇEK GPS sistemini kapat
       if(typeof window.gpsDurdur === 'function'){
         window.gpsDurdur();
       }
     } else {
-      // Kapalıysa GERÇEK GPS sistemini başlat
+      // ★ Kapalıysa → ANINDA yeşil yap (görsel tepki)
+      btn.classList.add('active');
+      btn.title = 'GPS aktif (kapatmak için bas)';
+      // GERÇEK GPS sistemini başlat
       if(typeof window.gpsBaslat === 'function'){
         window.gpsBaslat();
       } else {
-        if(typeof toast==='function') toast('⚠️ GPS sistemi hazır değil','warn',2500);
+        // GPS sistemi yoksa geri al
+        btn.classList.remove('active');
+        if(typeof window.toast==='function') window.toast('⚠️ GPS sistemi hazır değil','warn',2500);
       }
     }
-    // Tıklamadan hemen sonra görünümü güncelle (kullanıcı geri bildirim alsın)
-    setTimeout(gorunumGuncelle, 300);
-    setTimeout(gorunumGuncelle, 1500);
+    // Birkaç saniye sonra gerçek durumla senkronla
+    setTimeout(gorunumGuncelle, 500);
+    setTimeout(gorunumGuncelle, 2000);
+    setTimeout(gorunumGuncelle, 5000);
   });
 }
 
