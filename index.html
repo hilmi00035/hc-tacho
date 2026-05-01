@@ -219,28 +219,32 @@ select{font:inherit}
 .hbtn.gold{color:var(--gold);border-color:var(--gold-dim)}
 #mute-btn{font-size:1.05rem;min-width:36px;text-align:center;padding:6px}
 
-/* GPS butonu — mavi (kapalı) / yeşil (aktif) */
+/* GPS butonu — MAVİ (kapalı) / YEŞİL (aktif) - çok belirgin */
 #gps-btn{
-  font-size:1.1rem; min-width:42px; min-height:38px; text-align:center; padding:6px 8px;
-  color:#3b82f6; border-color:#1e40af; background:var(--panel2);
+  font-size:1.1rem; min-width:44px; min-height:38px; text-align:center; padding:6px 8px;
+  color:#60a5fa; 
+  border:2px solid #2563eb; 
+  background:rgba(37,99,235,.15);
   transition: all .15s ease, transform .12s ease;
   cursor:pointer; touch-action: manipulation; user-select: none;
-  -webkit-tap-highlight-color: rgba(59,130,246,.3);
+  -webkit-tap-highlight-color: rgba(37,99,235,.4);
+  font-weight:700;
 }
 #gps-btn:active{
   transform: scale(0.92);
 }
 #gps-btn.active{
-  color:#10b981; border-color:#059669;
-  background:rgba(16,185,129,.12);
-  box-shadow: 0 0 8px rgba(16,185,129,.5);
-  text-shadow: 0 0 6px rgba(16,185,129,.7);
-  animation: gpsPulse 2s ease-in-out infinite;
-  -webkit-tap-highlight-color: rgba(16,185,129,.3);
+  color:#34d399; 
+  border:2px solid #10b981; 
+  background:rgba(16,185,129,.20);
+  box-shadow: 0 0 12px rgba(16,185,129,.7);
+  text-shadow: 0 0 8px rgba(16,185,129,.9);
+  animation: gpsPulse 1.8s ease-in-out infinite;
+  -webkit-tap-highlight-color: rgba(16,185,129,.4);
 }
 @keyframes gpsPulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(16,185,129,.5); }
-  50%      { box-shadow: 0 0 14px rgba(16,185,129,.85); }
+  0%, 100% { box-shadow: 0 0 10px rgba(16,185,129,.6); }
+  50%      { box-shadow: 0 0 18px rgba(16,185,129,.95); }
 }
 
 /* ══ MODE STRIP ══ */
@@ -4747,7 +4751,10 @@ window.gpsDurdur = function(){
   if(ad){ad.textContent='Pasif';ad.style.color='var(--sub)';}
   const modal=document.getElementById('gps-mola-modal');
   if(modal) modal.classList.remove('acik');
-  if(typeof toast==='function') toast('📡 GPS Durduruldu','warn',3000);
+  // Hız sayacı sıfırla
+  sonHiz = 0;
+  // info tipi → görünür toast (warn değil!)
+  if(typeof window.toast==='function') window.toast('🛰️ GPS Kapatıldı','info',2000);
 };
 
 /* ── Konum Güncelleme — Takograf mantığı ── */
@@ -5502,15 +5509,9 @@ function gpsButonuHazirla(){
   if(!btn || btn.dataset.ready === '1') return;
   btn.dataset.ready = '1';
 
-  let kilit = false;          // Aynı anda iki tıklamayı engelle
-  let kullaniciTiklama = 0;   // Son tıklama zamanı
-  
-  // Görünümü güncelleme yardımcısı (window.gpsAktif ile senkron)
+  // Görünümü güncelleme — DOĞRUDAN window.gpsAktif'i okur
   function gorunumGuncelle(){
-    // Son 3 saniye içinde kullanıcı tıkladıysa, üzerine yazma
-    if(Date.now() - kullaniciTiklama < 3000) return;
-    const aktif = (window.gpsAktif === true);
-    if(aktif){
+    if(window.gpsAktif === true){
       btn.classList.add('active');
       btn.title = 'GPS aktif (kapatmak için bas)';
     } else {
@@ -5519,64 +5520,41 @@ function gpsButonuHazirla(){
     }
   }
   
-  // Açılışta mevcut durumu göster
+  // Açılışta ve her saniye senkron — kullanıcı arada başka yerden açarsa da güncel olur
   gorunumGuncelle();
-  // Her 2 saniyede bir senkronla
-  setInterval(gorunumGuncelle, 2000);
+  setInterval(gorunumGuncelle, 1000);
 
-  function tikla(e){
-    if(e){ e.preventDefault(); e.stopPropagation(); }
-    
-    // Kilit — eğer hâlâ önceki tıklama işleniyorsa görmezden gel
-    if(kilit){
-      console.log('GPS buton kilitli, tıklama yoksayıldı');
-      return;
-    }
-    kilit = true;
-    kullaniciTiklama = Date.now();
-    
-    // Görsel tepki için anlık titreşim
-    btn.style.transform = 'scale(0.92)';
-    setTimeout(()=>{ btn.style.transform = ''; }, 150);
+  // Tıklama: BASİT mantık
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
     
     const aktif = (window.gpsAktif === true);
-    console.log('GPS butona basıldı, mevcut durum:', aktif ? 'AÇIK' : 'KAPALI');
+    console.log('[GPS-BTN] Tıklama. Mevcut:', aktif ? 'AÇIK' : 'KAPALI');
     
     if(aktif){
-      // ★ Açıksa → ANINDA mavi yap (görsel tepki)
-      btn.classList.remove('active');
-      btn.title = 'GPS kapalı (açmak için bas)';
-      // GERÇEK GPS sistemini kapat
+      // GPS açık → kapat
       if(typeof window.gpsDurdur === 'function'){
-        try{ window.gpsDurdur(); } catch(err){ console.error('gpsDurdur hata:', err); }
+        window.gpsDurdur();
+        console.log('[GPS-BTN] gpsDurdur çağrıldı');
       } else {
-        console.warn('window.gpsDurdur tanımlı değil');
+        console.error('[GPS-BTN] window.gpsDurdur YOK!');
       }
     } else {
-      // ★ Kapalıysa → ANINDA yeşil yap (görsel tepki)
-      btn.classList.add('active');
-      btn.title = 'GPS aktif (kapatmak için bas)';
-      // GERÇEK GPS sistemini başlat
+      // GPS kapalı → aç
       if(typeof window.gpsBaslat === 'function'){
-        try{ window.gpsBaslat(); } catch(err){ 
-          console.error('gpsBaslat hata:', err);
-          btn.classList.remove('active');
-        }
+        window.gpsBaslat();
+        console.log('[GPS-BTN] gpsBaslat çağrıldı');
       } else {
-        console.warn('window.gpsBaslat tanımlı değil');
-        btn.classList.remove('active');
-        if(typeof window.toast==='function') window.toast('⚠️ GPS sistemi hazır değil','warn',2500);
+        console.error('[GPS-BTN] window.gpsBaslat YOK!');
       }
     }
     
-    // Kilidi 1 saniye sonra aç (çift tıklamayı önle)
-    setTimeout(()=>{ kilit = false; }, 1000);
-  }
-  
-  // Hem click hem pointerup ile yakala — Android'de daha hızlı tepki
-  btn.addEventListener('click', tikla);
-  // Touch cihazlarda click 300ms gecikebilir, pointerup hemen tetikler
-  // Ama her iki yerde tıkla çağırırsak çift olur — kilit bunu engelliyor
+    // Tıklamadan hemen sonra görünüm güncellesin
+    setTimeout(gorunumGuncelle, 50);
+    setTimeout(gorunumGuncelle, 300);
+    setTimeout(gorunumGuncelle, 1000);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function(){
