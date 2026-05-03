@@ -2081,6 +2081,11 @@ function load(){
       tenHourUsed:sN(st.tenHourUsed),shortRestUsed:sN(st.shortRestUsed),daysDriven:sN(st.daysDriven),
       dailyDrive:Array.isArray(st.dailyDrive)?st.dailyDrive.map(v=>sN(v)):[0,0,0,0,0,0,0],
       dailyDriveW2:Array.isArray(st.dailyDriveW2)?st.dailyDriveW2.map(v=>sN(v)):[0,0,0,0,0,0,0],
+      // ★ Hız sayaçları (gün bazlı)
+      maxHiz: sN(st.maxHiz),
+      hizIhlalSayisi: sN(st.hizIhlalSayisi),
+      hizIhlalGunKey: typeof st.hizIhlalGunKey === 'string' ? st.hizIhlalGunKey : '',
+      hizIhlalAktif: Boolean(st.hizIhlalAktif),
     };
     while(S.stats.dailyDrive.length<7)S.stats.dailyDrive.push(0);
     while(S.stats.dailyDriveW2.length<7)S.stats.dailyDriveW2.push(0);
@@ -2226,7 +2231,7 @@ function applyS(sec){
       let gunIndex = d.getDay();
       let takvimIndeksi = (gunIndex === 0) ? 6 : gunIndex - 1;
       
-      if(S.weekView === 1) {
+      if(_weekView === 1) {
         S.stats.dailyDrive[takvimIndeksi] = (S.stats.dailyDrive[takvimIndeksi] || 0) + buGun_sn;
       } else {
         S.stats.dailyDriveW2[takvimIndeksi] = (S.stats.dailyDriveW2[takvimIndeksi] || 0) + buGun_sn;
@@ -2540,7 +2545,7 @@ function handleEndOfDay(){
   S.selections.endCountry='';esel.selectedIndex=0;
   // ★ 4) Senkron — varış sonrası tüm sayfaları güncelle
   updateRestOptsUI();renderAll();
-  if(typeof dtcoPageRender==='function') dtcoPageRender();
+  if(typeof dUpdateDashboard==='function') dUpdateDashboard();
   save();_edLock=false;
 }
 
@@ -4855,8 +4860,9 @@ function hizKartGuncelle(hiz){
   if(hiz > HIZ_LIMIT && !S.stats.hizIhlalAktif){
     S.stats.hizIhlalAktif = true;
     S.stats.hizIhlalSayisi = (S.stats.hizIhlalSayisi||0) + 1;
-    if(typeof toast === 'function') toast('🚨 Hız ihlali: '+Math.round(hiz)+' km/h','warn',2500);
-    if(typeof save === 'function') save();
+    // 'warn' tipi gizliydi, 'info' kullan ki görünsün
+    if(typeof window.toast === 'function') window.toast('🚨 Hız ihlali: '+Math.round(hiz)+' km/h','info',2500);
+    if(typeof window.save === 'function') window.save();
   } else if(hiz <= HIZ_LIMIT - 2 && S.stats.hizIhlalAktif){
     // 88 km/h altına düşünce ihlal aktifliği kapanır (histeresiz - tekrar tekrar sayma)
     S.stats.hizIhlalAktif = false;
