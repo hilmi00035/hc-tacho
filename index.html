@@ -4179,19 +4179,20 @@ const KAMYON_YASAK = {
     ozet: 'Genel kamyon yasağı yok. Şehir merkezlerinde (İstanbul, Ankara, İzmir) belirli saat kısıtlamaları olabilir.',
     haftaSonu: 'Yok',
     resmiKaynak: [
-      { ad: 'KGM (Karayolları Genel Müdürlüğü)', url: 'https://www.kgm.gov.tr/' },
-      { ad: 'UND (Uluslararası Nakliyeciler Derneği)', url: 'https://www.und.org.tr/' },
-      { ad: 'TOBB Lojistik', url: 'https://www.tobb.org.tr/' }
+      { ad: 'KGM - Trafik Düzenlemeleri', url: 'https://www.kgm.gov.tr/Sayfalar/KGM/SiteTr/Trafik/IETT.aspx' },
+      { ad: 'UND - Geçiş Belgeleri ve Kısıtlamalar', url: 'https://www.und.org.tr/tr/yurt-disi-tasimacilik' },
+      { ad: 'KGM - Ana Sayfa', url: 'https://www.kgm.gov.tr/' }
     ]
   },
 
   'Bulgaristan': {
     flag: '🇧🇬',
-    ozet: 'Yaz aylarında (Tem-Ağu) Cumartesi öğleden sonra ve Pazar yasakları. Resmi tatil arifesi ve günü için ÖZEL saatler — kontrol şart!',
-    haftaSonu: 'Yaz aylarında (Tem-Ağu) Cmt 16:00-22:00 ve Pzr 06:00-22:00. Diğer aylarda yok.',
+    ozet: 'Yaz aylarında (Tem-Ağu) Cumartesi öğleden sonra ve Pazar yasakları. Resmi tatil arifesi ve günü için ÖZEL saatler.',
+    haftaSonu: 'Yaz aylarında (Tem-Ağu) Cmt 16:00-22:00 ve Pzr 06:00-22:00.',
     resmiKaynak: [
-      { ad: 'AAP (Bulgaristan Yol İdaresi)', url: 'https://www.api.bg/' },
-      { ad: 'NCTI (Uluslararası Taşımacılık Merkezi)', url: 'https://ncti.bg/' }
+      { ad: 'AAP - Trafik Kısıtlamaları (EN)', url: 'https://www.api.bg/index.php/en/traffic/traffic-restrictions' },
+      { ad: 'AAP - Anasayfa', url: 'https://www.api.bg/' },
+      { ad: 'IRU - Bulgaristan Yasakları (EN)', url: 'https://www.iru.org/where-we-work/europe/bulgaria' }
     ]
   },
 
@@ -4200,8 +4201,9 @@ const KAMYON_YASAK = {
     ozet: 'Yaz aylarında (15 Hzr - 1 Eyl) Pazar günleri yasak. 7 ton üstü kamyonlar için.',
     haftaSonu: 'Yaz: Pzr 06:00-23:00. Diğer aylarda yok.',
     resmiKaynak: [
-      { ad: 'Putevi Srbije (Sırbistan Yolları)', url: 'https://www.putevi-srbije.rs/' },
-      { ad: 'MUP (İçişleri Bakanlığı)', url: 'http://www.mup.gov.rs/' }
+      { ad: 'Putevi Srbije - Trafik Bilgi', url: 'https://www.putevi-srbije.rs/index.php/en/traffic-information' },
+      { ad: 'Putevi Srbije - Anasayfa', url: 'https://www.putevi-srbije.rs/' },
+      { ad: 'IRU - Sırbistan Yasakları (EN)', url: 'https://www.iru.org/where-we-work/europe/serbia' }
     ]
   },
 
@@ -4210,8 +4212,9 @@ const KAMYON_YASAK = {
     ozet: 'Yaz dönemi (1 Hzr - 30 Eyl) Cumartesi öğleden sonra ve Pazar yasakları. 7,5 ton üstü için.',
     haftaSonu: 'Yaz: Cmt 15:00-23:00, Pzr 00:00-22:00. Kış aylarında genelde yok.',
     resmiKaynak: [
-      { ad: 'HAK (Hırvatistan Otomobil Kulübü) - Trafik', url: 'https://www.hak.hr/' },
-      { ad: 'MMPI (Denizcilik ve Ulaştırma Bakanlığı)', url: 'https://mmpi.gov.hr/' }
+      { ad: 'HAK - Trafik Bilgi (canlı)', url: 'https://www.hak.hr/en/info/traffic-info' },
+      { ad: 'HAK - Kamyon Yasakları (EN)', url: 'https://www.hak.hr/en/info/lorry-traffic-bans' },
+      { ad: 'IRU - Hırvatistan Yasakları (EN)', url: 'https://www.iru.org/where-we-work/europe/croatia' }
     ]
   },
 
@@ -4220,8 +4223,9 @@ const KAMYON_YASAK = {
     ozet: 'Pazar 08:00-21:00 standart yasak. Yaz aylarında (Hzr-Ağu) Cumartesi de yasak. Tatillerde 08:00-21:00.',
     haftaSonu: 'Pzr 08:00-21:00. Yaz: Cmt 08:00-13:00 ek yasak.',
     resmiKaynak: [
-      { ad: 'DARS (Slovenya Otoyolları)', url: 'https://www.dars.si/' },
-      { ad: 'Promet.si (Trafik Bilgi)', url: 'https://www.promet.si/' }
+      { ad: 'Promet.si - Trafik (canlı)', url: 'https://www.promet.si/portal/sl/promet.aspx' },
+      { ad: 'DARS - Anasayfa (EN)', url: 'https://www.dars.si/Eng' },
+      { ad: 'IRU - Slovenya Yasakları (EN)', url: 'https://www.iru.org/where-we-work/europe/slovenia' }
     ]
   },
 
@@ -4230,9 +4234,9 @@ const KAMYON_YASAK = {
     ozet: 'Pazar ve resmi tatillerde 00:00-22:00 yasak. 7,5 ton üstü kamyonlar için. Yaz tatilinde (1 Tem-31 Ağu) ek Cumartesi yasakları olabilir.',
     haftaSonu: 'Pzr 00:00-22:00. Yaz: Bazı otoyollarda Cmt 07:00-20:00.',
     resmiKaynak: [
-      { ad: 'BAG / BALM (Federal Lojistik İdaresi)', url: 'https://www.balm.bund.de/' },
-      { ad: 'BMVI (Ulaştırma Bakanlığı)', url: 'https://www.bmvi.de/' },
-      { ad: 'ADAC (Otomobil Kulübü) - LKW yasakları', url: 'https://www.adac.de/verkehr/' }
+      { ad: 'BALM - Sürüş Yasakları (DE)', url: 'https://www.balm.bund.de/DE/Themen/Strassentransport/Fahrverbote/fahrverbote_node.html' },
+      { ad: 'ADAC - Yaz Tatil Yasakları (DE)', url: 'https://www.adac.de/verkehr/verkehrsinfos/lkw-fahrverbote/' },
+      { ad: 'BALM - Anasayfa', url: 'https://www.balm.bund.de/' }
     ]
   },
 };
@@ -4889,6 +4893,23 @@ window.gpsBaslat = function(){
     return;
   }
   
+  // ★ EĞER ZATEN AÇIKSA — önce eski watch'ı temizle
+  if(gpsWatchId !== null){
+    try{ navigator.geolocation.clearWatch(gpsWatchId); }catch(e){}
+    gpsWatchId = null;
+  }
+  if(gpsInterval){
+    clearInterval(gpsInterval);
+    gpsInterval = null;
+  }
+  
+  // ★ TÜM STATE'İ TAZE BAŞLAT
+  sonHiz = 0;
+  sonKonum = null;
+  durusBaslangic = null;
+  durusSoruldu = false;
+  toplamMesafe = 0;
+  
   // ★ HEMEN aktif olarak işaretle — kullanıcı hemen geri bildirim alsın
   setGpsAktif(true);
   
@@ -4912,47 +4933,72 @@ window.gpsBaslat = function(){
   if(S) S.lastTickMs = Date.now();
   if(typeof window.renderAll === 'function') window.renderAll();
   
-  // Şimdi gerçek GPS izni iste
-  navigator.geolocation.getCurrentPosition(
-    function(pos){
-      // BAŞARILI — watchPosition başlat
-      durusBaslangic = null;
-      durusSoruldu = false;
-      gpsWatchId = navigator.geolocation.watchPosition(
-        gpsGuncelle, gpsHata,
-        {enableHighAccuracy:true, maximumAge:3000, timeout:10000}
-      );
-      gpsInterval = setInterval(gpsUIGuncelle, 3000);
-      if(typeof window.toast==='function') window.toast('📡 GPS Aktif — sinyal alındı','ok',2500);
-      if(typeof window.speak==='function') window.speak('GPS aktif.','normal');
-      if(typeof window.save === 'function') window.save();
-    },
-    function(err){
-      // BAŞARISIZ — geri al
-      console.error('GPS hatası:', err);
-      setGpsAktif(false);
-      if(bar) bar.classList.remove('aktif');
-      if(bb) bb.style.display='block';
-      if(bd) bd.style.display='none';
-      if(ad){ad.textContent='Pasif';ad.style.color='var(--sub)';}
-      
-      let mesaj = 'GPS başlatılamadı.';
-      if(err.code === 1) mesaj = 'Konum izni reddedildi. Tarayıcı ayarlarından konum iznini açın.';
-      else if(err.code === 2) mesaj = 'Konum servisi kullanılamıyor. GPS açık mı?';
-      else if(err.code === 3) mesaj = 'GPS sinyali alınamadı (zaman aşımı). Açık alanda tekrar deneyin.';
-      
-      alert('⚠️ ' + mesaj);
-      if(typeof window.toast==='function') window.toast('❌ ' + mesaj,'warn',5000);
-    },
-    {enableHighAccuracy:true, timeout:15000, maximumAge:0}
-  );
+  // ★ Doğrudan watchPosition kullan — getCurrentPosition cache sorununu önler
+  try{
+    gpsWatchId = navigator.geolocation.watchPosition(
+      function(pos){
+        // BAŞARILI — sürekli güncelleme gelir
+        gpsGuncelle(pos);
+      },
+      function(err){
+        // BAŞARISIZ — geri al
+        console.error('[GPS] hata:', err);
+        // Sadece izin reddi durumunda durur, diğer hatalarda devam edebilir
+        if(err.code === 1){
+          // İzin reddi — GPS'i durdur
+          setGpsAktif(false);
+          if(gpsWatchId !== null){
+            try{ navigator.geolocation.clearWatch(gpsWatchId); }catch(e){}
+            gpsWatchId = null;
+          }
+          if(gpsInterval){clearInterval(gpsInterval);gpsInterval=null;}
+          if(bar) bar.classList.remove('aktif');
+          if(bb) bb.style.display='block';
+          if(bd) bd.style.display='none';
+          if(ad){ad.textContent='Pasif';ad.style.color='var(--sub)';}
+          alert('⚠️ Konum izni reddedildi. Tarayıcı ayarlarından konum iznini açın.');
+        } else if(err.code === 2){
+          if(typeof window.toast==='function') window.toast('⚠️ Konum servisi kullanılamıyor','warn',3000);
+        } else if(err.code === 3){
+          if(typeof window.toast==='function') window.toast('⚠️ GPS sinyali zayıf','warn',2500);
+        }
+      },
+      {enableHighAccuracy:true, maximumAge:3000, timeout:15000}
+    );
+    
+    // UI güncelleme interval'i
+    gpsInterval = setInterval(gpsUIGuncelle, 3000);
+    
+    if(typeof window.toast==='function') window.toast('📡 GPS Aktif','ok',2000);
+    if(typeof window.speak==='function') window.speak('GPS aktif.','normal');
+    if(typeof window.save === 'function') window.save();
+  } catch(err){
+    console.error('[GPS] watchPosition hata:', err);
+    setGpsAktif(false);
+    if(bar) bar.classList.remove('aktif');
+    if(bb) bb.style.display='block';
+    if(bd) bd.style.display='none';
+    if(ad){ad.textContent='Pasif';ad.style.color='var(--sub)';}
+    alert('GPS başlatılamadı: ' + err.message);
+  }
 };
 
 /* ── GPS Durdur ── */
 window.gpsDurdur = function(){
   setGpsAktif(false);
-  if(gpsWatchId!==null){navigator.geolocation.clearWatch(gpsWatchId);gpsWatchId=null;}
+  if(gpsWatchId!==null){
+    try{ navigator.geolocation.clearWatch(gpsWatchId); }catch(e){}
+    gpsWatchId=null;
+  }
   if(gpsInterval){clearInterval(gpsInterval);gpsInterval=null;}
+  
+  // ★ Tüm state'i temizle ki bir sonraki açma temiz başlasın
+  sonHiz = 0;
+  sonKonum = null;
+  durusBaslangic = null;
+  durusSoruldu = false;
+  toplamMesafe = 0;
+  
   const bar=document.getElementById('gps-durum-bar');
   if(bar) bar.classList.remove('aktif');
   const bb=document.getElementById('gps-baslat-btn');
@@ -4963,9 +5009,7 @@ window.gpsDurdur = function(){
   if(ad){ad.textContent='Pasif';ad.style.color='var(--sub)';}
   const modal=document.getElementById('gps-mola-modal');
   if(modal) modal.classList.remove('acik');
-  // Hız sayacı sıfırla
-  sonHiz = 0;
-  // info tipi → görünür toast (warn değil!)
+  
   if(typeof window.toast==='function') window.toast('🛰️ GPS Kapatıldı','info',2000);
 };
 
