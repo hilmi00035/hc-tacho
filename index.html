@@ -206,15 +206,15 @@ select{font:inherit}
 }
 .hbrand{font-family:var(--sans);font-weight:900;font-size:1.1rem;color:var(--gold);
   letter-spacing:1px;line-height:1;white-space:nowrap}
-.hbrand small{display:block;font-size:.55rem;color:var(--sub);letter-spacing:2px;font-weight:400;margin-top:1px}
-.hclock{font-family:var(--mono);font-size:1.2rem;color:var(--text);text-align:center;flex:1}
-.hclock small{display:block;font-size:.58rem;color:var(--sub);font-family:var(--sans);font-weight:600;letter-spacing:1px}
+.hbrand small{display:block;font-size:.7rem;color:#a0a8b8;letter-spacing:1.5px;font-weight:600;margin-top:2px}
+.hclock{font-family:var(--mono);font-size:1.25rem;color:var(--text);text-align:center;flex:1;font-weight:500}
+.hclock small{display:block;font-size:.74rem;color:#a0a8b8;font-family:var(--sans);font-weight:700;letter-spacing:.8px}
 .hactions{display:flex;gap:5px}
 .hbtn{
-  padding:6px 9px;border-radius:var(--radius);
+  padding:7px 10px;border-radius:var(--radius);
   background:var(--panel2);border:1px solid var(--border2);
-  font-family:var(--sans);font-size:.75rem;font-weight:700;letter-spacing:.5px;
-  color:var(--sub);transition:.12s;
+  font-family:var(--sans);font-size:.85rem;font-weight:700;letter-spacing:.4px;
+  color:#9ba8bb;transition:.12s;
 }
 .hbtn.gold{color:var(--gold);border-color:var(--gold-dim)}
 #mute-btn{font-size:1.05rem;min-width:36px;text-align:center;padding:6px}
@@ -268,15 +268,15 @@ select{font:inherit}
 /* ══ PLANNER BAR ══ */
 #planner{
   display:flex;align-items:center;gap:10px;
-  padding:9px 12px;background:var(--panel2);border-bottom:1px solid var(--border);
-  font-family:var(--sans);font-size:.88rem;font-weight:600;
+  padding:10px 12px;background:var(--panel2);border-bottom:1px solid var(--border);
+  font-family:var(--sans);font-size:.95rem;font-weight:600;
 }
-#planner .pi{font-size:1rem;flex-shrink:0}
-#planner .pt{flex:1;line-height:1.35;color:var(--text2)}
+#planner .pi{font-size:1.1rem;flex-shrink:0}
+#planner .pt{flex:1;line-height:1.4;color:#cdd5e0}
 #planner .pb{
-  font-family:var(--mono);font-size:.82rem;color:var(--gold);
+  font-family:var(--mono);font-size:.92rem;color:var(--gold);
   background:rgba(240,180,41,.1);border:1px solid var(--gold-dim);
-  padding:3px 8px;border-radius:3px;white-space:nowrap;flex-shrink:0;
+  padding:4px 9px;border-radius:3px;white-space:nowrap;flex-shrink:0;font-weight:600;
 }
 
 /* ══ MOLA TİPİ ══ */
@@ -285,12 +285,12 @@ select{font:inherit}
   padding:8px;background:var(--panel);border-bottom:1px solid var(--border);
 }
 .ro{
-  padding:9px 4px;text-align:center;
+  padding:10px 4px;text-align:center;
   background:var(--panel2);border:1px solid var(--border);border-radius:var(--radius);
-  font-family:var(--sans);font-size:.65rem;font-weight:700;
-  color:var(--sub);cursor:pointer;transition:.15s;line-height:1.3;
+  font-family:var(--sans);font-size:.78rem;font-weight:700;
+  color:#9ba8bb;cursor:pointer;transition:.15s;line-height:1.3;
 }
-.ro small{display:block;font-size:.55rem;color:var(--sub);margin-top:2px}
+.ro small{display:block;font-size:.7rem;color:#9ba8bb;margin-top:3px;font-weight:600}
 .ro.sel{background:var(--blue-dim);border-color:var(--blue);color:var(--blue)}
 .ro.sel small{color:var(--blue)}
 
@@ -300,8 +300,8 @@ select{font:inherit}
   padding:6px;background:var(--panel);border-bottom:1px solid var(--border);
 }
 .csel{
-  padding:10px 6px;border-radius:var(--radius);border:none;
-  font-family:var(--sans);font-weight:700;font-size:.82rem;
+  padding:11px 6px;border-radius:var(--radius);border:none;
+  font-family:var(--sans);font-weight:700;font-size:.92rem;
   text-align-last:center;appearance:none;width:100%;
 }
 #sel-start{background:#0c2618;border:1px solid #1a5c36;color:#6eebb0}
@@ -367,7 +367,7 @@ select{font:inherit}
 .gtime{
   font-family:var(--mono);font-size:1.85rem;font-weight:500;line-height:1;color:var(--text);
 }
-.gtime .ss{font-size:1rem;color:var(--sub)}
+.gtime .ss{font-size:1.2rem;color:#a0a8b8;font-weight:600}
 .gbw{height:5px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:6px;overflow:hidden}
 .gbar{height:100%;width:0%;border-radius:2px;transition:width .4s linear,background .4s}
 
@@ -426,14 +426,14 @@ select{font:inherit}
   background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
   padding:10px 8px;display:flex;flex-direction:column;gap:3px;
 }
-.sb-lbl{font-family:var(--sans);font-size:.8rem;font-weight:700;letter-spacing:1px;color:var(--sub)}
-.sb-val{font-family:var(--mono);font-size:1.1rem;color:var(--text)}
+.sb-lbl{font-family:var(--sans);font-size:.88rem;font-weight:700;letter-spacing:.8px;color:#a0a8b8}
+.sb-val{font-family:var(--mono);font-size:1.2rem;color:var(--text);font-weight:600}
 .sb-val.green {color:var(--green)}
 .sb-val.orange{color:var(--orange)}
 .sb-val.red   {color:var(--red)}
 .sb-val.blue  {color:var(--blue)}
 .sb-val.gold  {color:var(--gold)}
-.sb-sub{font-family:var(--sans);font-size:.78rem;color:var(--sub);margin-top:1px}
+.sb-sub{font-family:var(--sans);font-size:.85rem;color:#a0a8b8;margin-top:2px;font-weight:500}
 
 /* Dairesel gösterge */
 .ring-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 4px}
@@ -453,8 +453,8 @@ select{font:inherit}
   width:100%;border-radius:2px 2px 0 0;min-height:2px;
   transition:height .4s;
 }
-.wc-lbl{font-family:var(--sans);font-size:.75rem;color:var(--sub);font-weight:700}
-.wc-val{font-family:var(--mono);font-size:.72rem;color:var(--sub)}
+.wc-lbl{font-family:var(--sans);font-size:.86rem;color:#a0a8b8;font-weight:700}
+.wc-val{font-family:var(--mono);font-size:.84rem;color:#b8c0cc;font-weight:600}
 
 /* Zaman çizelgesi */
 .timeline{margin-top:6px}
@@ -519,40 +519,42 @@ select{font:inherit}
 #toast.ok  {background:var(--green);color:#000}
 
 @media(max-width:360px){
-  .gtime{font-size:1.45rem}
-  .hclock{font-size:1.05rem}
-  .sb-val{font-size:.95rem}
+  .gtime{font-size:1.6rem}
+  .gtime .ss{font-size:1.05rem}
+  .hclock{font-size:1.15rem}
+  .sb-val{font-size:1.05rem}
 }
 
 /* ══ MOBİL UYUM (telefon) ══ */
 @media(max-width:480px){
   /* Header küçült */
-  .hbrand{font-size:.9rem}
-  .hclock{font-size:1rem}
-  .hbtn{padding:5px 7px;font-size:.7rem}
+  .hbrand{font-size:.95rem}
+  .hclock{font-size:1.1rem}
+  .hbtn{padding:6px 8px;font-size:.78rem}
 
   /* Mode butonları */
-  .mode-btn{font-size:.52rem;padding:7px 2px}
-  .mode-btn .ico{font-size:1rem}
+  .mode-btn{font-size:.66rem;padding:8px 2px}
+  .mode-btn .ico{font-size:1.15rem}
 
   /* Gauge satırları */
-  .gtime{font-size:1.45rem}
-  .gll{font-size:.65rem}
-  .grem{font-size:1rem}
+  .gtime{font-size:1.6rem}
+  .gtime .ss{font-size:1.05rem}
+  .gll{font-size:.78rem}
+  .grem{font-size:1.1rem}
 
   /* Stat box */
-  .sb-val{font-size:.9rem}
-  .sb-lbl{font-size:.65rem}
+  .sb-val{font-size:1.02rem}
+  .sb-lbl{font-size:.74rem}
 
   /* Nav tabs */
-  .ntab{font-size:.72rem;padding:9px 2px;letter-spacing:.6px}
+  .ntab{font-size:.74rem;padding:9px 2px;letter-spacing:.7px}
 
   /* Haftalık chart */
-  .wc-val{font-size:.62rem}
-  .wc-lbl{font-size:.65rem}
+  .wc-val{font-size:.74rem}
+  .wc-lbl{font-size:.74rem}
 
   /* Rcard padding */
-  .rcard{padding:8px}
+  .rcard{padding:9px}
 
   /* r2 r3 tek kolon */
   .r4{grid-template-columns:1fr 1fr}
@@ -562,7 +564,8 @@ select{font:inherit}
 @media(min-width:481px) and (max-width:768px){
   .app-container{padding:0}
   .r4{grid-template-columns:1fr 1fr}
-  .gtime{font-size:1.55rem}
+  .gtime{font-size:1.7rem}
+  .gtime .ss{font-size:1.1rem}
 }
 
 /* ══ DTCO 4.1 SEFER PANELİ ══ */
@@ -1313,20 +1316,20 @@ select{font:inherit}
   
   <!-- ★ HIZ BİLGİ KARTI -->
   <div id="hiz-bilgi-kart" style="display:flex;gap:6px;padding:0 8px 8px;">
-    <div style="flex:1;background:#0e1a0e;border:1px solid #1c4a2c;border-radius:6px;padding:8px 6px;text-align:center;">
-      <div style="font-size:.6rem;color:#88aa88;letter-spacing:1.5px;font-family:var(--sans);font-weight:700;">ANLIK HIZ</div>
-      <div id="hiz-anlik" style="font-family:var(--mono);font-size:1.45rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:3px;">0</div>
-      <div style="font-size:.6rem;color:#88aa88;font-family:var(--sans);">km/h</div>
+    <div style="flex:1;background:#0e1a0e;border:1px solid #1c4a2c;border-radius:6px;padding:9px 6px;text-align:center;">
+      <div style="font-size:.74rem;color:#a8c8a8;letter-spacing:1px;font-family:var(--sans);font-weight:700;">ANLIK HIZ</div>
+      <div id="hiz-anlik" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:4px;">0</div>
+      <div style="font-size:.74rem;color:#a8c8a8;font-family:var(--sans);font-weight:600;">km/h</div>
     </div>
-    <div style="flex:1;background:#0e1322;border:1px solid #1c2e4a;border-radius:6px;padding:8px 6px;text-align:center;">
-      <div style="font-size:.6rem;color:#8a9bb8;letter-spacing:1.5px;font-family:var(--sans);font-weight:700;">MAX HIZ</div>
-      <div id="hiz-max" style="font-family:var(--mono);font-size:1.45rem;font-weight:900;color:#3b82f6;line-height:1.1;margin-top:3px;">0</div>
-      <div style="font-size:.6rem;color:#8a9bb8;font-family:var(--sans);">km/h</div>
+    <div style="flex:1;background:#0e1322;border:1px solid #1c2e4a;border-radius:6px;padding:9px 6px;text-align:center;">
+      <div style="font-size:.74rem;color:#a8b8d0;letter-spacing:1px;font-family:var(--sans);font-weight:700;">MAX HIZ</div>
+      <div id="hiz-max" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#3b82f6;line-height:1.1;margin-top:4px;">0</div>
+      <div style="font-size:.74rem;color:#a8b8d0;font-family:var(--sans);font-weight:600;">km/h</div>
     </div>
-    <div id="hiz-ihlal-kutu" style="flex:1;background:#0e1a0e;border:1px solid #1c4a2c;border-radius:6px;padding:8px 6px;text-align:center;">
-      <div style="font-size:.6rem;color:#88aa88;letter-spacing:1.5px;font-family:var(--sans);font-weight:700;">HIZ İHLALİ</div>
-      <div id="hiz-ihlal-sayisi" style="font-family:var(--mono);font-size:1.45rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:3px;">0</div>
-      <div style="font-size:.6rem;color:#88aa88;font-family:var(--sans);">90+ km/h</div>
+    <div id="hiz-ihlal-kutu" style="flex:1;background:#0e1a0e;border:1px solid #1c4a2c;border-radius:6px;padding:9px 6px;text-align:center;">
+      <div style="font-size:.74rem;color:#a8c8a8;letter-spacing:1px;font-family:var(--sans);font-weight:700;">HIZ İHLALİ</div>
+      <div id="hiz-ihlal-sayisi" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:4px;">0</div>
+      <div style="font-size:.74rem;color:#a8c8a8;font-family:var(--sans);font-weight:600;">90+ km/h</div>
     </div>
   </div>
   
