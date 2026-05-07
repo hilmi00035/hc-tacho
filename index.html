@@ -1758,8 +1758,109 @@ select{font:inherit}
 
 <!-- ▸ YAKIT / KM TAKİBİ -->
 <div class="dtco-subpage" id="dpage-fuel" style="padding:10px">
+
+  <!-- ★ AKILLI DEPO TAKİBİ (GPS kilometre + kalan yakıt) -->
+  <div class="d-card" id="depo-takip-kart">
+    <div class="d-card-hd">🛢️ Akıllı Depo Takibi</div>
+    <div style="background:#0e1828;border:1px solid #2a4060;border-radius:6px;padding:10px;margin-bottom:14px;font-family:var(--sans);font-size:.78rem;color:#a0b8d0;line-height:1.5;">
+      📡 GPS aktifken kilometre otomatik sayılır. Depodaki yakıt + ortalama tüketim ile <b>kalan menzil</b> tahmin edilir.
+    </div>
+    
+    <!-- Şu anki durum -->
+    <div class="d-stat-row">
+      <div class="d-stat-box">
+        <div class="d-s-lbl">Depodaki Yakıt</div>
+        <div class="d-s-val" id="depo-mevcut" style="color:var(--blue);font-size:1.4rem;">— L</div>
+      </div>
+      <div class="d-stat-box">
+        <div class="d-s-lbl">Kalan Menzil</div>
+        <div class="d-s-val" id="depo-menzil" style="color:var(--green);font-size:1.4rem;">— km</div>
+      </div>
+    </div>
+    <div class="d-stat-row">
+      <div class="d-stat-box">
+        <div class="d-s-lbl">GPS KM (Bu Açılış)</div>
+        <div class="d-s-val" id="depo-gps-km" style="color:var(--gold);">0 km</div>
+      </div>
+      <div class="d-stat-box">
+        <div class="d-s-lbl">Tüketim Ort.</div>
+        <div class="d-s-val" id="depo-tuketim" style="color:var(--orange);">— L/100km</div>
+      </div>
+    </div>
+    
+    <!-- Görsel depo göstergesi -->
+    <div style="margin:14px 0;padding:14px;background:#0a1422;border:1px solid #1a2840;border-radius:8px;">
+      <div style="font-family:var(--sans);font-size:.78rem;color:#a0b8d0;margin-bottom:6px;display:flex;justify-content:space-between;">
+        <span>DEPO DOLULUĞU</span>
+        <span id="depo-yuzde" style="color:var(--gold);font-weight:700;">—%</span>
+      </div>
+      <div style="height:24px;background:#1a2540;border-radius:12px;overflow:hidden;position:relative;">
+        <div id="depo-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:12px;transition:width .5s,background .5s;"></div>
+      </div>
+      <div style="margin-top:6px;font-family:var(--mono);font-size:.78rem;color:#7a92b0;display:flex;justify-content:space-between;">
+        <span>0 L</span>
+        <span id="depo-kapasite-lbl">/ — L</span>
+      </div>
+    </div>
+    
+    <!-- Depo işlemleri -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+      <button class="d-btn d-btn-a" onclick="depoDolumAc()" style="padding:13px;font-size:.85rem;font-weight:700;">⛽ Yakıt Doldur</button>
+      <button class="d-btn d-btn-s" onclick="depoAyarlaAc()" style="padding:13px;font-size:.85rem;font-weight:700;">⚙️ Depo Ayarları</button>
+    </div>
+    
+    <!-- Depo dolum formu (gizli, açılır) -->
+    <div id="depo-dolum-form" style="display:none;margin-top:14px;padding:12px;background:#0e1828;border:1px solid #2a4060;border-radius:6px;">
+      <div style="font-family:var(--sans);font-size:.85rem;font-weight:700;color:#a0b8d0;margin-bottom:10px;">⛽ YAKIT DOLUMU</div>
+      <div class="d-form-row">
+        <div class="dfg"><label>Doldurulan Litre</label><input type="number" id="depo-eklenen-lt" placeholder="350" step="0.1"></div>
+        <div class="dfg"><label>Birim Fiyat (€/L)</label><input type="number" id="depo-eklenen-fiyat" placeholder="1.65" step="0.01"></div>
+      </div>
+      <div class="d-form-row">
+        <div class="dfg" style="flex:1">
+          <label>Tipi</label>
+          <select id="depo-dolum-tip">
+            <option value="full">🔝 FULL DOLUM (depoyu tamamen doldur)</option>
+            <option value="kismi">➕ KISMI DOLUM (sadece eklenen kadar)</option>
+          </select>
+        </div>
+      </div>
+      <div class="d-form-row">
+        <div class="dfg"><label>Yer / Not (opsiyonel)</label><input type="text" id="depo-dolum-not" placeholder="Shell Sofia"></div>
+      </div>
+      <div class="d-btn-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="d-btn d-btn-a" onclick="depoDolumKaydet()">✅ Onayla</button>
+        <button class="d-btn d-btn-s" onclick="depoDolumKapat()">İptal</button>
+      </div>
+    </div>
+    
+    <!-- Depo ayar formu (gizli, açılır) -->
+    <div id="depo-ayar-form" style="display:none;margin-top:14px;padding:12px;background:#0e1828;border:1px solid #2a4060;border-radius:6px;">
+      <div style="font-family:var(--sans);font-size:.85rem;font-weight:700;color:#a0b8d0;margin-bottom:10px;">⚙️ DEPO AYARLARI</div>
+      <div class="d-form-row">
+        <div class="dfg"><label>Toplam Depo Kapasitesi (L)</label><input type="number" id="depo-kapasite" placeholder="600" step="1"></div>
+        <div class="dfg"><label>Şu Anki Yakıt (L)</label><input type="number" id="depo-mevcut-input" placeholder="450" step="0.1"></div>
+      </div>
+      <div class="d-form-row">
+        <div class="dfg"><label>Tüketim Ortalama (L/100km)</label><input type="number" id="depo-tuketim-input" placeholder="32" step="0.1"></div>
+        <div class="dfg"><label>Düşük Yakıt Uyarısı (%)</label><input type="number" id="depo-uyari-yuzde" placeholder="20" step="1" max="50"></div>
+      </div>
+      <div class="d-btn-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="d-btn d-btn-a" onclick="depoAyarKaydet()">💾 Kaydet</button>
+        <button class="d-btn d-btn-s" onclick="depoAyarKapat()">İptal</button>
+      </div>
+    </div>
+    
+    <!-- Bilgi mesajı -->
+    <div style="margin-top:10px;font-family:var(--sans);font-size:.74rem;color:#7a92b0;line-height:1.4;">
+      💡 İlk kez kullanım: <b>"Depo Ayarları"</b> → kapasite (örn: 600 L), mevcut yakıt, ortalama tüketim gir.<br>
+      🔄 Sürüş sırasında GPS otomatik mesafeyi sayar, yakıt azalır.<br>
+      ⛽ Yakıt aldığında <b>"Yakıt Doldur"</b> → eklenen miktarı gir, otomatik güncellenir.
+    </div>
+  </div>
+
   <div class="d-card">
-    <div class="d-card-hd">⛽ Yakıt / KM Takibi</div>
+    <div class="d-card-hd">⛽ Manuel Yakıt / KM Kaydı</div>
     <div style="background:#1a2438;border:1px solid #2a4060;border-radius:6px;padding:10px;margin-bottom:14px;font-family:var(--sans);font-size:.78rem;color:#a0b8d0;line-height:1.5;">
       ℹ️ Sefer başında ve sonunda kilometre + yakıt değerlerini girin. Sistem otomatik tüketim hesaplar.
     </div>
@@ -4327,6 +4428,15 @@ let D={
   settings:{warnD:480,warnC:240,warnW:50},
   trips:[],entries:[],borders:[],transports:[],cabotages:[],debts:[],
   fuels:[], // ★ Yakıt/KM kayıtları
+  depo:{
+    kapasite: 600,        // Toplam depo kapasitesi (L)
+    mevcut: 0,            // Şu anki yakıt (L)
+    tuketim: 32,          // L/100km ortalama
+    uyariYuzde: 20,       // %20 altında uyarı
+    sonGuncelleme: null,  // En son güncelleme zamanı (ms)
+    sonGpsKm: 0,          // En son kayıtlı GPS km'si
+    olaylar: []           // Dolum geçmişi
+  },
   activeTrip:null,
   curAct:null, curActStart:null,
   lastCountry:'TR',
@@ -4337,6 +4447,11 @@ function dLoad(){
     if(r)D={...D,...JSON.parse(r)};
     // Eski yedeklerde fuels yoksa boş array yap
     if(!Array.isArray(D.fuels)) D.fuels = [];
+    // Eski yedeklerde depo yoksa default
+    if(!D.depo || typeof D.depo !== 'object'){
+      D.depo = {kapasite:600, mevcut:0, tuketim:32, uyariYuzde:20, sonGuncelleme:null, sonGpsKm:0, olaylar:[]};
+    }
+    if(!Array.isArray(D.depo.olaylar)) D.depo.olaylar = [];
   }catch(e){}
 }
 function dSave(){try{localStorage.setItem(DSK,JSON.stringify(D));}catch(e){}}
@@ -4403,6 +4518,7 @@ window.dtcoNavTo=function(page){
   if(page==='cabotage')dRenderCabotages();
   if(page==='fuel'){
     dRenderFuel();
+    if(typeof depoRender === 'function') depoRender();
     // Tarih alanını şimdiki zamanla doldur
     const fd = g('d-fuel-date');
     if(fd && !fd.value){
@@ -5118,6 +5234,245 @@ function dRenderFuel(){
   }
 }
 window.dRenderFuel = dRenderFuel;
+
+/* ═══════════════════════════════════════════════════
+   🛢️ AKILLI DEPO TAKİBİ (GPS kilometre + kalan yakıt)
+═══════════════════════════════════════════════════ */
+
+// GPS kilometresini al — toplamMesafe global değişkeni metre cinsinden
+function depoGetGpsKm(){
+  try {
+    if(typeof toplamMesafe === 'number'){
+      return toplamMesafe / 1000; // metre → km
+    }
+  } catch(e){}
+  return 0;
+}
+
+// Yakıt güncellemesini hesapla — GPS sürüşü sırasında çağrılır
+function depoYakitGuncelle(){
+  if(!D.depo) return;
+  
+  const guncelKm = depoGetGpsKm();
+  const oncekiKm = D.depo.sonGpsKm || 0;
+  const farkKm = guncelKm - oncekiKm;
+  
+  if(farkKm <= 0) return; // Hareket yok ya da reset olmuş
+  
+  // Tüketilen yakıt = (km × tüketim_oranı / 100)
+  const tuketilen = (farkKm * D.depo.tuketim) / 100;
+  D.depo.mevcut = Math.max(0, (D.depo.mevcut || 0) - tuketilen);
+  D.depo.sonGpsKm = guncelKm;
+  D.depo.sonGuncelleme = Date.now();
+  
+  // Düşük yakıt uyarısı (sadece bir kez)
+  const yuzde = (D.depo.mevcut / D.depo.kapasite) * 100;
+  if(yuzde <= D.depo.uyariYuzde && yuzde > 0 && !D.depo._uyariVerildi){
+    D.depo._uyariVerildi = true;
+    if(typeof window.toast === 'function'){
+      window.toast('⛽ DİKKAT: Yakıt %' + yuzde.toFixed(0) + ' — depoyu doldur!','warn',5000);
+    }
+    if(typeof window.speak === 'function'){
+      window.speak('Dikkat! Yakıt seviyesi düştü. Yakıt deposunu doldurun.','urgent');
+    }
+    if(typeof window.pushBildirim === 'function'){
+      window.pushBildirim('⛽ Düşük Yakıt', 'Depodaki yakıt %' + yuzde.toFixed(0) + ' — dolum yapın');
+    }
+  }
+  // Yakıt arttıysa uyarı flagini reset
+  if(yuzde > D.depo.uyariYuzde + 5){
+    D.depo._uyariVerildi = false;
+  }
+  
+  dSave();
+  // Sayfa açıksa render
+  if(document.querySelector('#dpage-fuel.active')){
+    depoRender();
+  }
+}
+window.depoYakitGuncelle = depoYakitGuncelle;
+
+// Depo bilgilerini ekrana yazdır
+function depoRender(){
+  if(!D.depo) return;
+  const e = id => document.getElementById(id);
+  
+  const mevcut = D.depo.mevcut || 0;
+  const kapasite = D.depo.kapasite || 600;
+  const tuketim = D.depo.tuketim || 32;
+  const yuzde = kapasite > 0 ? (mevcut / kapasite) * 100 : 0;
+  
+  // Kalan menzil = (mevcut yakıt / tüketim) × 100
+  const menzil = tuketim > 0 ? (mevcut / tuketim) * 100 : 0;
+  
+  // Stat boxes
+  if(e('depo-mevcut')) e('depo-mevcut').textContent = mevcut.toFixed(1) + ' L';
+  if(e('depo-menzil')){
+    e('depo-menzil').textContent = Math.floor(menzil) + ' km';
+    // Renk değiştir
+    if(menzil < 100) e('depo-menzil').style.color = 'var(--red)';
+    else if(menzil < 200) e('depo-menzil').style.color = 'var(--orange)';
+    else e('depo-menzil').style.color = 'var(--green)';
+  }
+  if(e('depo-gps-km')) e('depo-gps-km').textContent = depoGetGpsKm().toFixed(1) + ' km';
+  if(e('depo-tuketim')) e('depo-tuketim').textContent = tuketim.toFixed(1) + ' L/100km';
+  if(e('depo-yuzde')){
+    e('depo-yuzde').textContent = '%' + yuzde.toFixed(0);
+    if(yuzde < D.depo.uyariYuzde) e('depo-yuzde').style.color = 'var(--red)';
+    else if(yuzde < 50) e('depo-yuzde').style.color = 'var(--orange)';
+    else e('depo-yuzde').style.color = 'var(--green)';
+  }
+  if(e('depo-kapasite-lbl')) e('depo-kapasite-lbl').textContent = '/ ' + kapasite + ' L';
+  
+  // Bar
+  const bar = e('depo-bar');
+  if(bar){
+    bar.style.width = Math.min(100, Math.max(0, yuzde)) + '%';
+    if(yuzde < D.depo.uyariYuzde){
+      bar.style.background = 'linear-gradient(90deg,#dc2626,#ef4444)';
+    } else if(yuzde < 50){
+      bar.style.background = 'linear-gradient(90deg,#d97706,#fbbf24)';
+    } else {
+      bar.style.background = 'linear-gradient(90deg,#16a34a,#22c55e)';
+    }
+  }
+}
+window.depoRender = depoRender;
+
+// Yakıt dolum formunu aç/kapat
+window.depoDolumAc = function(){
+  const f = g('depo-dolum-form');
+  const a = g('depo-ayar-form');
+  if(a) a.style.display = 'none';
+  if(f) f.style.display = f.style.display === 'block' ? 'none' : 'block';
+};
+window.depoDolumKapat = function(){
+  const f = g('depo-dolum-form');
+  if(f) f.style.display = 'none';
+  // Form temizle
+  ['depo-eklenen-lt','depo-eklenen-fiyat','depo-dolum-not'].forEach(id=>{
+    const e = g(id); if(e) e.value = '';
+  });
+};
+
+// Yakıt dolumu kaydet
+window.depoDolumKaydet = function(){
+  const lt = parseFloat((g('depo-eklenen-lt')||{}).value) || 0;
+  const fiyat = parseFloat((g('depo-eklenen-fiyat')||{}).value) || 0;
+  const tip = (g('depo-dolum-tip')||{}).value || 'kismi';
+  const not = (g('depo-dolum-not')||{}).value || '';
+  
+  if(lt <= 0){ alert('⚠️ Doldurulan litre girilmeli'); return; }
+  
+  if(!D.depo) D.depo = {kapasite:600, mevcut:0, tuketim:32, uyariYuzde:20, olaylar:[]};
+  if(!Array.isArray(D.depo.olaylar)) D.depo.olaylar = [];
+  
+  const onceki = D.depo.mevcut || 0;
+  const oncekiYuzde = D.depo.kapasite > 0 ? (onceki/D.depo.kapasite)*100 : 0;
+  
+  if(tip === 'full'){
+    // Full dolum — depoyu tam doldur
+    D.depo.mevcut = D.depo.kapasite || 600;
+    
+    // Tüketim ortalamasını GÜNCELLE (eklenen yakıt / yapılan km)
+    // Eğer önceki dolumdan beri kayda değer km yapıldıysa
+    if(D.depo.olaylar.length > 0){
+      const sonDolum = D.depo.olaylar[D.depo.olaylar.length - 1];
+      if(sonDolum && sonDolum.gpsKm){
+        const gpsAraKm = depoGetGpsKm() - sonDolum.gpsKm;
+        if(gpsAraKm > 100 && lt > 50){ // En az 100 km ve 50 L
+          const yeniTuketim = (lt / gpsAraKm) * 100;
+          // Sapma çok aşırı değilse güncelle (kademeli ortalama)
+          if(yeniTuketim > 15 && yeniTuketim < 80){
+            D.depo.tuketim = (D.depo.tuketim * 0.6 + yeniTuketim * 0.4); // kademeli güncelleme
+          }
+        }
+      }
+    }
+  } else {
+    // Kısmi dolum — sadece eklenen kadar arttır
+    D.depo.mevcut = Math.min(D.depo.kapasite || 600, onceki + lt);
+  }
+  
+  // Olay kaydı
+  D.depo.olaylar.push({
+    id: Date.now(),
+    tarih: new Date().toISOString(),
+    tip: tip,
+    eklenen: lt,
+    fiyat: fiyat,
+    maliyet: lt * fiyat,
+    not: not,
+    oncekiMevcut: onceki,
+    yeniMevcut: D.depo.mevcut,
+    gpsKm: depoGetGpsKm(),
+  });
+  // Son 50 olay tut
+  if(D.depo.olaylar.length > 50) D.depo.olaylar.shift();
+  
+  // Uyarı reset
+  D.depo._uyariVerildi = false;
+  
+  // Ayrıca fuels listesine de ekle (mevcut sistem ile uyumlu)
+  if(!Array.isArray(D.fuels)) D.fuels = [];
+  D.fuels.push({
+    id: Date.now() + 1,
+    tarih: new Date().toISOString().slice(0,16),
+    tip: 'dolum',
+    km: depoGetGpsKm(),
+    lt: lt,
+    fiyat: fiyat,
+    maliyet: lt * fiyat,
+    not: not + ' (depo)',
+  });
+  
+  dSave();
+  depoRender();
+  if(typeof dRenderFuel === 'function') dRenderFuel();
+  depoDolumKapat();
+  if(typeof dToast === 'function') dToast('✅ ' + lt + ' L yakıt eklendi','ok',3000);
+};
+
+// Depo ayar formunu aç/kapat
+window.depoAyarlaAc = function(){
+  const a = g('depo-ayar-form');
+  const f = g('depo-dolum-form');
+  if(f) f.style.display = 'none';
+  if(a){
+    a.style.display = a.style.display === 'block' ? 'none' : 'block';
+    // Mevcut değerleri form'a yükle
+    if(D.depo){
+      const k = g('depo-kapasite'); if(k) k.value = D.depo.kapasite || 600;
+      const m = g('depo-mevcut-input'); if(m) m.value = (D.depo.mevcut || 0).toFixed(1);
+      const t = g('depo-tuketim-input'); if(t) t.value = (D.depo.tuketim || 32).toFixed(1);
+      const u = g('depo-uyari-yuzde'); if(u) u.value = D.depo.uyariYuzde || 20;
+    }
+  }
+};
+window.depoAyarKapat = function(){
+  const a = g('depo-ayar-form');
+  if(a) a.style.display = 'none';
+};
+window.depoAyarKaydet = function(){
+  const k = parseFloat((g('depo-kapasite')||{}).value) || 600;
+  const m = parseFloat((g('depo-mevcut-input')||{}).value) || 0;
+  const t = parseFloat((g('depo-tuketim-input')||{}).value) || 32;
+  const u = parseInt((g('depo-uyari-yuzde')||{}).value) || 20;
+  
+  if(!D.depo) D.depo = {olaylar:[]};
+  D.depo.kapasite = k;
+  D.depo.mevcut = Math.min(k, Math.max(0, m));
+  D.depo.tuketim = Math.max(5, Math.min(100, t));
+  D.depo.uyariYuzde = Math.max(5, Math.min(50, u));
+  D.depo.sonGpsKm = depoGetGpsKm(); // Şu anki GPS km'sini referans olarak al
+  D.depo.sonGuncelleme = Date.now();
+  D.depo._uyariVerildi = false;
+  
+  dSave();
+  depoRender();
+  depoAyarKapat();
+  if(typeof dToast === 'function') dToast('💾 Depo ayarları kaydedildi','ok',2500);
+};
 
 /* ────────────────── DİNLENME BORCU ────────────────── */
 window.dUpdateDebtPay=function(){
@@ -6013,6 +6368,14 @@ function gpsGuncelle(pos){
   if(sonKonum){
     const d = hesaplaMesafe(sonKonum.lat, sonKonum.lng, pos.coords.latitude, pos.coords.longitude);
     toplamMesafe += d;
+    
+    // ★ Akıllı depo güncelleme — her 500 metrede bir hesapla (verim için)
+    if(d > 0 && typeof window.depoYakitGuncelle === 'function'){
+      // Sadece sürüş modundayken (hareket halinde) güncelle
+      if(sonHiz >= 3){
+        try { window.depoYakitGuncelle(); } catch(e){}
+      }
+    }
   }
   sonKonum = {lat:pos.coords.latitude, lng:pos.coords.longitude};
 
