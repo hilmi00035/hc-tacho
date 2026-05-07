@@ -242,7 +242,6 @@ select{font:inherit}
   color:#9ba8bb;transition:.12s;
 }
 .hbtn.gold{color:var(--gold);border-color:var(--gold-dim)}
-#mute-btn{font-size:1.05rem;min-width:36px;text-align:center;padding:6px}
 
 /* GPS butonu — MAVİ (kapalı) / YEŞİL (aktif) - çok belirgin */
 #gps-btn{
@@ -615,13 +614,6 @@ select{font:inherit}
 #dtco-live-panel .dp-btn{flex:1;padding:7px;background:var(--panel3);border:1px solid var(--border2);border-radius:4px;font-family:var(--sans);font-size:.68rem;font-weight:700;letter-spacing:1px;cursor:pointer;transition:.12s}
 #dtco-live-panel .dp-btn:hover{border-color:var(--blue);color:var(--blue)}
 
-/* ══ DTCO EK MODLAR ══ */
-#dtco-extra-modes .mode-btn{font-size:.55rem;padding:7px 2px;color:var(--sub)}
-.mode-btn.mode-tren.active  {color:var(--purple);border-color:var(--purple);background:rgba(168,85,247,.06)}
-.mode-btn.mode-gemi.active  {color:var(--cyan);border-color:var(--cyan);background:rgba(6,182,212,.06)}
-.mode-btn.mode-sinir.active {color:var(--gold);border-color:var(--gold);background:rgba(240,180,41,.06)}
-.mode-btn.mode-yuk.active   {color:#f43f5e;border-color:#f43f5e;background:rgba(244,63,94,.06)}
-
 /* ══ DTCO SIDEBAR ══ */
 #dtco-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:800;backdrop-filter:blur(2px)}
 #dtco-overlay.open{display:block}
@@ -989,62 +981,6 @@ select{font:inherit}
 .d-s-timer{font-family:var(--mono);font-size:1.6rem;font-weight:700;letter-spacing:3px;color:#00c8ff}
 .d-pulse{animation:dPulse 1.5s ease-in-out infinite}
 @keyframes dPulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-/* ══ MİKROFON / SES KOMUT ══ */
-#mic-btn{
-  padding:6px 9px;border-radius:var(--radius);
-  background:var(--panel2);border:1px solid var(--border2);
-  font-size:1.1rem;cursor:pointer;transition:.2s;
-  position:relative;
-}
-#mic-btn.dinliyor{
-  background:rgba(239,68,68,.15);
-  border-color:var(--red);
-  animation:mic-pulse 1s ease-in-out infinite;
-}
-/* Zonya pasif dinleme modu — yumuşak mavi */
-#mic-btn.zonya-pasif{
-  background:rgba(59,130,246,.12);
-  border-color:var(--blue);
-  animation:mic-breath 3s ease-in-out infinite;
-}
-@keyframes mic-breath{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.35)}50%{box-shadow:0 0 0 6px rgba(59,130,246,0)}}
-/* Zonya uyanık, komut bekliyor — parlak yeşil */
-#mic-btn.zonya-uyanik{
-  background:rgba(34,197,94,.25);
-  border-color:var(--green);
-  animation:mic-alert .8s ease-in-out infinite;
-}
-@keyframes mic-alert{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{box-shadow:0 0 0 10px rgba(34,197,94,0)}}
-@keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
-#ses-panel{
-  display:none;
-  position:fixed;bottom:70px;left:50%;transform:translateX(-50%);
-  z-index:6000;
-  background:var(--panel);border:1px solid var(--border2);
-  border-radius:10px;padding:14px 20px;
-  min-width:280px;max-width:90vw;
-  text-align:center;
-  box-shadow:0 8px 32px rgba(0,0,0,.6);
-}
-#ses-panel.aktif{display:block}
-#ses-dalga{
-  display:flex;align-items:center;justify-content:center;gap:4px;
-  height:32px;margin:8px 0;
-}
-#ses-dalga span{
-  display:inline-block;width:4px;border-radius:2px;
-  background:var(--red);
-  animation:dalga 0.8s ease-in-out infinite;
-}
-#ses-dalga span:nth-child(2){animation-delay:.1s}
-#ses-dalga span:nth-child(3){animation-delay:.2s}
-#ses-dalga span:nth-child(4){animation-delay:.3s}
-#ses-dalga span:nth-child(5){animation-delay:.4s}
-@keyframes dalga{0%,100%{height:6px}50%{height:28px}}
-#ses-sonuc{font-family:var(--mono);font-size:.85rem;color:var(--text2);min-height:20px}
-#ses-komut-lbl{font-family:var(--sans);font-size:.65rem;letter-spacing:1.5px;color:var(--sub);margin-bottom:4px}
-#ses-ipucu{font-family:var(--sans);font-size:.68rem;color:var(--sub);margin-top:8px;line-height:1.6}
 
 /* ══ GPS TAKİP ══ */
 #gps-durum-bar{
@@ -1061,32 +997,6 @@ select{font:inherit}
 #gps-hiz{font-family:var(--mono);font-size:1rem;color:#22c55e;font-weight:700}
 #gps-bilgi{color:var(--text2);font-size:.7rem;flex:1;margin-left:8px}
 #gps-kapat-btn{font-size:.7rem;color:var(--sub);padding:3px 8px;border:1px solid var(--border);border-radius:3px;cursor:pointer}
-
-/* GPS Mola Sorusu Modal */
-#gps-mola-modal{
-  display:none;position:fixed;inset:0;z-index:7000;
-  background:rgba(0,0,0,.85);
-  display:none;align-items:center;justify-content:center;padding:20px;
-}
-#gps-mola-modal.acik{display:flex}
-#gps-mola-kart{
-  background:var(--panel);border:2px solid var(--gold);border-radius:10px;
-  padding:24px;width:100%;max-width:340px;text-align:center;
-}
-#gps-mola-baslik{font-family:var(--sans);font-size:1.2rem;font-weight:900;color:var(--gold);margin-bottom:6px;letter-spacing:1px}
-#gps-mola-alt{font-family:var(--sans);font-size:.8rem;color:var(--sub);margin-bottom:20px}
-.gps-mola-btn{
-  display:block;width:100%;margin-bottom:10px;
-  padding:14px;border-radius:6px;
-  font-family:var(--sans);font-size:.95rem;font-weight:900;letter-spacing:1px;
-  cursor:pointer;border:2px solid;transition:.15s;
-}
-.gps-mola-btn:hover{opacity:.85}
-.gps-mola-btn.kisa{background:rgba(59,130,246,.1);border-color:var(--blue);color:var(--blue)}
-.gps-mola-btn.orta{background:rgba(34,197,94,.1);border-color:var(--green);color:var(--green)}
-.gps-mola-btn.uzun{background:rgba(240,180,41,.1);border-color:var(--gold);color:var(--gold)}
-.gps-mola-btn.devam{background:rgba(251,191,36,.1);border-color:var(--orange);color:var(--orange)}
-#gps-mola-sure{font-family:var(--mono);font-size:2rem;color:var(--text);margin:10px 0;font-weight:700}
 </style>
 </head>
 <body>
@@ -1114,9 +1024,6 @@ select{font:inherit}
   </div>
   <div class="hactions">
     <button id="gps-btn" class="hbtn" title="GPS göstergesi">🛰️</button>
-    <button id="theme-btn" class="hbtn" onclick="temaDegistir()" title="Tema değiştir">🌙</button>
-    <button id="mute-btn" class="hbtn gold">🔊</button>
-    <button id="reset-btn" class="hbtn">↺</button>
   </div>
 </header>
 
@@ -1196,20 +1103,6 @@ select{font:inherit}
   <div id="gps-hiz">0 km/h</div>
   <div id="gps-bilgi">GPS Takip Aktif</div>
   <button id="gps-kapat-btn" onclick="gpsDurdur()">■ Durdur</button>
-</div>
-
-<!-- ══ GPS MOLA SORUSU ══ -->
-<div id="gps-mola-modal">
-  <div id="gps-mola-kart">
-    <div id="gps-mola-baslik">🛑 DURDUNUZ</div>
-    <div id="gps-mola-alt">Kaç saatlik mola yapacaksınız?</div>
-    <button class="gps-mola-btn kisa" onclick="gpsMolaBaslat('uzun_mola',45)">⏱ 45 Dakika — Kısa Mola</button>
-    <button class="gps-mola-btn orta" onclick="gpsMolaBaslat('gunluk_kisa',9*60)">😴 9 Saat — Günlük Kısa</button>
-    <button class="gps-mola-btn uzun" onclick="gpsMolaBaslat('gunluk_tam',11*60)">😴 11 Saat — Günlük Tam</button>
-    <button class="gps-mola-btn uzun" onclick="gpsMolaBaslat('gunluk_tam',24*60)">📅 24 Saat — Haftalık Kısa</button>
-    <button class="gps-mola-btn uzun" onclick="gpsMolaBaslat('gunluk_tam',45*60)">📅 45 Saat — Haftalık Tam</button>
-    <button class="gps-mola-btn devam" onclick="gpsMolaIptal()">🚛 Devam Ediyorum</button>
-  </div>
 </div>
 
 <div id="sbar">
@@ -1544,34 +1437,6 @@ select{font:inherit}
       <button class="wtab"        id="wt2" onclick="selectWeekView(2)">2. Hafta</button>
     </div>
     <div class="week-chart" id="bw-chart" style="height:72px"></div>
-  </div>
-
-  <!-- 2 Haftalık Dairesel -->
-  <div class="rcard">
-    <div class="rcard-title"><span>2 HAFTALIK KULLANIM</span></div>
-    <div id="bw-ring-grid" class="r3"></div>
-  </div>
-
-  <!-- Haftalık İstirahat Takibi -->
-  <div class="sh"><span>HAFTALIK İSTİRAHAT TAKİBİ</span></div>
-  <div class="rcard">
-    <div class="rcard-title"><span>45 SAATLIK HAFTALIK İSTİRAHAT</span></div>
-    <div class="r2">
-      <div class="stat-box">
-        <span class="sb-lbl">1. HAFTA İSTİRAHATİ</span>
-        <span class="sb-val" id="bw-rest1" style="color:var(--sub)">—</span>
-        <span class="sb-sub">min 24s (azaltılmış) / 45s</span>
-      </div>
-      <div class="stat-box">
-        <span class="sb-lbl">2. HAFTA İSTİRAHATİ</span>
-        <span class="sb-val" id="bw-rest2" style="color:var(--sub)">—</span>
-        <span class="sb-sub">min 24s (azaltılmış) / 45s</span>
-      </div>
-    </div>
-    <div style="margin-top:8px;padding:8px;background:var(--panel);border-radius:var(--radius);
-      font-family:var(--sans);font-size:.68rem;color:var(--sub);line-height:1.6">
-      ⚠️ 2 haftanın birinde 24s azaltılmış haftalık istirahat kullanılabilir. Diğerinde en az 45s zorunludur.
-    </div>
   </div>
 
   <!-- 2 Haftalık İhlaller -->
@@ -2020,7 +1885,7 @@ select{font:inherit}
     <div class="d-card" id="gps-ayar-kart">
     <div class="d-card-hd">📡 GPS Takip Sistemi</div>
     <div class="d-al-i d-alert" style="margin-bottom:12px">
-      ℹ️ GPS aktifken hızınız otomatik takip edilir. Durduğunuzda mola sorusu çıkar, hareket edince sürüş modu başlar.
+      ℹ️ GPS aktifken hızınız otomatik takip edilir. Hareket edince sürüş, durunca çalışma moduna geçer. Mola alacaksanız manuel olarak MOLA butonuna basın.
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
       <div class="d-stat-box">
@@ -2041,10 +1906,35 @@ select{font:inherit}
       </div>
     </div>
     <div style="margin-bottom:12px;padding:10px;background:var(--panel3);border-radius:6px;border:1px solid var(--border)">
-      <div style="font-family:var(--sans);font-size:.72rem;color:var(--text2);line-height:1.8">
-        🚛 <b>3 km/h üstü</b> → Sürüş modu anında başlar<br>
-        🛑 <b>Araç durur durmaz</b> → Mola sorusu anında çıkar<br>
-        ↩️ <b>Tekrar hareket</b> → Sürüş modu anında devam eder
+      <div style="font-family:var(--sans);font-size:.85rem;color:var(--text2);line-height:1.7">
+        🚛 <b>Hareket başlar</b> (3 km/h üstü) → Otomatik SÜRÜŞ moduna geçer<br>
+        🛑 <b>Durur durmaz</b> (2 dk sabit) → Otomatik ÇALIŞMA moduna geçer<br>
+        🛌 <b>Mola için</b> → Manuel olarak MOLA butonuna basın<br>
+        📡 <b>GPS pasifken</b> → Tüm modlar manuel kullanılır
+      </div>
+    </div>
+    
+    <!-- ★ STABİLİTE UYARI KARTI -->
+    <div style="margin-bottom:12px;padding:12px;background:#1a1408;border:1px solid #5c4a1a;border-radius:6px;">
+      <div style="font-family:var(--sans);font-size:.88rem;font-weight:700;color:#fbbf24;margin-bottom:6px;">
+        ⚠️ Stabil Çalışma İçin Önemli Bilgiler
+      </div>
+      <div style="font-family:var(--sans);font-size:.78rem;color:#d4c896;line-height:1.6;">
+        <b>📱 Tarayıcı arka plan kısıtlamaları:</b><br>
+        • Uygulamayı <b>açık</b> tutun ve ekrana baktırın<br>
+        • Başka uygulamaya geçince GPS yavaşlar (~30 sn sonra)<br>
+        • Telefon kilidi = GPS durur<br><br>
+        
+        <b>✅ Sorunsuz çalışması için:</b><br>
+        • Uygulamayı <b>ön planda</b> tutun<br>
+        • Ekran kilidini geçici olarak kapatın<br>
+        • Telefonu şarja takın (pil koruması GPS'i durdurabilir)<br>
+        • Tablette WiFi/Mobil internet açık olsun<br><br>
+        
+        <b>🛡️ Sistem korumaları:</b><br>
+        • Geri dönünce sayaçlar <b>otomatik telafi edilir</b><br>
+        • GPS durdursa sayfa açılınca <b>kendi başlatır</b><br>
+        • Sürüş kayıtları <b>asla kaybolmaz</b> (yedekli)
       </div>
     </div>
     <div class="d-btn-row">
@@ -2094,6 +1984,37 @@ select{font:inherit}
     </div>
     <div class="d-btn-row"><button class="d-btn d-btn-a" onclick="dSaveSettings()">💾 Kaydet</button></div>
   </div>
+  
+  <!-- ★ GÖRÜNÜM AYARLARI -->
+  <div class="d-card">
+    <div class="d-card-hd">🎨 Görünüm Ayarları</div>
+    
+    <!-- Tema seçici -->
+    <div style="margin-bottom:14px;">
+      <div style="font-family:var(--sans);font-size:.85rem;font-weight:700;color:#a0b8d0;margin-bottom:8px;">Tema</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="d-btn" id="tema-koyu-btn" onclick="temaSec('dark')" style="padding:14px;font-size:.88rem;font-weight:700;">🌙 Karanlık Tema</button>
+        <button class="d-btn" id="tema-acik-btn" onclick="temaSec('light')" style="padding:14px;font-size:.88rem;font-weight:700;">☀️ Açık Tema</button>
+      </div>
+      <div style="margin-top:6px;font-family:var(--sans);font-size:.74rem;color:#7a92b0;">
+        💡 Karanlık tema: Gece sürüş için göz yormaz<br>
+        💡 Açık tema: Gündüz okumak için ideal
+      </div>
+    </div>
+    
+    <!-- Ses seçici -->
+    <div>
+      <div style="font-family:var(--sans);font-size:.85rem;font-weight:700;color:#a0b8d0;margin-bottom:8px;">Sesli Uyarılar</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="d-btn" id="ses-acik-btn" onclick="sesSec(true)" style="padding:14px;font-size:.88rem;font-weight:700;">🔊 Ses Açık</button>
+        <button class="d-btn" id="ses-kapali-btn" onclick="sesSec(false)" style="padding:14px;font-size:.88rem;font-weight:700;">🔇 Ses Kapalı</button>
+      </div>
+      <div style="margin-top:6px;font-family:var(--sans);font-size:.74rem;color:#7a92b0;">
+        🔊 Mola, ihlal ve uyarı seslerini açar/kapatır
+      </div>
+    </div>
+  </div>
+  
   <div class="d-card">
     <div class="d-card-hd">📦 Veri Yedekleme</div>
     <div style="background:#1a2438;border:1px solid #2a4060;border-radius:6px;padding:10px;margin-bottom:12px;font-family:var(--sans);font-size:.78rem;color:#a0b8d0;line-height:1.5;">
@@ -2121,6 +2042,53 @@ select{font:inherit}
     </div>
   </div>
   
+  <!-- ★ SİSTEM SIFIRLAMA — Net ve okunaklı -->
+  <div class="d-card" style="border:2px solid #5c1a1a;background:#1a0a0e;">
+    <div class="d-card-hd" style="color:#ef4444;">⚠️ Sistem Sıfırlama</div>
+    
+    <!-- Haftalık Sıfırlama -->
+    <div style="background:#1a2438;border:1px solid #2a4060;border-radius:6px;padding:12px;margin-bottom:12px;">
+      <div style="font-family:var(--sans);font-size:.95rem;font-weight:700;color:#fbbf24;margin-bottom:6px;">
+        📅 Haftalık Sıfırlama
+      </div>
+      <div style="font-family:var(--sans);font-size:.82rem;color:#a0b8d0;line-height:1.5;margin-bottom:10px;">
+        1. haftadan 2. haftaya manuel geçiş yapar.<br>
+        Bu hafta kaydı arşivlenir, yeni hafta sıfırdan başlar.<br>
+        <b style="color:#fbbf24;">Sürüş geçmişi korunur</b>, sadece haftalık sayaçlar sıfırlanır.
+      </div>
+      <button class="d-btn" onclick="weeklyReset()" 
+        style="width:100%;padding:14px;background:#3a2f08;border:1px solid #fbbf24;color:#fbbf24;font-size:.92rem;font-weight:700;letter-spacing:.5px;">
+        📅 HAFTAYI SIFIRLA (1.→2. Hafta)
+      </button>
+    </div>
+    
+    <!-- TÜM SİSTEM SIFIRLAMA -->
+    <div style="background:#1a0a0e;border:1px solid #5c1a1a;border-radius:6px;padding:12px;margin-bottom:6px;">
+      <div style="font-family:var(--sans);font-size:.95rem;font-weight:700;color:#ef4444;margin-bottom:6px;">
+        🗑️ TÜM SİSTEM SIFIRLAMA
+      </div>
+      <div style="font-family:var(--sans);font-size:.82rem;color:#fca5a5;line-height:1.5;margin-bottom:10px;">
+        ⚠️ <b>DİKKAT:</b> Tüm veriler tamamen silinir!<br>
+        • Tüm sürüş kayıtları<br>
+        • Tüm mola/çalışma kayıtları<br>
+        • Tüm ihlaller<br>
+        • Tüm haftalık veriler<br>
+        <b style="color:#ef4444;">Bu işlem GERİ ALINAMAZ!</b>
+      </div>
+      <div style="background:#0a1828;border:1px solid #1a3458;border-radius:5px;padding:8px;margin-bottom:10px;font-family:var(--sans);font-size:.78rem;color:#60a5fa;">
+        💡 <b>Önce yedek alın!</b> Yukarıdaki "💾 TÜM VERİYİ YEDEKLE" butonu ile.
+      </div>
+      <button class="d-btn" onclick="fullReset()" 
+        style="width:100%;padding:16px;background:#3a0d0d;border:2px solid #ef4444;color:#ef4444;font-size:1rem;font-weight:900;letter-spacing:1px;">
+        🗑️ TÜM SİSTEMİ SIFIRLA
+      </button>
+    </div>
+    
+    <div style="font-family:var(--sans);font-size:.74rem;color:#7a92b0;line-height:1.4;margin-top:10px;">
+      💡 İki onay sorusu çıkar — yanlış basışa karşı koruma vardır.
+    </div>
+  </div>
+  
   <div class="d-card">
     <div class="d-card-hd">DTCO Veri Yönetimi</div>
     <div class="d-btn-row">
@@ -2129,7 +2097,7 @@ select{font:inherit}
       <button class="d-btn d-btn-d" onclick="dtcoReset()">🗑 Sıfırla</button>
     </div>
     <input type="file" id="d-imp-file" accept=".json" style="display:none" onchange="dImportData(event)">
-    <p style="font-size:.72rem;color:#3d5a7a;margin-top:10px">Sadece DTCO verisi (sefer, sınır, sürücü kartı). Yukarıdaki "Tüm Veriyi Yedekle" tüm sistem verisini içerir.</p>
+    <p style="font-size:.72rem;color:#7a92b0;margin-top:10px">Sadece DTCO verisi (sefer, sınır, sürücü kartı). Yukarıdaki "Tüm Veriyi Yedekle" tüm sistem verisini içerir.</p>
   </div>
 </div>
 
@@ -2418,23 +2386,11 @@ function speak(txt,urg='normal'){
     syn.cancel();
     const u=new SpeechSynthesisUtterance(txt);
     u.lang='tr-TR';u.rate=urg==='urgent'?1.1:1;u.pitch=urg==='urgent'?1.15:1;u.volume=1;
-    // ══ ZONYA KENDİNİ DUYMASIN ══
-    // Konuşma başladığında ses tanımayı duraklat
-    window._zonyaKonusuyor = true;
     const t=setTimeout(()=>{
       try{syn.cancel();}catch(_){}
-      window._zonyaKonusuyor = false;
     },15000);
-    u.onstart = () => { window._zonyaKonusuyor = true; };
-    u.onend = () => {
-      clearTimeout(t);
-      // Konuşma bittikten 500ms sonra mikrofonu tekrar aç (yankı bitsin)
-      setTimeout(() => { window._zonyaKonusuyor = false; }, 500);
-    };
-    u.onerror = () => {
-      clearTimeout(t);
-      window._zonyaKonusuyor = false;
-    };
+    u.onend = () => clearTimeout(t);
+    u.onerror = () => clearTimeout(t);
     syn.speak(u);
   }catch(e){console.warn('tts',e);}
 }
@@ -2445,20 +2401,32 @@ window.speak = speak;
 ═══════════════════════════════════════════════════ */
 window.temaDegistir = function(){
   const isLight = document.body.classList.contains('light-theme');
-  if(isLight){
-    document.body.classList.remove('light-theme');
-    localStorage.setItem('hctacho_tema', 'dark');
-    const btn = document.getElementById('theme-btn');
-    if(btn) btn.textContent = '🌙';
-    if(typeof toast === 'function') toast('🌙 Karanlık tema','info',2000);
-  } else {
+  temaSec(isLight ? 'dark' : 'light');
+};
+
+window.temaSec = function(tip){
+  if(tip === 'light'){
     document.body.classList.add('light-theme');
     localStorage.setItem('hctacho_tema', 'light');
-    const btn = document.getElementById('theme-btn');
-    if(btn) btn.textContent = '☀️';
     if(typeof toast === 'function') toast('☀️ Açık tema','info',2000);
+  } else {
+    document.body.classList.remove('light-theme');
+    localStorage.setItem('hctacho_tema', 'dark');
+    if(typeof toast === 'function') toast('🌙 Karanlık tema','info',2000);
   }
+  // Buton durumlarını güncelle
+  temaButonGuncelle();
 };
+
+function temaButonGuncelle(){
+  const isLight = document.body.classList.contains('light-theme');
+  const koyuBtn = document.getElementById('tema-koyu-btn');
+  const acikBtn = document.getElementById('tema-acik-btn');
+  if(koyuBtn) koyuBtn.classList.toggle('d-btn-a', !isLight);
+  if(koyuBtn) koyuBtn.classList.toggle('d-btn-s', isLight);
+  if(acikBtn) acikBtn.classList.toggle('d-btn-a', isLight);
+  if(acikBtn) acikBtn.classList.toggle('d-btn-s', !isLight);
+}
 
 // Sayfa yüklenince tema yükle
 (function temaYukle(){
@@ -2466,13 +2434,58 @@ window.temaDegistir = function(){
     const tema = localStorage.getItem('hctacho_tema');
     if(tema === 'light'){
       document.body.classList.add('light-theme');
-      // İkonu butonda güncelle (DOM hazır olunca)
-      setTimeout(()=>{
-        const btn = document.getElementById('theme-btn');
-        if(btn) btn.textContent = '☀️';
-      }, 100);
     }
+    setTimeout(temaButonGuncelle, 200);
   } catch(e){}
+})();
+
+/* ═══════════════════════════════════════════════════
+   🔊 SES KONTROLÜ
+═══════════════════════════════════════════════════ */
+window.sesSec = function(acik){
+  try {
+    localStorage.setItem('hctacho_ses', acik ? '1' : '0');
+    // Window'da da set et
+    window.sesAcik = acik;
+    // Ana sistem state
+    if(window.S){
+      window.S.isMuted = !acik;
+      // save() ile kaydet
+      if(typeof window.save === 'function') window.save();
+    }
+    
+    if(typeof toast === 'function'){
+      toast(acik ? '🔊 Ses açıldı' : '🔇 Ses kapatıldı','info',2000);
+    }
+    sesButonGuncelle();
+  } catch(e){
+    console.warn('Ses ayar hata:', e);
+  }
+};
+
+function sesButonGuncelle(){
+  const acik = window.sesAcik !== false; // default açık
+  const acikBtn = document.getElementById('ses-acik-btn');
+  const kapaliBtn = document.getElementById('ses-kapali-btn');
+  if(acikBtn) acikBtn.classList.toggle('d-btn-a', acik);
+  if(acikBtn) acikBtn.classList.toggle('d-btn-s', !acik);
+  if(kapaliBtn) kapaliBtn.classList.toggle('d-btn-a', !acik);
+  if(kapaliBtn) kapaliBtn.classList.toggle('d-btn-s', acik);
+}
+
+// Sayfa yüklenince ses ayarını yükle
+(function sesYukle(){
+  try {
+    const ses = localStorage.getItem('hctacho_ses');
+    window.sesAcik = (ses === null) ? true : (ses === '1');
+    // S yüklenince aktarılması için bekle
+    setTimeout(()=>{
+      if(window.S) window.S.isMuted = !window.sesAcik;
+      sesButonGuncelle();
+    }, 500);
+  } catch(e){
+    window.sesAcik = true;
+  }
 })();
 
 /* ═══════════════════════════════════════════════════
@@ -3055,6 +3068,8 @@ function fullReset(){
   populateCountries();switchPage('daily');updateRestOptsUI();renderAll();save();
   speak('Sistem sıfırlandı.','normal');toast('↺ Sistem sıfırlandı','info');
 }
+window.fullReset = fullReset;
+window.weeklyReset = weeklyReset;
 
 /* ══ HAFTA GÖRÜNÜMÜ ══ */
 function selectWeekView(w){
@@ -3477,17 +3492,6 @@ function renderBiWeek(){
   if(e('bw-w2'))e('bw-w2').textContent=fmtHM(S.stats.week2||0);
   const bwr=Math.max(0,K.DRIVE_2WEEK-S.stats.dweek);
   if(e('bw-remain'))e('bw-remain').style.color=bwr<18000?'var(--red)':bwr<36000?'var(--orange)':'var(--green)';
-  // Ring
-  const rg=e('bw-ring-grid');
-  if(rg){
-    rg.innerHTML=
-      ringHTML('2 Haftalık',S.stats.dweek,K.DRIVE_2WEEK,'var(--blue)')+
-      ringHTML('1. Hafta',S.stats.week1||S.stats.week,K.DRIVE_WEEK,'var(--orange)')+
-      ringHTML('2. Hafta',S.stats.week2||0,K.DRIVE_WEEK,'var(--gold)');
-  }
-  // Haftalık istirahat
-  if(e('bw-rest1'))e('bw-rest1').textContent='—';
-  if(e('bw-rest2'))e('bw-rest2').textContent='—';
   // İhlaller
   const bvl=e('bw-viol-list');if(bvl)bvl.innerHTML=violListHTML(S.violations);
   const bvc=e('bw-viol-count');if(bvc)bvc.textContent=`${S.violations.length} kayıt`;
@@ -4168,8 +4172,6 @@ function renderAll(){
   renderTachoChart();
   if(S.selectedPage==='weekly')renderWeekly();
   else if(S.selectedPage==='biweek')renderBiWeek();
-  const mi=document.getElementById('mute-btn');
-  if(mi)mi.textContent=S.isMuted?'🔇':'🔊';
 }
 window.renderAll = renderAll;
 
@@ -4285,6 +4287,15 @@ function checkDayRollover(){
 function startTicker(){
   if(tickId)clearInterval(tickId);
   tickId=setInterval(()=>{checkDayRollover();sync();renderAll();},K.TICK);
+  
+  // ★ AUTO-SAVE: Aktif modda her 30 saniyede bir otomatik kaydet
+  // Uygulama çökse veya tarayıcı kapansa bile en fazla 30 sn kaybedilir
+  if(window._autoSaveTimer) clearInterval(window._autoSaveTimer);
+  window._autoSaveTimer = setInterval(()=>{
+    if(S.mode){ // Bir mod aktifse
+      try { save(); } catch(e){ console.warn('auto-save:', e); }
+    }
+  }, 30000);
 }
 // Global erişim için
 window.startTicker = startTicker;
@@ -4309,7 +4320,6 @@ function bindEvents(){
     // Sekme aktif görünmesin (sayfa değişmiyor, sadece menü açıldı)
     document.getElementById('tab-dtco')?.classList.remove('active');
   });
-  document.getElementById('mute-btn')?.addEventListener('click',()=>{S.isMuted=!S.isMuted;renderAll();save();});
   document.getElementById('sel-start')?.addEventListener('change',e=>{S.selections.startCountry=e.target.value;save();renderUlkeBayrak();renderTachoChart();});
   document.getElementById('sel-end')?.addEventListener('change',e=>{
     S.selections.endCountry=e.target.value;save();renderUlkeBayrak();renderTachoChart();
@@ -4324,21 +4334,42 @@ function bindEvents(){
       if(e.target.value&&ULKELER.includes(e.target.value))setTimeout(handleEndOfDay,0);
     }
   });
-  // Reset: kısa = full reset, uzun basış = haftalık reset
-  let rHold=null;
-  const rb=document.getElementById('reset-btn');
-  rb?.addEventListener('click',fullReset);
-  rb?.addEventListener('pointerdown',()=>{rHold=setTimeout(weeklyReset,2000);});
-  rb?.addEventListener('pointerup',()=>clearTimeout(rHold));
-  rb?.addEventListener('pointerleave',()=>clearTimeout(rHold));
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){
       // Arka plana geçince: sayaçları hesapla ve kaydet
       sync(); save();
+      // Son zamanı işaretle ki dönünce ne kadar süre arkada kaldığımızı bilelim
+      try {
+        localStorage.setItem('arkapan_zamani', String(Date.now()));
+        localStorage.setItem('arkapan_mode', S.mode || '');
+        localStorage.setItem('arkapan_gps', window.gpsAktif ? '1' : '0');
+      } catch(e){}
     } else {
-      // Ön plana gelince: önce sync (kapanma süresini ekle), sonra lastTickMs güncelle
+      // Ön plana geri gelince: ne kadar süre arkada kaldık?
+      let arkadaKalanSn = 0;
+      try {
+        const t = parseFloat(localStorage.getItem('arkapan_zamani')) || 0;
+        if(t) arkadaKalanSn = Math.floor((Date.now() - t) / 1000);
+      } catch(e){}
+      
+      // Önce sync (kapanma süresini ekle), sonra lastTickMs güncelle
       sync();
       S.lastTickMs = Date.now();
+      
+      // Eğer 5 dk'dan uzun arka planda kaldıysak ve GPS aktifse → kullanıcıyı bilgilendir
+      if(arkadaKalanSn > 300 && window.gpsAktif){
+        const dkk = Math.floor(arkadaKalanSn/60);
+        setTimeout(()=>{
+          if(typeof toast === 'function'){
+            toast('📱 ' + dkk + ' dk arka planda kalındı — sayaçlar güncellendi','info',4000);
+          }
+        }, 800);
+        // GPS'i yenile (eğer kapatıldıysa tekrar başlat)
+        if(typeof window.gpsBaslat === 'function' && !document.getElementById('gps-durum-bar')?.classList.contains('aktif')){
+          setTimeout(()=>{ window.gpsBaslat(); }, 1500);
+        }
+      }
+      
       renderAll();
     }
   });
@@ -4527,6 +4558,11 @@ window.dtcoNavTo=function(page){
     }
   }
   if(page==='activity')dRenderLog();
+  if(page==='settings'){
+    // Tema ve ses butonlarını güncelle
+    if(typeof temaButonGuncelle === 'function') temaButonGuncelle();
+    if(typeof sesButonGuncelle === 'function') sesButonGuncelle();
+  }
   if(page==='report'){const now=new Date();const rf=new Date(now);rf.setDate(rf.getDate()-28);const df=g('d-rpt-from');const dt=g('d-rpt-to');if(df)df.value=rf.toISOString().slice(0,10);if(dt)dt.value=todayStr();}
 };
 
@@ -6085,22 +6121,6 @@ document.addEventListener('DOMContentLoaded',function(){
     },true);
   }
 
-  // Extra mod butonları (header altındaki tren/gemi/sinir/yuk)
-  document.querySelectorAll('[data-dtco]').forEach(btn=>{
-    btn.addEventListener('click',function(){
-      const mod=this.dataset.dtco;
-      document.querySelectorAll('[data-dtco]').forEach(b=>b.classList.remove('active'));
-      this.classList.add('active');
-      dStartAct(mod);D.curAct=mod;
-      if(mod==='border'){
-        const from=D.lastCountry;const to=typeof S!=='undefined'&&S.selections&&S.selections.endCountry;
-        if(from&&to&&from!==to)dAddAutoSinir(from,to);
-      }
-      dSave();dUpdateDashboard();
-      dToast((DMOD[mod]?.ico||'•')+' '+(DMOD[mod]?.label||mod)+' başladı','info');
-    });
-  });
-
   dUpdateDashboard();dRefreshTripSelects();
 
   // 5 sn'de bir güncelle
@@ -6131,6 +6151,10 @@ window.gpsAktif = false;
 function setGpsAktif(v){
   gpsAktif = !!v;
   window.gpsAktif = gpsAktif;
+  // ★ State'i localStorage'a kaydet — sayfa yenilense de bilelim
+  try {
+    localStorage.setItem('gps_aktif', gpsAktif ? '1' : '0');
+  } catch(e){}
 }
 
 let gpsWatchId = null;
@@ -6140,6 +6164,31 @@ let durusSoruldu = false;
 let toplamMesafe = 0;
 let sonKonum = null;
 let gpsInterval = null;
+let sonModDegisikligi = 0; // Mod kararsızlığını önler
+let gpsBaslangicMs = 0; // GPS aktivasyon zamanı
+let gpsKonumGecmisi = []; // Hız null olduğunda hesap için son konumlar
+let durusOnayMs = 0; // Duruş kararı için bekleme zamanı (anlık trafik ışığı için)
+let gpsSonyalKayipMs = 0; // GPS sinyali kayıp zamanı
+
+// Mesafeyi sayfa yenilenmesinde de koru
+function gpsKayitYap(){
+  try {
+    localStorage.setItem('gps_mesafe', String(toplamMesafe));
+    localStorage.setItem('gps_son_zaman', String(Date.now()));
+  } catch(e){}
+}
+function gpsKayitOku(){
+  try {
+    const m = parseFloat(localStorage.getItem('gps_mesafe')) || 0;
+    const t = parseFloat(localStorage.getItem('gps_son_zaman')) || 0;
+    // Son 24 saat içindeyse mesafeyi koru, eski ise sıfırla
+    if(t && (Date.now() - t) < 24*60*60*1000){
+      toplamMesafe = m;
+    } else {
+      toplamMesafe = 0;
+    }
+  } catch(e){}
+}
 
 function hizEsik(){return 3;} // Takograf standardı: 3 km/h
 const HIZ_LIMIT = 90; // Maksimum izin verilen hız (km/h)
@@ -6254,7 +6303,11 @@ window.gpsBaslat = function(){
   sonKonum = null;
   durusBaslangic = null;
   durusSoruldu = false;
-  toplamMesafe = 0;
+  // toplamMesafe — DOKUNMAZ! Yenileme sonrası korunsun (gpsKayitOku ile zaten yüklendi)
+  sonModDegisikligi = 0;
+  durusOnayMs = 0;
+  gpsSonyalKayipMs = 0;
+  gpsBaslangicMs = Date.now();
   
   // ★ HEMEN aktif olarak işaretle — kullanıcı hemen geri bildirim alsın
   setGpsAktif(true);
@@ -6267,8 +6320,8 @@ window.gpsBaslat = function(){
   if(bb) bb.style.display='none';
   if(bd) bd.style.display='block';
   const ad = document.getElementById('gps-ayar-durum');
-  if(ad){ad.textContent='🟢 Aktif';ad.style.color='var(--green)';}
-  if(typeof window.toast==='function') window.toast('📡 GPS başlatılıyor...','ok',2000);
+  if(ad){ad.textContent='⏳ Sinyal aranıyor...';ad.style.color='var(--gold)';}
+  if(typeof window.toast==='function') window.toast('📡 GPS sinyal aranıyor...','info',3000);
   
   // ★ TAKO SİSTEMİNİ AKTİVE ET
   const S = getS();
@@ -6281,15 +6334,24 @@ window.gpsBaslat = function(){
   
   // ★ Doğrudan watchPosition kullan — getCurrentPosition cache sorununu önler
   try{
+    let ilkKonumGeldi = false;
+    
     gpsWatchId = navigator.geolocation.watchPosition(
       function(pos){
+        // İlk konum geldiğinde kullanıcıya bilgi ver
+        if(!ilkKonumGeldi){
+          ilkKonumGeldi = true;
+          if(ad){ad.textContent='🟢 Aktif';ad.style.color='var(--green)';}
+          if(typeof window.toast==='function') window.toast('✅ GPS sinyali alındı','ok',2000);
+          if(typeof window.speak==='function') window.speak('GPS sinyali alındı.','normal');
+        }
         // BAŞARILI — sürekli güncelleme gelir
         gpsGuncelle(pos);
       },
       function(err){
-        // BAŞARISIZ — geri al
+        // BAŞARISIZ
         console.error('[GPS] hata:', err);
-        // Sadece izin reddi durumunda durur, diğer hatalarda devam edebilir
+        
         if(err.code === 1){
           // İzin reddi — GPS'i durdur
           setGpsAktif(false);
@@ -6302,21 +6364,29 @@ window.gpsBaslat = function(){
           if(bb) bb.style.display='block';
           if(bd) bd.style.display='none';
           if(ad){ad.textContent='Pasif';ad.style.color='var(--sub)';}
-          alert('⚠️ Konum izni reddedildi. Tarayıcı ayarlarından konum iznini açın.');
+          alert('⚠️ Konum izni reddedildi.\n\nTarayıcı ayarlarından bu siteye konum izni verin ve tekrar deneyin.');
         } else if(err.code === 2){
-          if(typeof window.toast==='function') window.toast('⚠️ Konum servisi kullanılamıyor','warn',3000);
+          // POSITION_UNAVAILABLE — GPS kapalı veya cihaz GPS'i bulamıyor
+          // Konumu bulduğu sürece tolere et, sürekli hata olursa kullanıcıyı uyar
+          if(!gpsSonyalKayipMs) gpsSonyalKayipMs = Date.now();
+          const gecen = Math.floor((Date.now() - gpsSonyalKayipMs) / 1000);
+          if(gecen > 60){
+            // 1 dk'dan uzun sinyal yok
+            if(ad){ad.textContent='⚠️ Sinyal yok';ad.style.color='var(--orange)';}
+            if(typeof window.toast==='function') window.toast('⚠️ GPS sinyali bulunamıyor','warn',3000);
+            gpsSonyalKayipMs = Date.now(); // Tekrar uyarı için
+          }
         } else if(err.code === 3){
-          if(typeof window.toast==='function') window.toast('⚠️ GPS sinyali zayıf','warn',2500);
+          // TIMEOUT — sinyal zayıf
+          if(typeof window.toast==='function') window.toast('⚠️ GPS sinyali zayıf','warn',2000);
         }
       },
-      {enableHighAccuracy:true, maximumAge:3000, timeout:15000}
+      {enableHighAccuracy:true, maximumAge:5000, timeout:30000}
     );
     
-    // UI güncelleme interval'i
-    gpsInterval = setInterval(gpsUIGuncelle, 3000);
+    // UI güncelleme interval'i — saniye bazlı duruş süresi vs için
+    gpsInterval = setInterval(gpsUIGuncelle, 1000);
     
-    if(typeof window.toast==='function') window.toast('📡 GPS Aktif','ok',2000);
-    if(typeof window.speak==='function') window.speak('GPS aktif.','normal');
     if(typeof window.save === 'function') window.save();
   } catch(err){
     console.error('[GPS] watchPosition hata:', err);
@@ -6344,6 +6414,16 @@ window.gpsDurdur = function(){
   durusBaslangic = null;
   durusSoruldu = false;
   toplamMesafe = 0;
+  sonModDegisikligi = 0;
+  durusOnayMs = 0;
+  gpsSonyalKayipMs = 0;
+  
+  // localStorage'tan da temizle
+  try {
+    localStorage.removeItem('gps_mesafe');
+    localStorage.removeItem('gps_son_zaman');
+    localStorage.setItem('gps_aktif', '0');
+  } catch(e){}
   
   const bar=document.getElementById('gps-durum-bar');
   if(bar) bar.classList.remove('aktif');
@@ -6353,31 +6433,72 @@ window.gpsDurdur = function(){
   if(bd) bd.style.display='none';
   const ad=document.getElementById('gps-ayar-durum');
   if(ad){ad.textContent='Pasif';ad.style.color='var(--sub)';}
-  const modal=document.getElementById('gps-mola-modal');
-  if(modal) modal.classList.remove('acik');
   
   if(typeof window.toast==='function') window.toast('🛰️ GPS Kapatıldı','info',2000);
 };
 
-/* ── Konum Güncelleme — Takograf mantığı ── */
+/* ── Konum Güncelleme — AKILLI Takograf mantığı ── */
 function gpsGuncelle(pos){
   if(!gpsAktif) return;
-  const hiz = pos.coords.speed !== null ? pos.coords.speed * 3.6 : 0;
+  
+  // GPS sinyali geri geldiyse kayıp flagini sıfırla
+  gpsSonyalKayipMs = 0;
+  
+  // ★ HIZ HESAPLAMA — Önce GPS'in verdiği hızı al
+  let hiz = pos.coords.speed !== null ? pos.coords.speed * 3.6 : null;
+  
+  // ★ HIZ NULL veya 0 ise → koordinat farkından hesapla
+  // (Bazı cihazlarda speed null gelebilir, bizim manuel hesabımız yedek olur)
+  if((hiz === null || hiz < 0.5) && sonKonum){
+    const sonKonumZamani = sonKonum.zaman || 0;
+    const gecenSn = (Date.now() - sonKonumZamani) / 1000;
+    if(gecenSn > 0 && gecenSn < 30){ // 30 sn'den eski değil
+      const d = hesaplaMesafe(sonKonum.lat, sonKonum.lng, pos.coords.latitude, pos.coords.longitude);
+      // d metre cinsinden, hız km/h'ye çevir
+      const tahminHiz = (d / gecenSn) * 3.6;
+      // Eğer tahmin daha makul ise onu kullan
+      if(tahminHiz > 0.5 && tahminHiz < 200){
+        hiz = tahminHiz;
+      } else if(hiz === null){
+        hiz = 0;
+      }
+    } else {
+      if(hiz === null) hiz = 0;
+    }
+  }
+  
+  if(hiz === null) hiz = 0;
+  if(hiz < 0) hiz = 0;
+  
+  // GPS doğruluğu kötüyse (accuracy çok yüksek = belirsiz konum) hızı düzelt
+  const accuracy = pos.coords.accuracy || 0;
+  if(accuracy > 100){
+    // 100 metreden daha az kesinlikte → hıza güvenme, sıfır say
+    if(hiz < 5){ hiz = sonHiz; } // Sapma yapmasın
+  }
+  
   sonHiz = Math.round(hiz * 10) / 10;
 
   if(sonKonum){
     const d = hesaplaMesafe(sonKonum.lat, sonKonum.lng, pos.coords.latitude, pos.coords.longitude);
-    toplamMesafe += d;
-    
-    // ★ Akıllı depo güncelleme — her 500 metrede bir hesapla (verim için)
-    if(d > 0 && typeof window.depoYakitGuncelle === 'function'){
-      // Sadece sürüş modundayken (hareket halinde) güncelle
-      if(sonHiz >= 3){
+    // ★ Bayrak değerleri: 5 km'den uzun atlamaları kabul etme (GPS sıçraması)
+    if(d > 0 && d < 5000){
+      toplamMesafe += d;
+      // Her güncellemede localStorage'a kaydet (sürüş kaybolmasın)
+      gpsKayitYap();
+      
+      // ★ Akıllı depo güncelleme — sadece sürüş modundayken
+      if(sonHiz >= 3 && typeof window.depoYakitGuncelle === 'function'){
         try { window.depoYakitGuncelle(); } catch(e){}
       }
     }
   }
-  sonKonum = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+  sonKonum = {
+    lat: pos.coords.latitude,
+    lng: pos.coords.longitude,
+    zaman: Date.now(),
+    accuracy: accuracy
+  };
 
   const hizEl = document.getElementById('gps-hiz');
   if(hizEl) hizEl.textContent = Math.round(sonHiz) + ' km/h';
@@ -6385,80 +6506,96 @@ function gpsGuncelle(pos){
   // ★ HIZ BİLGİ KARTI GÜNCELLEME
   hizKartGuncelle(sonHiz);
 
-  if(sonHiz >= hizEsik()){
-    // HAREKET — anında sürüş
-    if(durusBaslangic !== null){
-      durusBaslangic = null;
-      durusSoruldu = false;
-      const modal=document.getElementById('gps-mola-modal');
-      if(modal) modal.classList.remove('acik');
-    }
-    const bilgi=document.getElementById('gps-bilgi');
+  const S = getS();
+  const simdi = Date.now();
+  const SURUS_ESIK = 3; // km/h
+  const DURMA_ONAY_SN = 120; // 2 dakika sürekli durma → mod değişir (trafik ışığı korunur)
+  const MIN_MOD_DEGISIM_SN = 30; // En az 30 sn mod değiştirmeden bekle (kararsızlık önler)
+
+  if(sonHiz >= SURUS_ESIK){
+    // ===== HAREKET — sürüş =====
+    durusBaslangic = null;
+    durusOnayMs = 0;
+    durusSoruldu = false;
+    
+    const bilgi = document.getElementById('gps-bilgi');
     if(bilgi) bilgi.textContent = '🚛 Sürüş — ' + Math.round(sonHiz) + ' km/h';
-    // ★ window.S ve window.setMode üzerinden — IIFE scope sorununu önler
-    const S = getS();
+    
+    // Sürüş moduna geç (eğer değilse) — kararsızlık önleyici
     if(S && S.mode !== 'surus'){
-      if(typeof window.setMode === 'function'){
-        window.setMode('surus', 'gps');  // 'gps' kaynak — kalkış ülke kontrolü atlanır
-        if(typeof window.toast === 'function') window.toast('🚛 GPS: Sürüş başladı','ok',2500);
+      // Mod değişimi için kontrol: en az 30 sn beklesin (titreşim önler)
+      if(!sonModDegisikligi || (simdi - sonModDegisikligi) > MIN_MOD_DEGISIM_SN * 1000){
+        if(typeof window.setMode === 'function'){
+          window.setMode('surus', 'gps');
+          sonModDegisikligi = simdi;
+          if(typeof window.toast === 'function') window.toast('🚛 GPS: Sürüş başladı','ok',2500);
+        }
       }
     }
   } else {
-    // DURUŞ — Otomatik ÇALIŞMA moduna geç (mola sorusu YOK, manuel mola alınır)
+    // ===== DURMA — bekle (trafik ışığı vs.) =====
     if(durusBaslangic === null){
-      durusBaslangic = Date.now();
+      durusBaslangic = simdi;
     }
-    const S = getS();
-    // Eğer şu an SÜRÜŞ modundaysa → ÇALIŞMA moduna geç
-    if(S && S.mode === 'surus'){
-      if(typeof window.setMode === 'function'){
-        window.setMode('calisma', 'gps');
-        if(typeof window.toast === 'function') window.toast('⚙️ GPS: Çalışma moduna geçildi','ok',2500);
+    const durusSn = Math.floor((simdi - durusBaslangic) / 1000);
+    
+    const bilgi = document.getElementById('gps-bilgi');
+    if(bilgi){
+      if(durusSn < DURMA_ONAY_SN && S && S.mode === 'surus'){
+        // Kısa duruş — hâlâ sürüş modunda
+        const kalan = DURMA_ONAY_SN - durusSn;
+        bilgi.textContent = '🚦 Duruş — ' + (kalan>=60 ? Math.floor(kalan/60)+'dk':kalan+'sn') + ' içinde çalışmaya geç';
+      } else {
+        // Onaylı duruş — çalışma
+        bilgi.textContent = '⚙ Çalışma — ' + (durusSn>=60 ? Math.floor(durusSn/60)+'dk' : durusSn+'sn');
       }
     }
-    const durusSn = Math.floor((Date.now()-durusBaslangic)/1000);
-    const bilgi=document.getElementById('gps-bilgi');
-    if(bilgi) bilgi.textContent = '⚙ Çalışma — ' + (durusSn>=60 ? Math.floor(durusSn/60)+'dk' : durusSn+'sn');
+    
+    // ★ Sadece DURMA_ONAY_SN sn sürekli durduktan sonra mod değiştir (trafik ışığı affedilir)
+    if(durusSn >= DURMA_ONAY_SN && S && S.mode === 'surus'){
+      // Mod değişimi için kontrol
+      if(!sonModDegisikligi || (simdi - sonModDegisikligi) > MIN_MOD_DEGISIM_SN * 1000){
+        if(typeof window.setMode === 'function'){
+          window.setMode('calisma', 'gps');
+          sonModDegisikligi = simdi;
+          if(typeof window.toast === 'function') window.toast('⚙️ GPS: Çalışma moduna geçildi','ok',2500);
+        }
+      }
+    }
   }
   gpsUIGuncelle();
 }
 
-/* ── Mola Sorusu ── */
-function gpsMolaSor(){
-  // Mola sorusu DEVRE DIŞI — kullanıcı tercihiyle. Manuel mola alınır.
-  // Modal açılmaz, sessizce geçer.
-  return;
-}
-
-window.gpsMolaBaslat = function(tip, dakika){
-  const modal=document.getElementById('gps-mola-modal');
-  if(modal) modal.classList.remove('acik');
-  if(typeof window.setRestType==='function') window.setRestType(tip);
-  if(typeof window.setMode==='function') window.setMode('dinlenme', 'gps');
-  const sure = dakika>=60 ? Math.floor(dakika/60)+'s '+(dakika%60?dakika%60+'dk':'') : dakika+'dk';
-  if(typeof window.toast==='function') window.toast('🛌 Mola başladı: '+sure,'ok',4000);
-  if(typeof window.speak==='function') window.speak(sure+' mola başladı.','normal');
-  durusSoruldu = true;
-};
-
-window.gpsMolaIptal = function(){
-  const modal=document.getElementById('gps-mola-modal');
-  if(modal) modal.classList.remove('acik');
-  durusSoruldu = true;
-  if(typeof window.toast==='function') window.toast('🚛 Sürüşe devam','ok',2000);
-};
-
 /* ── UI Güncelle ── */
 function gpsUIGuncelle(){
-  const hizEl=document.getElementById('gps-ayar-hiz');
-  const durusEl=document.getElementById('gps-ayar-durus');
-  const mesafeEl=document.getElementById('gps-ayar-mesafe');
-  if(hizEl){hizEl.textContent=Math.round(sonHiz)+' km/h';hizEl.style.color=sonHiz>=3?'var(--green)':'var(--sub)';}
-  if(durusEl&&durusBaslangic){
-    const sn=Math.floor((Date.now()-durusBaslangic)/1000);
-    durusEl.textContent=sn>=60?Math.floor(sn/60)+'dk '+(sn%60)+'sn':sn+'sn';
-  }else if(durusEl){durusEl.textContent='—';}
-  if(mesafeEl) mesafeEl.textContent=(toplamMesafe/1000).toFixed(1)+' km';
+  const hizEl = document.getElementById('gps-ayar-hiz');
+  const durusEl = document.getElementById('gps-ayar-durus');
+  const mesafeEl = document.getElementById('gps-ayar-mesafe');
+  
+  if(hizEl){
+    hizEl.textContent = Math.round(sonHiz) + ' km/h';
+    if(sonHiz >= 90) hizEl.style.color = 'var(--red)';
+    else if(sonHiz >= 3) hizEl.style.color = 'var(--green)';
+    else hizEl.style.color = 'var(--sub)';
+  }
+  
+  if(durusEl){
+    if(durusBaslangic){
+      const sn = Math.floor((Date.now() - durusBaslangic) / 1000);
+      durusEl.textContent = sn >= 60 ? Math.floor(sn/60)+'dk '+(sn%60)+'sn' : sn+'sn';
+      // 2 dk yaklaşıyorsa renk değişsin
+      if(sn >= 90) durusEl.style.color = 'var(--orange)';
+      else durusEl.style.color = 'var(--text)';
+    } else {
+      durusEl.textContent = '—';
+      durusEl.style.color = 'var(--sub)';
+    }
+  }
+  
+  if(mesafeEl){
+    mesafeEl.textContent = (toplamMesafe/1000).toFixed(1) + ' km';
+    mesafeEl.style.color = toplamMesafe > 0 ? 'var(--blue)' : 'var(--sub)';
+  }
 }
 
 /* ── Mesafe (Haversine) ── */
@@ -6477,640 +6614,10 @@ function gpsHata(err){
 
 </script>
 
-<!-- ═══ Ses Komut Motoru ═══ -->
+<!-- ═══ GPS Sistemi ═══ -->
 <script>
-/* ══════════════════════════════════════
-   SES KOMUT MOTORU
-   ses-motor.js  —  HÇ TACHO PRO
-   webkitSpeechRecognition tabanlı
-   Header'da 🎤 mikrofon butonu ile çalışır
-══════════════════════════════════════ */
-
 (function(){
 'use strict';
-
-let tanima = null;
-let sesAktif = false;
-let sesKilitli = false;
-
-const KOMUTLAR = [
-  {
-    kelimeler: [
-      'sürüş başlat','sürüşe başla','sürüşe geç','sürüşe başlıyorum',
-      'sürüyorum','sürmeye başla','sürmeye başlıyorum',
-      'hareket ediyorum','hareket başla','hareket et',
-      'yola çık','yola çıktım','yola çıkıyorum','yola çıkalım','yola koyul',
-      'yolcuyum','yola düş',
-      'gaza bas','gidiyorum','gideceğim','sefere başla','sefer başlat',
-      'araç hareket','araba hareket','kamyon hareket','tır hareket'
-    ],
-    islem: () => { if(typeof window.setMode==='function') window.setMode('surus'); },
-    yanit: 'Sürüş modu başlatıldı.'
-  },
-  {
-    kelimeler: [
-      'mola','mola ver','mola veriyorum','mola vereceğim','mola başlat','mola başlıyor',
-      'dinleniyorum','dinlenme','dinlenmeye geç','dinlenmeye başla','dinleneceğim',
-      'duruyorum','durdum','durdur','araç durdu','durma',
-      'park ettim','park','park et',
-      'çay molası','sigara molası','tuvalet molası',
-      'kalktım araçtan','iniyorum','indim'
-    ],
-    islem: () => { if(typeof window.setMode==='function') window.setMode('dinlenme'); },
-    yanit: 'Mola başlatıldı.'
-  },
-  {
-    kelimeler: [
-      'kısa mola','kırk beş dakika','kırkbeş dakika','45 dakika','mola 45','45 mola',
-      'uzun mola','yemek molası'
-    ],
-    islem: () => { if(typeof window.setRestType==='function') window.setRestType('uzun_mola'); if(typeof window.setMode==='function') window.setMode('dinlenme'); },
-    yanit: '45 dakika kısa mola başlatıldı.'
-  },
-  {
-    kelimeler: [
-      'dokuz saat','9 saat','günlük mola','günlük kısa','kısa dinlenme',
-      'dokuz saatlik','9 saatlik'
-    ],
-    islem: () => { if(typeof window.setRestType==='function') window.setRestType('gunluk_kisa'); if(typeof window.setMode==='function') window.setMode('dinlenme'); },
-    yanit: 'Dokuz saatlik günlük mola başlatıldı.'
-  },
-  {
-    kelimeler: [
-      'on bir saat','11 saat','tam mola','günlük tam','gece dinlenme','gece molası',
-      'uyuyorum','uyuyacağım','uykuya','yatıyorum','yatacağım',
-      'on birlik','on bir saatlik','11 saatlik'
-    ],
-    islem: () => { if(typeof window.setRestType==='function') window.setRestType('gunluk_tam'); if(typeof window.setMode==='function') window.setMode('dinlenme'); },
-    yanit: 'On bir saatlik tam mola başlatıldı.'
-  },
-  {
-    kelimeler: [
-      'çalışma','çalışıyorum','çalışmaya başla','iş başla','işe başla',
-      'yükleme','yüklüyorum','yük alıyorum','yük aldım',
-      'boşaltma','boşaltıyorum','boşalttım','indiriyorum',
-      'iş yapıyorum','tamirat','bakım','tamir'
-    ],
-    islem: () => { if(typeof window.setMode==='function') window.setMode('calisma'); },
-    yanit: 'Çalışma modu başlatıldı.'
-  },
-  {
-    kelimeler: [
-      'hazır','hazırım','bekliyorum','beklemeye geç',
-      'hazır bekleme','beklemede','sırada','sıradayım',
-      'gümrük bekleme','gümrükteyim','kuyrukta','kuyruktayım'
-    ],
-    islem: () => { if(typeof window.setMode==='function') window.setMode('hazir'); },
-    yanit: 'Hazır bekleme modu başlatıldı.'
-  },
-  {
-    kelimeler: [
-      'gps başlat','gps aç','gps aç',
-      'konum başlat','konumu başlat','konum aç','konumu aç',
-      'takibi başlat','takip başlat','takip aç',
-      'navigasyon aç','navigasyon başlat'
-    ],
-    islem: () => { if(typeof gpsBaslat==='function') gpsBaslat(); },
-    yanit: 'GPS takip başlatıldı.'
-  },
-  {
-    kelimeler: [
-      'gps durdur','gps kapat','gps kapat',
-      'konum durdur','konumu durdur','konum kapat','konumu kapat',
-      'takibi durdur','takip durdur','takip kapat'
-    ],
-    islem: () => { if(typeof gpsDurdur==='function') gpsDurdur(); },
-    yanit: 'GPS durduruldu.'
-  },
-  {
-    kelimeler: [
-      'sesi kapat','ses kapat','sessiz','sustur','sus',
-      'sessize al','konuşma','konuşma artık'
-    ],
-    islem: () => { if(typeof S!=='undefined'){S.isMuted=true;if(typeof renderAll==='function')renderAll();if(typeof save==='function')save();} },
-    yanit: 'Ses kapatıldı.'
-  },
-  {
-    kelimeler: [
-      'sesi aç','ses aç','sesli','konuş','konuşmaya başla'
-    ],
-    islem: () => { if(typeof S!=='undefined'){S.isMuted=false;if(typeof renderAll==='function')renderAll();if(typeof save==='function')save();} },
-    yanit: 'Ses açıldı.'
-  },
-  {
-    kelimeler: [
-      'durum','durum ne','ne kadar sürdüm','sürem ne','süre ne kadar',
-      'kaç saat sürdüm','bugün ne kadar','bugünkü süre','toplam süre',
-      'kaç saat oldu','ne kadar oldu','rapor','raporu söyle'
-    ],
-    islem: () => {
-      if(typeof S==='undefined') return;
-      const saat=Math.floor(S.stats.drive/3600);
-      const dk=Math.floor((S.stats.drive%3600)/60);
-      const mesaj=`Bugün toplam ${saat} saat ${dk} dakika sürdünüz.`;
-      if(typeof speak==='function') speak(mesaj,'normal');
-      if(typeof toast==='function') toast('🕐 '+mesaj,'ok',5000);
-    },
-    yanit: null
-  },
-  {
-    kelimeler: [
-      'günü sıfırla','sıfırla','resetle','reset',
-      'baştan başla','temizle','verileri sil'
-    ],
-    islem: () => { if(typeof fullReset==='function') fullReset(); },
-    yanit: 'Gün sıfırlandı.'
-  },
-  {
-    kelimeler: [
-      'menü aç','menüyü aç','dtco menü','dtco aç',
-      'ayarları aç','ayarlar'
-    ],
-    islem: () => { if(typeof dtcoSidebarOpen==='function') dtcoSidebarOpen(); },
-    yanit: 'Menü açıldı.'
-  },
-  {
-    kelimeler: [
-      'menü kapat','menüyü kapat','dtco kapat','kapat menüyü'
-    ],
-    islem: () => { if(typeof dtcoSidebarClose==='function') dtcoSidebarClose(); },
-    yanit: 'Menü kapatıldı.'
-  },
-  {
-    kelimeler: [
-      'kimsin','kim','sen kimsin','adın ne','adın nedir','isim',
-      'merhaba','selam','selamünaleyküm','selamun aleykum','merhabalar',
-      'günaydın','iyi akşamlar','iyi geceler'
-    ],
-    islem: () => {
-      const selamlar = [
-        'Ben Zonya, sizin takograf asistanınızım. Size nasıl yardımcı olabilirim?',
-        'Merhaba, ben Zonya. Emrinizdeyim.',
-        'Buradayım, dinliyorum. Ben Zonya.'
-      ];
-      const mesaj = selamlar[Math.floor(Math.random()*selamlar.length)];
-      if(typeof speak==='function') speak(mesaj,'normal');
-      if(typeof toast==='function') toast('🎤 '+mesaj,'ok',5000);
-    },
-    yanit: null
-  },
-  {
-    kelimeler: [
-      'yardım','komutlar','ne diyebilirim','ne söyleyebilirim',
-      'komut listesi','komutları söyle','komutlar neler'
-    ],
-    islem: () => {
-      const mesaj='Komutlarım: Sürüş başlat, Mola, GPS başlat, Durum, Sesi kapat. Ayrıca: Başlangıç ülkesi Türkiye veya Varış ülkesi Almanya gibi söyleyebilirsiniz. İsim olarak Zonya deyin.';
-      if(typeof speak==='function') speak('Komutlarım: Sürüş başlat, Mola, GPS başlat, Durum, Sesi kapat. Ayrıca başlangıç veya varış ülkesi söyleyebilirsiniz. Beni Zonya diye çağırın.','normal');
-      if(typeof toast==='function') toast('🎤 '+mesaj,'ok',10000);
-    },
-    yanit: null
-  },
-];
-
-/* ══ ZONYA UYANDIRMA KELİMELERİ ══ */
-const ZONYA_ISIMLERI = ['zonya','zönya','zonia','sonya','sonja','zorya','zanya'];
-
-function zonyaCikar(metin){
-  // "Zonya sürüş başlat" → "sürüş başlat"
-  metin = metin.toLowerCase().trim();
-  for(const isim of ZONYA_ISIMLERI){
-    if(metin.startsWith(isim+' ')){
-      return metin.substring(isim.length+1).trim();
-    }
-    // Ortada da olabilir: "ey zonya, mola"
-    const idx = metin.indexOf(' '+isim+' ');
-    if(idx !== -1){
-      return metin.substring(idx + isim.length + 2).trim();
-    }
-  }
-  return metin; // Zonya yoksa aynen dön
-}
-
-function zonyaVarMi(metin){
-  metin = metin.toLowerCase();
-  return ZONYA_ISIMLERI.some(isim => metin.includes(isim));
-}
-
-/* ══ ÜLKE KOMUT SİSTEMİ ══ */
-// Ülke isimlerinin telaffuz varyantları (ses tanıma yanlış yazabilir)
-const ULKE_ARAMA = {
-  'Almanya 🇩🇪': ['almanya','almanyaya','almanyadan'],
-  'Arnavutluk 🇦🇱': ['arnavutluk','arnavut'],
-  'Andorra 🇦🇩': ['andorra'],
-  'Avusturya 🇦🇹': ['avusturya','avusturyaya','avusturyadan'],
-  'Azerbaycan 🇦🇿': ['azerbaycan','azerbeycan'],
-  'Belçika 🇧🇪': ['belçika','belcika'],
-  'Belarus 🇧🇾': ['belarus','beyaz rusya'],
-  'Bosna Hersek 🇧🇦': ['bosna','bosna hersek','hersek'],
-  'Bulgaristan 🇧🇬': ['bulgaristan','bulgar'],
-  'Çekya 🇨🇿': ['çekya','çekoslovakya','çek cumhuriyeti','çek'],
-  'Danimarka 🇩🇰': ['danimarka'],
-  'Estonya 🇪🇪': ['estonya'],
-  'Finlandiya 🇫🇮': ['finlandiya','fin'],
-  'Fransa 🇫🇷': ['fransa','fransaya'],
-  'Gürcistan 🇬🇪': ['gürcistan','gurcistan'],
-  'Hırvatistan 🇭🇷': ['hırvatistan','hirvatistan','hırvat'],
-  'Hollanda 🇳🇱': ['hollanda','felemenk'],
-  'İngiltere 🇬🇧': ['ingiltere','britanya','birleşik krallık','uk'],
-  'İrlanda 🇮🇪': ['irlanda'],
-  'İspanya 🇪🇸': ['ispanya'],
-  'İsveç 🇸🇪': ['isveç','isvec'],
-  'İsviçre 🇨🇭': ['isviçre','isvicre'],
-  'İtalya 🇮🇹': ['italya'],
-  'İzlanda 🇮🇸': ['izlanda'],
-  'Karadağ 🇲🇪': ['karadağ','karadag'],
-  'Kosova 🇽🇰': ['kosova'],
-  'Letonya 🇱🇻': ['letonya'],
-  'Lihtenştayn 🇱🇮': ['lihtenştayn','liechtenstein'],
-  'Litvanya 🇱🇹': ['litvanya'],
-  'Lüksemburg 🇱🇺': ['lüksemburg','luksemburg','lüksemburg'],
-  'Macaristan 🇭🇺': ['macaristan','macar'],
-  'Makedonya 🇲🇰': ['makedonya','kuzey makedonya'],
-  'Malta 🇲🇹': ['malta'],
-  'Moldova 🇲🇩': ['moldova'],
-  'Monako 🇲🇨': ['monako'],
-  'Norveç 🇳🇴': ['norveç','norvec'],
-  'Polonya 🇵🇱': ['polonya','leh'],
-  'Portekiz 🇵🇹': ['portekiz'],
-  'Romanya 🇷🇴': ['romanya'],
-  'Rusya 🇷🇺': ['rusya','rus federasyonu'],
-  'San Marino 🇸🇲': ['san marino'],
-  'Sırbistan 🇷🇸': ['sırbistan','sirbistan','sırp'],
-  'Slovakya 🇸🇰': ['slovakya'],
-  'Slovenya 🇸🇮': ['slovenya'],
-  'Türkiye 🇹🇷': ['türkiye','turkey','turkiye'],
-  'Ukrayna 🇺🇦': ['ukrayna'],
-  'Vatikan 🇻🇦': ['vatikan'],
-  'Yunanistan 🇬🇷': ['yunanistan','yunan']
-};
-
-function ulkeBul(metin){
-  metin = metin.toLowerCase();
-  // En uzun eşleşen kelimeden başla (kısa olanlar önce eşleşmesin)
-  const siralanmis = Object.entries(ULKE_ARAMA).sort((a,b)=>{
-    const maxA = Math.max(...a[1].map(s=>s.length));
-    const maxB = Math.max(...b[1].map(s=>s.length));
-    return maxB - maxA;
-  });
-  for(const [ulke, aramalar] of siralanmis){
-    for(const ara of aramalar){
-      if(metin.includes(ara)) return ulke;
-    }
-  }
-  return null;
-}
-
-function ulkeKomutDene(metin){
-  metin = metin.toLowerCase();
-  
-  // Kalkış/başlangıç ülkesi komutları
-  const kalkisKelime = ['kalkış','kalkis','başlangıç','baslangic','çıkış','cikis','başlıyorum','nereden','kalktım'];
-  const varisKelime  = ['varış','varis','bitiş','bitis','hedef','gidiyorum','gideceğim','vardım','ulaştım','nereye'];
-  
-  const kalkisVar = kalkisKelime.some(k => metin.includes(k));
-  const varisVar  = varisKelime.some(k => metin.includes(k));
-  
-  if(!kalkisVar && !varisVar) return null;
-  
-  const ulke = ulkeBul(metin);
-  if(!ulke) return null;
-  
-  // Hangisi? Kalkış mı varış mı?
-  if(kalkisVar){
-    return {
-      islem: () => {
-        if(typeof S !== 'undefined' && S.selections){
-          S.selections.startCountry = ulke;
-          const el = document.getElementById('sel-start');
-          if(el) el.value = ulke;
-          if(typeof renderUlkeBayrak === 'function') renderUlkeBayrak();
-          if(typeof save === 'function') save();
-          if(typeof renderAll === 'function') renderAll();
-        }
-      },
-      yanit: `Kalkış ülkesi ${ulke.replace(/[^\p{L}\s]/gu,'').trim()} olarak ayarlandı.`
-    };
-  }
-  if(varisVar){
-    return {
-      islem: () => {
-        if(typeof S !== 'undefined' && S.selections){
-          S.selections.endCountry = ulke;
-          const el = document.getElementById('sel-end');
-          if(el) el.value = ulke;
-          if(typeof renderUlkeBayrak === 'function') renderUlkeBayrak();
-          if(typeof save === 'function') save();
-          if(typeof renderAll === 'function') renderAll();
-        }
-      },
-      yanit: `Varış ülkesi ${ulke.replace(/[^\p{L}\s]/gu,'').trim()} olarak ayarlandı.`
-    };
-  }
-  return null;
-}
-
-function komutEsles(metin){
-  // Normalleştir: küçük harf, noktalama temizle, Türkçe harfleri koru
-  metin = metin.toLowerCase().trim();
-  metin = metin.replace(/[.,!?;:'"]/g,' ');   // noktalama işaretlerini boşluğa çevir
-  metin = metin.replace(/\s+/g,' ').trim();   // çoklu boşlukları tek boşluk yap
-  
-  // Zonya varsa kelimeyi çıkar, geri kalan metne bak
-  metin = zonyaCikar(metin);
-  
-  // Önce ülke komutu mu dene
-  const ulkeKomut = ulkeKomutDene(metin);
-  if(ulkeKomut) return ulkeKomut;
-  
-  for(const k of KOMUTLAR){
-    for(const anahtar of k.kelimeler){
-      const a = anahtar.toLowerCase().trim();
-      if(metin.includes(a)) return k;
-      // Kelime kökü eşleşmesi — "yola çık" ile "yola çıkıyorum" eşleşsin
-      const kelimeler = a.split(' ');
-      if(kelimeler.length >= 2){
-        const kok = kelimeler.map(w => w.substring(0, Math.max(3, Math.floor(w.length * 0.7)))).join(' ');
-        if(metin.includes(kok)) return k;
-      }
-    }
-  }
-  return null;
-}
-
-/* ══ TANIMA BAŞLAT ══ */
-window.sesBaslat = function(){
-  if(sesAktif){ sesDurdur(); return; }
-
-  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SpeechRec){
-    alert('Ses tanıma bu cihazda desteklenmiyor.\nChrome veya WebView gereklidir.');
-    return;
-  }
-
-  tanima = new SpeechRec();
-  tanima.lang = 'tr-TR';
-  tanima.continuous = false;
-  tanima.interimResults = false;
-  tanima.maxAlternatives = 7;
-
-/* ══ HEY ZONYA — UYANDIRMA MODU ══
-   Sürekli dinler, sadece "Zonya" dediğinde komut işler
-═══════════════════════════════════════════════════ */
-let zonyaUyaniksa = false;         // Zonya aktif komut dinliyor mu
-let zonyaUyaniklikTimer = null;     // Zonya ne kadar süre aktif kalacak
-const ZONYA_UYANIK_SURE = 20000;    // 20 saniye (komut için bekleme süresi - mobilde uzun tut)
-
-// Zonya'yı uyandır
-window.zonyaUyandir = function(){
-  zonyaUyaniksa = true;
-  if(zonyaUyaniklikTimer) clearTimeout(zonyaUyaniklikTimer);
-  zonyaUyaniklikTimer = setTimeout(() => {
-    zonyaUyaniksa = false;
-    micBtnGuncelle(sesKilitli);  // butonu güncelle (pasif dinlemeye dön)
-  }, ZONYA_UYANIK_SURE);
-  micBtnGuncelle(sesKilitli, true); // uyanık durumu buton renginde göster
-};
-// Geri uyumluluk — iç kod da kullanabilsin
-function zonyaUyandir(){ return window.zonyaUyandir(); }
-
-  tanima.onstart = function(){
-    sesAktif = true;
-    micBtnGuncelle(sesKilitli);
-    // İlk başlatmada bir kez bildir, sonra sessiz çalışsın
-    if(!window._zonyaIlkBildirim){
-      if(typeof toast==='function') toast('🎤 Zonya dinliyor — istediğinde "Zonya" de','ok',5000);
-      window._zonyaIlkBildirim = true;
-    }
-  };
-
-  tanima.onresult = function(event){
-    // ══ ZONYA KENDİ SESİNİ DUYMASIN ══
-    // Konuşma sırasında gelen sonuçları görmezden gel
-    if(window._zonyaKonusuyor){
-      return;
-    }
-    
-    let enIyi = '';
-    // Tüm alternatifleri tara
-    for(let i=0; i<event.results[0].length; i++){
-      const alt = event.results[0][i].transcript;
-      if(i===0) enIyi = alt;
-      const altLower = alt.toLowerCase().trim();
-
-      // SÜREKLİ DİNLEME modundaysak: "Zonya" duyana kadar yoksay
-      if(sesKilitli){
-        // Önce Zonya uyandırma kelimesi var mı bak
-        const zonyaDenildi = zonyaVarMi(altLower);
-        
-        if(!zonyaUyaniksa && !zonyaDenildi){
-          // Zonya uyuyor ve Zonya denilmedi → yoksay
-          continue;
-        }
-        
-        if(zonyaDenildi && !zonyaUyaniksa){
-          // Zonya çağrıldı, uyandır
-          zonyaUyandir();
-          // "Zonya X" gibi tek cümlede komut da varsa hemen işle
-          const kalan = zonyaCikar(altLower);
-          if(kalan && kalan !== altLower && kalan.length > 2){
-            const komut = komutEsles(altLower);
-            if(komut){
-              komutCalistir(komut, alt);
-              zonyaUyaniksa = false;
-              if(zonyaUyaniklikTimer) clearTimeout(zonyaUyaniklikTimer);
-              return;
-            }
-          }
-          // Sadece "Zonya" denildi → cevap ver
-          if(typeof speak==='function') speak('Buyrun?','normal');
-          if(typeof toast==='function') toast('🎙️ Zonya dinliyor, komutunuzu söyleyin...','ok',5000);
-          return;
-        }
-        
-        // Zonya uyanık → komut işle
-        if(zonyaUyaniksa){
-          const komut = komutEsles(altLower);
-          if(komut){
-            komutCalistir(komut, alt);
-            zonyaUyaniksa = false;
-            if(zonyaUyaniklikTimer) clearTimeout(zonyaUyaniklikTimer);
-            return;
-          }
-        }
-      } else {
-        // Tek seferlik mod (manuel basış) — her şeyi kabul et
-        const komut = komutEsles(altLower);
-        if(komut){ komutCalistir(komut, alt); return; }
-      }
-    }
-    
-    // Anlamadık durumu
-    if(sesKilitli && zonyaUyaniksa){
-      if(typeof toast==='function') toast('🎤 Anlamadım: "'+enIyi+'"','warn',3000);
-      if(typeof speak==='function') speak('Anlamadım.','normal');
-      zonyaUyaniksa = false;
-      if(zonyaUyaniklikTimer) clearTimeout(zonyaUyaniklikTimer);
-    } else if(!sesKilitli){
-      // Tek seferlik modda her zaman cevap ver
-      if(typeof toast==='function') toast('🎤 Anlamadım: "'+enIyi+'" — Örnek: Yola çıkıyorum, Mola ver','warn',5000);
-      if(typeof speak==='function') speak('Anlamadım. Tekrar söyleyin.','normal');
-    }
-    // Sürekli modda Zonya denilmediyse: sessizce devam et
-  };
-
-  tanima.onerror = function(e){
-    sesAktif = false;
-    if(e.error==='not-allowed'){
-      sesKilitli = false;
-      alert('Mikrofon izni reddedildi!\nTarayıcı ayarlarından mikrofon iznini açın.');
-    } else if(e.error==='no-speech'){
-      // Sürekli modda ses algılanmadı — sessizce devam et
-      if(!sesKilitli){
-        if(typeof toast==='function') toast('🎤 Ses algılanmadı','warn',2000);
-      }
-    }
-    micBtnGuncelle(sesKilitli);
-  };
-
-  tanima.onend = function(){
-    sesAktif = false;
-    // Sürekli mod aktifse otomatik tekrar başlat
-    if(sesKilitli){
-      // Zonya uyanıksa hemen başlat, uyuyorsa biraz bekle (batarya tasarrufu)
-      const gecikme = zonyaUyaniksa ? 200 : 800;
-      setTimeout(()=>{ 
-        if(sesKilitli && !sesAktif) sesBaslat(); 
-      }, gecikme);
-    }
-    micBtnGuncelle(sesKilitli);
-  };
-
-  try{ tanima.start(); } catch(e){ 
-    sesAktif=false; 
-    micBtnGuncelle(sesKilitli); 
-    // Zaten çalışıyor hatası — önce durdurup yeniden başlat
-    if(e.name === 'InvalidStateError'){
-      setTimeout(()=>{ 
-        try{ tanima.start(); }catch(_){} 
-      }, 500);
-    }
-  }
-};
-
-window.sesDurdur = function(){
-  sesKilitli = false;
-  sesAktif = false;
-  zonyaUyaniksa = false;
-  if(zonyaUyaniklikTimer) clearTimeout(zonyaUyaniklikTimer);
-  if(tanima){ try{ tanima.stop(); }catch(_){} tanima=null; }
-  micBtnGuncelle(false);  // buton gri
-  if(typeof toast==='function') toast('🎤 Zonya uyku modunda','warn',2500);
-  if(typeof speak==='function') speak('Zonya kapatıldı.','normal');
-};
-
-window.sesSurekliBaslat = function(){
-  sesKilitli = true;
-  zonyaUyaniksa = false;
-  window._zonyaIlkBildirim = false;
-  window._zonyaKonusuyor = true;  // Başlangıç konuşmasından önce sağır et
-  micBtnGuncelle(true);
-  if(typeof toast==='function') toast('🎙️ Zonya aktif — "Zonya" diye seslenin','ok',5000);
-  if(typeof speak==='function') speak('Zonya dinliyor. Bana seslenmek için Zonya deyin.','normal');
-  // Konuşma bitmesini bekle sonra dinlemeye başla (yankıyı önle)
-  setTimeout(() => {
-    window._zonyaKonusuyor = false;
-    sesBaslat();
-  }, 3500); // 3.5 saniye sonra mikrofonu aç
-};
-
-function komutCalistir(komut, metin){
-  if(typeof toast==='function') toast('🎤 "'+metin+'"','ok',2500);
-  try{ komut.islem(); } catch(e){ console.warn('Komut hatası',e); }
-  if(komut.yanit && typeof speak==='function'){
-    setTimeout(()=>speak(komut.yanit,'normal'), 300);
-  }
-}
-
-/* ══ MİKROFON BUTONU GÜNCELLE ══ */
-function micBtnGuncelle(surekliAktif, zonyaUyaniksaDurum){
-  const btn = document.getElementById('mic-btn');
-  if(!btn) return;
-  btn.classList.remove('dinliyor','zonya-uyanik','zonya-pasif');
-  if(zonyaUyaniksaDurum){
-    // Zonya çağrıldı, komut bekliyor — parlak yeşil
-    btn.textContent = '🟢';
-    btn.title = 'Zonya komutunuzu bekliyor';
-    btn.classList.add('zonya-uyanik');
-  } else if(surekliAktif){
-    // Pasif dinleme — Zonya denmesini bekliyor
-    btn.textContent = '🎙️';
-    btn.title = 'Zonya aktif — "Zonya" diye seslenin (kapatmak için bas)';
-    btn.classList.add('zonya-pasif');
-  } else {
-    // Kapalı
-    btn.textContent = '🎤';
-    btn.title = 'Mikrofon — bas: dinle';
-  }
-}
-
-/* ══ HEADER'A MİKROFON BUTONU EKLE ══ */
-function micButonuEkle(){
-  const hactions = document.querySelector('.hactions');
-  if(!hactions) return;
-
-  let btn = document.getElementById('mic-btn');
-  
-  // Buton yoksa oluştur
-  if(!btn){
-    btn = document.createElement('button');
-    btn.id = 'mic-btn';
-    btn.className = 'hbtn';
-    btn.textContent = '🎤';
-    // Mute butonunun önüne ekle
-    const muteBtn = document.getElementById('mute-btn');
-    if(muteBtn) hactions.insertBefore(btn, muteBtn);
-    else hactions.appendChild(btn);
-  }
-  
-  // Çift event ekleme engeli
-  if(btn.dataset.micReady === '1') return;
-  btn.dataset.micReady = '1';
-  
-  btn.title = 'Mikrofon — bas: dinle';
-
-  // Tek dokunuş → Mikrofonu aç/kapa (basit mod)
-  btn.addEventListener('click', function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('🎤 Mikrofon butonuna basıldı.');
-    
-    const aktifMi = (typeof sesAktif !== 'undefined' && sesAktif);
-    
-    if(aktifMi){
-      // Dinliyorsa kapat
-      try{ if(typeof tanima !== 'undefined' && tanima){ tanima.stop(); } }catch(_){}
-      if(typeof window.sesDurdur === 'function') window.sesDurdur();
-      if(typeof toast==='function') toast('🎤 Mikrofon kapalı','warn',2000);
-    } else {
-      // Kapalıysa dinlemeye başla
-      try {
-        if(typeof window.zonyaUyandir === 'function') window.zonyaUyandir();
-        if(typeof window.sesBaslat === 'function') {
-          window.sesBaslat();
-          if(typeof toast==='function') toast('🎙️ Dinliyorum, komutunuzu söyleyin','ok',3000);
-        } else {
-          if(typeof toast==='function') toast('⚠️ Ses fonksiyonu bulunamadı','warn',3000);
-        }
-      } catch(err) {
-        console.error('Mikrofon başlatma hatası:', err);
-        if(typeof toast==='function') toast('⚠️ Mikrofon hatası: '+err.message,'warn',5000);
-      }
-    }
-  });
-  
-  console.log('✓ Mikrofon butonu hazır');
-}
 
 /* ══ BAŞLAT ══ */
 /* ══ GPS GÖSTERGE BUTONU ══ */
@@ -7172,11 +6679,36 @@ document.addEventListener('DOMContentLoaded', function(){
   if(bootBtn){
     bootBtn.addEventListener('click', function(){
       setTimeout(gpsButonuHazirla, 400);
+      // ★ Önceden GPS açıksa otomatik tekrar başlat
+      setTimeout(gpsAutoBaslat, 800);
     }, {once:true});
   } else {
     gpsButonuHazirla();
+    setTimeout(gpsAutoBaslat, 500);
   }
 });
+
+/* ★ Sayfa yenilendiğinde önceki GPS durumunu kontrol et ve gerekirse otomatik başlat */
+function gpsAutoBaslat(){
+  try {
+    const oncekiAktif = localStorage.getItem('gps_aktif') === '1';
+    // Önceki mesafeyi yükle
+    gpsKayitOku();
+    
+    if(oncekiAktif && !gpsAktif){
+      console.log('[GPS] Sayfa yenilenmiş, GPS otomatik başlatılıyor...');
+      // Kullanıcıya sorma — sessizce devam et (yola çıkmışsa fark etmesin)
+      setTimeout(()=>{
+        if(typeof window.gpsBaslat === 'function'){
+          window.gpsBaslat();
+          if(typeof window.toast === 'function'){
+            window.toast('📡 GPS otomatik devam ettirildi','info',3000);
+          }
+        }
+      }, 1000);
+    }
+  } catch(e){ console.warn('[GPS] auto-baslat hata:', e); }
+}
 
 })();
 
@@ -7250,8 +6782,23 @@ document.addEventListener('DOMContentLoaded', function(){
   async function wakeLockAcquire(){
     try{
       if('wakeLock' in navigator){
+        // Mevcut wakeLock varsa serbest bırak
+        if(wakeLock){
+          try { await wakeLock.release(); } catch(e){}
+          wakeLock = null;
+        }
         wakeLock = await navigator.wakeLock.request('screen');
         console.log('✓ Ekran uyanık tutma aktif');
+        
+        // wakeLock serbest bırakılırsa (mesela telefon kilitlenince) yeniden almaya çalış
+        wakeLock.addEventListener('release', () => {
+          console.log('Wake lock serbest bırakıldı');
+          wakeLock = null;
+          // Eğer GPS aktifse veya sürüşteyse yeniden almaya çalış
+          if(window.gpsAktif || (window.S && window.S.mode === 'surus')){
+            setTimeout(wakeLockAcquire, 1000);
+          }
+        });
       }
     }catch(e){
       console.warn('Wake Lock alınamadı:', e.message);
@@ -7267,6 +6814,13 @@ document.addEventListener('DOMContentLoaded', function(){
   window.addEventListener('load', () => {
     setTimeout(wakeLockAcquire, 2000);
   });
+  
+  // ★ GPS aktifken her 30 saniyede bir wakeLock kontrol et (yenileme)
+  setInterval(() => {
+    if((window.gpsAktif || (window.S && window.S.mode === 'surus')) && !wakeLock && document.visibilityState === 'visible'){
+      wakeLockAcquire();
+    }
+  }, 30000);
 
   // ══ YÜKLEME BUTONU ══
   let deferredPrompt = null;
