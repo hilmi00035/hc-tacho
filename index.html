@@ -174,6 +174,31 @@
   --radius:5px;
 }
 
+/* ★ AÇIK TEMA — Gündüz şoförleri için */
+body.light-theme{
+  --bg:#f5f6fa;
+  --panel:#ffffff;
+  --panel2:#f0f2f7;
+  --panel3:#e6e9f0;
+  --border:#d1d5dc;
+  --border2:#b8bdc8;
+  --gold:#b8860b;
+  --gold-dim:#fff4d6;
+  --green:#16a34a;
+  --green-dim:#dcfce7;
+  --red:#dc2626;
+  --red-dim:#fee2e2;
+  --orange:#d97706;
+  --orange-dim:#fef3c7;
+  --blue:#2563eb;
+  --blue-dim:#dbeafe;
+  --purple:#9333ea;
+  --purple-dim:#f3e8ff;
+  --text:#1a1a2e;
+  --text2:#2c3e50;
+  --sub:#5a6580;
+}
+
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden}
 button{border:0;cursor:pointer;font:inherit;background:none;color:inherit}
@@ -1089,6 +1114,7 @@ select{font:inherit}
   </div>
   <div class="hactions">
     <button id="gps-btn" class="hbtn" title="GPS göstergesi">🛰️</button>
+    <button id="theme-btn" class="hbtn" onclick="temaDegistir()" title="Tema değiştir">🌙</button>
     <button id="mute-btn" class="hbtn gold">🔊</button>
     <button id="reset-btn" class="hbtn">↺</button>
   </div>
@@ -1111,6 +1137,7 @@ select{font:inherit}
   <div class="dtco-nav-item" id="dnav-border" onclick="dtcoNavTo('border')"><span class="dni">🚧</span>Sınır Geçişleri</div>
   <div class="dtco-nav-item" id="dnav-transport" onclick="dtcoNavTo('transport')"><span class="dni">🚢</span>Feribot / Tren</div>
   <div class="dtco-nav-item" id="dnav-cabotage" onclick="dtcoNavTo('cabotage')"><span class="dni">📦</span>Kabotar Takibi</div>
+  <div class="dtco-nav-item" id="dnav-fuel" onclick="dtcoNavTo('fuel')"><span class="dni">⛽</span>Yakıt / KM</div>
   <div class="dtco-nav-sec">Çalışma Süreleri</div>
   <div class="dtco-nav-item" id="dnav-weekly" onclick="dtcoNavTo('weekly')"><span class="dni">📅</span>Haftalık Görünüm</div>
   <div class="dtco-nav-item" id="dnav-debt" onclick="dtcoNavTo('debt')"><span class="dni">⚖️</span>Dinlenme Borcu</div>
@@ -1729,6 +1756,73 @@ select{font:inherit}
   <div class="d-card"><div class="d-card-hd">Kabotar Durumu</div><div id="d-cab-status"></div><div style="overflow-x:auto;margin-top:10px"><table class="d-tbl"><thead><tr><th>Ülke</th><th>No</th><th>Başlangıç</th><th>Bitiş</th><th>Durum</th><th></th></tr></thead><tbody id="d-cab-log"></tbody></table></div></div>
 </div>
 
+<!-- ▸ YAKIT / KM TAKİBİ -->
+<div class="dtco-subpage" id="dpage-fuel" style="padding:10px">
+  <div class="d-card">
+    <div class="d-card-hd">⛽ Yakıt / KM Takibi</div>
+    <div style="background:#1a2438;border:1px solid #2a4060;border-radius:6px;padding:10px;margin-bottom:14px;font-family:var(--sans);font-size:.78rem;color:#a0b8d0;line-height:1.5;">
+      ℹ️ Sefer başında ve sonunda kilometre + yakıt değerlerini girin. Sistem otomatik tüketim hesaplar.
+    </div>
+    
+    <div class="d-form-row">
+      <div class="dfg"><label>Tarih</label><input type="datetime-local" id="d-fuel-date"></div>
+      <div class="dfg"><label>İşlem Tipi</label>
+        <select id="d-fuel-type">
+          <option value="kalkis">🚩 Sefer Başı (KM/Yakıt)</option>
+          <option value="dolum">⛽ Yakıt Dolumu</option>
+          <option value="varis">🏁 Sefer Sonu (KM/Yakıt)</option>
+        </select>
+      </div>
+    </div>
+    <div class="d-form-row">
+      <div class="dfg"><label>Kilometre (km)</label><input type="number" id="d-fuel-km" placeholder="123456" step="1"></div>
+      <div class="dfg"><label>Yakıt (litre)</label><input type="number" id="d-fuel-lt" placeholder="450" step="0.1"></div>
+    </div>
+    <div class="d-form-row">
+      <div class="dfg"><label>Birim Fiyat (€/L)</label><input type="number" id="d-fuel-price" placeholder="1.65" step="0.01"></div>
+      <div class="dfg"><label>Notlar (opsiyonel)</label><input type="text" id="d-fuel-note" placeholder="Shell Sofia"></div>
+    </div>
+    <div class="d-btn-row">
+      <button class="d-btn d-btn-a" onclick="dFuelEkle()">➕ Kayıt Ekle</button>
+    </div>
+  </div>
+  
+  <div class="d-card">
+    <div class="d-card-hd">📊 Genel Özet</div>
+    <div class="d-stat-row">
+      <div class="d-stat-box">
+        <div class="d-s-lbl">Toplam KM</div>
+        <div class="d-s-val" id="d-fuel-toplam-km" style="color:var(--blue)">0 km</div>
+      </div>
+      <div class="d-stat-box">
+        <div class="d-s-lbl">Toplam Yakıt</div>
+        <div class="d-s-val" id="d-fuel-toplam-lt" style="color:var(--orange)">0 L</div>
+      </div>
+    </div>
+    <div class="d-stat-row">
+      <div class="d-stat-box">
+        <div class="d-s-lbl">Ortalama Tüketim</div>
+        <div class="d-s-val" id="d-fuel-tuketim" style="color:var(--green)">— L/100km</div>
+      </div>
+      <div class="d-stat-box">
+        <div class="d-s-lbl">Toplam Maliyet</div>
+        <div class="d-s-val" id="d-fuel-maliyet" style="color:var(--gold)">€ 0</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="d-card">
+    <div class="d-card-hd">📋 Kayıtlar</div>
+    <div style="overflow-x:auto">
+      <table class="d-tbl">
+        <thead><tr><th>Tarih</th><th>Tip</th><th>KM</th><th>Yakıt</th><th>Maliyet</th><th>Not</th><th></th></tr></thead>
+        <tbody id="d-fuel-log"><tr><td colspan="7"><div class="d-empty">Henüz kayıt yok</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- /YAKIT-KM SONU -->
+
 <!-- ▸ HAFTALIK GÖRÜNÜM -->
 <div class="dtco-subpage" id="dpage-weekly" style="padding:10px">
   <div class="d-card"><div class="d-card-hd">Bu Hafta</div><div class="d-week-cells" id="d-week-cells"></div></div>
@@ -1869,15 +1963,26 @@ select{font:inherit}
       <div class="dfg"><label>Kart No</label><input type="text" id="d-s-card" placeholder="TR 12345678901234"></div>
     </div>
     <div class="d-form-row">
+      <div class="dfg"><label>Sürücü Kartı Geçerlilik</label><input type="date" id="d-s-card-exp"></div>
+      <div class="dfg"><label>Ehliyet Geçerlilik</label><input type="date" id="d-s-license-exp"></div>
+    </div>
+    <div class="d-form-row">
       <div class="dfg"><label>Plaka</label><input type="text" id="d-s-plate" placeholder="34 ABC 123"></div>
       <div class="dfg"><label>Araç Tipi</label>
         <select id="d-s-vehicle"><option value="truck">🚛 Kamyon</option><option value="bus">🚌 Otobüs</option><option value="van">🚐 Van</option></select></div>
+    </div>
+    <div class="d-form-row">
+      <div class="dfg"><label>Araç Muayene Tarihi</label><input type="date" id="d-s-inspection-exp"></div>
+      <div class="dfg"><label>Trafik Sigorta Bitiş</label><input type="date" id="d-s-insurance-exp"></div>
     </div>
     <div class="d-form-row">
       <div class="dfg"><label>Şirket</label><input type="text" id="d-s-company"></div>
       <div class="dfg"><label>Ev Ülkesi</label><select id="d-s-home-country"></select></div>
     </div>
     <div class="d-btn-row"><button class="d-btn d-btn-a" onclick="dSaveSettings()">💾 Kaydet</button></div>
+    
+    <!-- ★ Süre Uyarıları -->
+    <div id="d-belge-uyari" style="margin-top:12px;display:none;"></div>
   </div>
   <div class="d-card">
     <div class="d-card-hd">Uyarı Eşikleri (dakika)</div>
@@ -1889,14 +1994,41 @@ select{font:inherit}
     <div class="d-btn-row"><button class="d-btn d-btn-a" onclick="dSaveSettings()">💾 Kaydet</button></div>
   </div>
   <div class="d-card">
-    <div class="d-card-hd">Veri Yönetimi</div>
+    <div class="d-card-hd">📦 Veri Yedekleme</div>
+    <div style="background:#1a2438;border:1px solid #2a4060;border-radius:6px;padding:10px;margin-bottom:12px;font-family:var(--sans);font-size:.78rem;color:#a0b8d0;line-height:1.5;">
+      ℹ️ Tüm uygulama verileriniz tarayıcıda yerel olarak saklanır. Tablet bozulursa <b>kaybolur</b>. Düzenli yedek almanızı öneririz.
+    </div>
+    <div class="d-btn-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button class="d-btn d-btn-a" onclick="tumYedekAl()" style="padding:14px;font-size:.88rem;font-weight:700;">💾 TÜM VERİYİ YEDEKLE</button>
+      <button class="d-btn d-btn-s" onclick="document.getElementById('tum-yedek-file').click()" style="padding:14px;font-size:.88rem;font-weight:700;">📥 YEDEKTEN GERİ YÜKLE</button>
+    </div>
+    <input type="file" id="tum-yedek-file" accept=".json" style="display:none" onchange="tumYedekYukle(event)">
+    <div style="margin-top:10px;font-family:var(--sans);font-size:.72rem;color:#7a92b0;line-height:1.4;">
+      📤 <b>Yedekle:</b> Sürüş, mola, ihlal, sefer, sınır geçişi, ülke seçimleri, ayarlar — hepsini JSON dosyasına indirir.<br>
+      📥 <b>Geri yükle:</b> Yedek dosyasını seçince mevcut veri üzerine yazılır (uyarı verilir).
+    </div>
+  </div>
+  
+  <div class="d-card">
+    <div class="d-card-hd">📄 Yasal Rapor (PDF)</div>
+    <div style="background:#1a2438;border:1px solid #2a4060;border-radius:6px;padding:10px;margin-bottom:12px;font-family:var(--sans);font-size:.78rem;color:#a0b8d0;line-height:1.5;">
+      🚔 Yetkili durdurmaları için son 28 günlük sürüş özeti. Yedek belge olarak kullanın.
+    </div>
+    <div class="d-btn-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button class="d-btn d-btn-a" onclick="haftalikRaporOlustur()" style="padding:14px;font-size:.88rem;font-weight:700;">📄 HAFTALIK RAPOR</button>
+      <button class="d-btn d-btn-a" onclick="dortHaftaRaporOlustur()" style="padding:14px;font-size:.88rem;font-weight:700;">📄 28 GÜNLÜK RAPOR</button>
+    </div>
+  </div>
+  
+  <div class="d-card">
+    <div class="d-card-hd">DTCO Veri Yönetimi</div>
     <div class="d-btn-row">
       <button class="d-btn d-btn-s" onclick="dtcoExport()">📤 Dışa Aktar</button>
       <button class="d-btn d-btn-s" onclick="document.getElementById('d-imp-file').click()">📥 İçe Aktar</button>
       <button class="d-btn d-btn-d" onclick="dtcoReset()">🗑 Sıfırla</button>
     </div>
     <input type="file" id="d-imp-file" accept=".json" style="display:none" onchange="dImportData(event)">
-    <p style="font-size:.72rem;color:#3d5a7a;margin-top:10px">Veriler tarayıcıda yerel olarak saklanır. Resmi denetimler için gerçek takograf cihazınızı esas alınız.</p>
+    <p style="font-size:.72rem;color:#3d5a7a;margin-top:10px">Sadece DTCO verisi (sefer, sınır, sürücü kartı). Yukarıdaki "Tüm Veriyi Yedekle" tüm sistem verisini içerir.</p>
   </div>
 </div>
 
@@ -2017,6 +2149,10 @@ function freshS(){
       tenHourUsed:0,shortRestUsed:0,daysDriven:0,
       dailyDrive:[0,0,0,0,0,0,0],
       dailyDriveW2:[0,0,0,0,0,0,0],
+      // ★ Hafta takibi - 2 haftalık döngü
+      currentWeekKey:'',     // Şu anda hangi haftadayız (örn: "2026-W18")
+      cycleStartKey:'',      // 2 haftalık döngünün başlangıç haftası (1. hafta)
+      cyclePosition:1,       // Döngüde kaçıncı hafta (1 veya 2)
       // ★ Hız sayaçları (gün bazlı)
       maxHiz:0,
       hizIhlalSayisi:0,
@@ -2025,6 +2161,7 @@ function freshS(){
     },
     alerts:{
       shiftWarned:false,shiftDone:false,
+      shift30min:false, // ★ 30 dk önce hatırlatıcı
       driveWarned:false,driveDone:false,
       restDone:false,workdayWarned:false,workdayOverAnnounced:false,
       weekWarn:false,weekOver:false,dweekOver:false,
@@ -2077,6 +2214,10 @@ function load(){
       tenHourUsed:sN(st.tenHourUsed),shortRestUsed:sN(st.shortRestUsed),daysDriven:sN(st.daysDriven),
       dailyDrive:Array.isArray(st.dailyDrive)?st.dailyDrive.map(v=>sN(v)):[0,0,0,0,0,0,0],
       dailyDriveW2:Array.isArray(st.dailyDriveW2)?st.dailyDriveW2.map(v=>sN(v)):[0,0,0,0,0,0,0],
+      // ★ 2 haftalık döngü takibi
+      currentWeekKey: typeof st.currentWeekKey === 'string' ? st.currentWeekKey : '',
+      cycleStartKey: typeof st.cycleStartKey === 'string' ? st.cycleStartKey : '',
+      cyclePosition: (st.cyclePosition === 2) ? 2 : 1,
       // ★ Hız sayaçları (gün bazlı)
       maxHiz: sN(st.maxHiz),
       hizIhlalSayisi: sN(st.hizIhlalSayisi),
@@ -2086,9 +2227,70 @@ function load(){
     while(S.stats.dailyDrive.length<7)S.stats.dailyDrive.push(0);
     while(S.stats.dailyDriveW2.length<7)S.stats.dailyDriveW2.push(0);
     S.stats.weeklyRest=sN(st.weeklyRest);
+    
+    // ★ 2-HAFTALIK DÖNGÜ KONTROLÜ
+    const buHaftaKey = getWeekKey(Date.now());
+    
+    if(!S.stats.cycleStartKey){
+      // İlk yükleme — döngü başlat
+      S.stats.cycleStartKey = buHaftaKey;
+      S.stats.currentWeekKey = buHaftaKey;
+      S.stats.cyclePosition = 1;
+    } else {
+      // Döngü başlangıcından kaç hafta geçti?
+      const haftaFarki = haftaArasiFark(S.stats.cycleStartKey, buHaftaKey);
+      
+      if(haftaFarki === 0){
+        // Hâlâ 1. hafta
+        S.stats.cyclePosition = 1;
+        S.stats.currentWeekKey = buHaftaKey;
+      } else if(haftaFarki === 1 && S.stats.cyclePosition === 1){
+        // 1. haftadan 2. haftaya GEÇİŞ — 1. hafta verisini W2'ye arşivle
+        S.stats.week2 = S.stats.week1 || 0;
+        S.stats.dailyDriveW2 = [...(S.stats.dailyDrive || [0,0,0,0,0,0,0])];
+        // Bu hafta (2. hafta) sıfırlanır — yeni sürüşler buraya yazılacak
+        S.stats.week1 = 0;
+        S.stats.week = 0;
+        S.stats.dailyDrive = [0,0,0,0,0,0,0];
+        S.stats.cyclePosition = 2;
+        S.stats.currentWeekKey = buHaftaKey;
+        // dweek = geçen hafta (W2) — yeni hafta 0'dan
+        S.stats.dweek = S.stats.week2 || 0;
+        setTimeout(()=>{
+          if(typeof toast === 'function') toast('📅 2. Hafta başladı','ok',4000);
+        }, 1500);
+      } else if(haftaFarki === 1 && S.stats.cyclePosition === 2){
+        // Bu durum olmaz ama güvenlik için
+        S.stats.cyclePosition = 2;
+      } else if(haftaFarki >= 2){
+        // 2 HAFTA GEÇTİ — DÖNGÜ TAMAMLANDI, HER ŞEY SIFIRLANIR
+        // Yeni döngü bu haftadan başlar, geriye dönük HİÇBİR ŞEY KALMAZ
+        S.stats.week1 = 0;
+        S.stats.week2 = 0;
+        S.stats.week = 0;
+        S.stats.dweek = 0;
+        S.stats.dailyDrive = [0,0,0,0,0,0,0];
+        S.stats.dailyDriveW2 = [0,0,0,0,0,0,0];
+        S.stats.tenHourUsed = 0;
+        S.stats.shortRestUsed = 0;
+        S.stats.daysDriven = 0;
+        S.stats.cycleStartKey = buHaftaKey;
+        S.stats.currentWeekKey = buHaftaKey;
+        S.stats.cyclePosition = 1;
+        // İhlalleri de temizle (2 haftalık döngü kaydı sona erdi)
+        S.violations = [];
+        S.log = []; // 2 haftalık tüm kayıtlar da silinir
+        setTimeout(()=>{
+          if(typeof toast === 'function') toast('🔄 Yeni 2 haftalık döngü başladı','ok',4500);
+        }, 1500);
+      }
+    }
+    // _weekView ile cyclePosition senkron
+    _weekView = S.stats.cyclePosition;
+    S.weekView = S.stats.cyclePosition;
     const al=p.alerts||{};
     S.alerts={
-      shiftWarned:Boolean(al.shiftWarned),shiftDone:Boolean(al.shiftDone),
+      shiftWarned:Boolean(al.shiftWarned),shiftDone:Boolean(al.shiftDone),shift30min:Boolean(al.shift30min),
       driveWarned:Boolean(al.driveWarned),driveDone:Boolean(al.driveDone),
       restDone:Boolean(al.restDone),workdayWarned:Boolean(al.workdayWarned),
       workdayOverAnnounced:Boolean(al.workdayOverAnnounced),
@@ -2137,6 +2339,80 @@ function speak(txt,urg='normal'){
 }
 window.speak = speak;
 
+/* ═══════════════════════════════════════════════════
+   🌗 TEMA DEĞİŞTİRİCİ (Karanlık / Açık)
+═══════════════════════════════════════════════════ */
+window.temaDegistir = function(){
+  const isLight = document.body.classList.contains('light-theme');
+  if(isLight){
+    document.body.classList.remove('light-theme');
+    localStorage.setItem('hctacho_tema', 'dark');
+    const btn = document.getElementById('theme-btn');
+    if(btn) btn.textContent = '🌙';
+    if(typeof toast === 'function') toast('🌙 Karanlık tema','info',2000);
+  } else {
+    document.body.classList.add('light-theme');
+    localStorage.setItem('hctacho_tema', 'light');
+    const btn = document.getElementById('theme-btn');
+    if(btn) btn.textContent = '☀️';
+    if(typeof toast === 'function') toast('☀️ Açık tema','info',2000);
+  }
+};
+
+// Sayfa yüklenince tema yükle
+(function temaYukle(){
+  try {
+    const tema = localStorage.getItem('hctacho_tema');
+    if(tema === 'light'){
+      document.body.classList.add('light-theme');
+      // İkonu butonda güncelle (DOM hazır olunca)
+      setTimeout(()=>{
+        const btn = document.getElementById('theme-btn');
+        if(btn) btn.textContent = '☀️';
+      }, 100);
+    }
+  } catch(e){}
+})();
+
+/* ═══════════════════════════════════════════════════
+   📱 PUSH BİLDİRİM (Mola hatırlatıcı, ihlal uyarısı)
+   Tarayıcı notification API + titreşim
+═══════════════════════════════════════════════════ */
+function pushBildirim(baslik, mesaj){
+  // Bildirim izni iste (ilk seferde)
+  if('Notification' in window){
+    if(Notification.permission === 'default'){
+      Notification.requestPermission();
+    }
+    if(Notification.permission === 'granted'){
+      try {
+        new Notification(baslik, {
+          body: mesaj,
+          icon: 'icon-192.png',
+          badge: 'icon-192.png',
+          tag: 'hctacho-' + Date.now(),
+          requireInteraction: false,
+          silent: false,
+        });
+      } catch(e){ console.warn('Bildirim hata:', e); }
+    }
+  }
+  // Titreşim (mobil cihazlarda)
+  if('vibrate' in navigator){
+    try {
+      navigator.vibrate([200, 100, 200]);
+    } catch(e){}
+  }
+}
+window.pushBildirim = pushBildirim;
+
+// Sayfa yüklenince bildirim izni iste
+if('Notification' in window && Notification.permission === 'default'){
+  setTimeout(()=>{
+    try { Notification.requestPermission(); } catch(e){}
+  }, 5000);
+}
+
 /* ══ TOAST ══ */
 function toast(msg,type='warn',dur=3800){
   // Turuncu (warn) uyarılar artık gösterilmez — kullanıcı tercihi
@@ -2157,6 +2433,71 @@ function fmtClk(s){
 function fmtHM(s){s=Math.max(0,Math.floor(s));return `${pad(Math.floor(s/3600))}:${pad(Math.floor((s%3600)/60))}`;}
 function fmtHMS(s){s=Math.max(0,Math.floor(s));return `${pad(Math.floor(s/3600))}:${pad(Math.floor((s%3600)/60))}:${pad(s%60)}`;}
 function pad(n){return String(n).padStart(2,'0');}
+
+/* ═══ ISO HAFTA YARDIMCISI ═══
+   AB takograf yönetmeliği: hafta = Pazartesi 00:00 → Pazar 23:59
+   ISO 8601'e göre hafta numarası
+*/
+function getWeekKey(date){
+  const d = new Date(date);
+  d.setHours(0,0,0,0);
+  // Pazartesi'yi haftanın ilk günü kabul et
+  // ISO: Pazartesi=1, Pazar=7
+  const gun = d.getDay() || 7; // Pazar=0'ı 7 yap
+  // Bu haftanın Perşembe'sine git (ISO 8601)
+  d.setDate(d.getDate() + 4 - gun);
+  const yilBasi = new Date(d.getFullYear(), 0, 1);
+  const haftaNo = Math.ceil(((d - yilBasi) / 86400000 + 1) / 7);
+  return d.getFullYear() + '-W' + pad(haftaNo);
+}
+
+/* İki hafta anahtarı arasında kaç hafta var?
+   Aynı hafta = 0, sonraki hafta = 1, vs.
+   Eski hafta verilirse negatif (ama kullanmıyoruz) */
+function haftaArasiFark(eskiKey, yeniKey){
+  if(!eskiKey || !yeniKey || eskiKey === yeniKey) return 0;
+  // YYYY-WNN formatından Pazartesi tarihi hesapla
+  function keyToMonday(key){
+    const m = key.match(/^(\d{4})-W(\d{2})$/);
+    if(!m) return null;
+    const yil = parseInt(m[1]);
+    const haftaNo = parseInt(m[2]);
+    // Yılın 4 Ocak'ı her zaman 1. haftada
+    const ocak4 = new Date(yil, 0, 4);
+    const ocak4Gun = ocak4.getDay() || 7;
+    // Haftanın Pazartesi'sini bul
+    const pazartesi = new Date(ocak4);
+    pazartesi.setDate(ocak4.getDate() - ocak4Gun + 1 + (haftaNo - 1) * 7);
+    pazartesi.setHours(0,0,0,0);
+    return pazartesi;
+  }
+  const m1 = keyToMonday(eskiKey);
+  const m2 = keyToMonday(yeniKey);
+  if(!m1 || !m2) return 0;
+  return Math.round((m2 - m1) / (7 * 86400000));
+}
+
+/* Sekme tıklamasına göre doğru veri kaynağını döndür.
+   Mantık:
+   - cyclePosition=1 (1. haftadayız): current data = week1/dailyDrive
+       → Sekme 1 → current
+       → Sekme 2 → boş (henüz 2. hafta gelmedi)
+   - cyclePosition=2 (2. haftadayız): current data = week1/dailyDrive (yeni hafta)
+       → Sekme 1 → arşiv (week2/dailyDriveW2)
+       → Sekme 2 → current (week1/dailyDrive)
+*/
+function haftaVeriAl(sekmeNo){
+  const cp = S.stats.cyclePosition || 1;
+  if(cp === 1){
+    // 1. haftadayız, current = week1
+    if(sekmeNo === 1) return { toplam: S.stats.week1 || 0, gunluk: S.stats.dailyDrive || [0,0,0,0,0,0,0], aktif: true };
+    return { toplam: 0, gunluk: [0,0,0,0,0,0,0], aktif: false }; // 2. hafta henüz yok
+  } else {
+    // 2. haftadayız: arşiv = week2, current = week1
+    if(sekmeNo === 1) return { toplam: S.stats.week2 || 0, gunluk: S.stats.dailyDriveW2 || [0,0,0,0,0,0,0], aktif: false }; // arşiv
+    return { toplam: S.stats.week1 || 0, gunluk: S.stats.dailyDrive || [0,0,0,0,0,0,0], aktif: true }; // current
+  }
+}
 function fmtTime(ms){const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;}
 function fmtDate(ms){const d=new Date(ms);return `${pad(d.getDate())}.${pad(d.getMonth()+1)}`;}
 
@@ -2200,7 +2541,8 @@ function applyS(sec){
   if(S.mode === 'surus'){
     S.stats.drive += sec; S.stats.shift += sec; S.stats.workday += sec;
     S.stats.week += sec; S.stats.dweek += sec;
-    if(_weekView === 1) S.stats.week1 += sec; else S.stats.week2 += sec;
+    // ★ Sürüş HER ZAMAN bu haftaya (week1) eklenir, kullanıcı hangi sekmede olursa olsun
+    S.stats.week1 = (S.stats.week1 || 0) + sec;
 
     // ★ GÜN GEÇİŞİ DESTEĞİ — Sürüşü doğru güne yaz
     // sec saniye, S.lastTickMs'den önceki ana kadar uzanır
@@ -2227,11 +2569,8 @@ function applyS(sec){
       let gunIndex = d.getDay();
       let takvimIndeksi = (gunIndex === 0) ? 6 : gunIndex - 1;
       
-      if(_weekView === 1) {
-        S.stats.dailyDrive[takvimIndeksi] = (S.stats.dailyDrive[takvimIndeksi] || 0) + buGun_sn;
-      } else {
-        S.stats.dailyDriveW2[takvimIndeksi] = (S.stats.dailyDriveW2[takvimIndeksi] || 0) + buGun_sn;
-      }
+      // ★ Sürüş HER ZAMAN bu haftaya (dailyDrive) yazılır
+      S.stats.dailyDrive[takvimIndeksi] = (S.stats.dailyDrive[takvimIndeksi] || 0) + buGun_sn;
       
       kalan -= buGun_sn;
       kursorMs = gunSonuMs;
@@ -2254,6 +2593,14 @@ function checkDriveAlerts(){
   const sh=S.stats.shift,dr=S.stats.drive;
   const dlim=S.extendedDriveApplied?K.DRIVE_DAY_EXT:K.DRIVE_DAY;
 
+  // ★ AKILLI HATIRLATIcı - Sürüş bloğu 4:00 olunca (30 dk öncesi)
+  if(!S.alerts.shift30min && sh >= (K.SHIFT - 30*60)){
+    S.alerts.shift30min = true;
+    speak('Dikkat! 30 dakika sonra mola gerekiyor. Mola yeri planlayın.','normal');
+    toast('🟡 30 dk içinde mola gerekiyor — yer planla','info',5000);
+    pushBildirim('Mola Hatırlatıcı', '30 dk içinde mola gerekiyor');
+  }
+
   // Blok uyarısı %85
   if(!S.alerts.shiftWarned&&sh>=K.SHIFT*0.85){
     S.alerts.shiftWarned=true;
@@ -2268,6 +2615,7 @@ function checkDriveAlerts(){
     speak('Uyarı! Sürüş bloğu doldu. Mola zorunlu!','urgent');
     toast('🚨 4:30 SÜRÜŞ BLOĞU DOLDU — Mola verin!','');
     addViolation('SHIFT_OVER',`4.5 saatlik sürüş bloğu aşıldı. Toplam: ${fmtHM(sh)}`,'L2');
+    pushBildirim('🚨 Mola Zorunlu', '4:30 sürüş bloğu doldu');
   }
   // Günlük sürüş %90
   if(!S.alerts.driveWarned&&dr>=dlim*0.9){
@@ -2396,7 +2744,7 @@ function checkRestProgress(before){
   }
 
   if((S.restType==='uzun_mola'||S.restType==='kisa_mola')&&before<K.BREAK_SHORT&&p>=K.BREAK_SHORT){
-    S.stats.shift=0;S.alerts.shiftWarned=false;S.alerts.shiftDone=false;
+    S.stats.shift=0;S.alerts.shiftWarned=false;S.alerts.shiftDone=false;S.alerts.shift30min=false;S.alerts.shift30min=false;
   }
   if(S.restType==='kisa_mola'){
     if(S.splitPhase===0&&p>=K.BREAK_SPLIT1){
@@ -2409,8 +2757,15 @@ function checkRestProgress(before){
   if(!S.alerts.restDone&&p>=tgt){
     S.alerts.restDone=true;
     const isDaily=S.restType==='gunluk_kisa'||S.restType==='gunluk_tam';
-    if(isDaily){speak('Günlük istirahat tamamlandı. Günaydın! İyi yolculuklar.','normal');toast('✅ Günlük istirahat tamamlandı','ok');}
-    else{speak('Mola tamamlandı. Sürüşe hazırsınız.','normal');toast('✅ Mola tamam — Sürüşe hazır!','ok');}
+    if(isDaily){
+      speak('Günlük istirahat tamamlandı. Günaydın! İyi yolculuklar.','normal');
+      toast('✅ Günlük istirahat tamamlandı','ok');
+      pushBildirim('✅ Günlük İstirahat Tamamlandı', 'Yola çıkmaya hazırsınız');
+    } else {
+      speak('Mola tamamlandı. Sürüşe hazırsınız.','normal');
+      toast('✅ Mola tamam — Sürüşe hazır!','ok');
+      pushBildirim('✅ Mola Tamamlandı', 'Sürüşe devam edebilirsiniz');
+    }
   }
 }
 
@@ -2545,21 +2900,50 @@ function handleEndOfDay(){
   save();_edLock=false;
 }
 
-/* ══ HAFTALIK SIFIR ══ */
+/* ══ HAFTALIK SIFIR (manuel) ══ */
+/* ══ HAFTALIK SIFIR (manuel) ══ 
+   2 haftalık döngü mantığı:
+   - 1. haftadayken bas → 2. haftaya geç (1. hafta arşivlenir)
+   - 2. haftadayken bas → DÖNGÜ TAMAMLANIR, yeni 1. hafta başlar (HER ŞEY SIFIR)
+*/
 function weeklyReset(){
-  if(!window.confirm('Haftalık sayaçlar sıfırlansın mı?\n(1. Haftadan 2. Haftaya geçiş için kullanın)'))return;
-  // 1. haftanın değerlerini hafıza al
-  S.stats.week2=S.stats.week1;
-  S.stats.dailyDriveW2=[...S.stats.dailyDrive];
-  S.stats.week1=0;
-  S.stats.week=0;
-  S.stats.dailyDrive=[0,0,0,0,0,0,0];
-  S.stats.tenHourUsed=0;S.stats.shortRestUsed=0;S.stats.daysDriven=0;
-  _weekView=2;S.weekView=2;
-  // Hafta seçici güncelle
-  selectWeekView(2);
-  speak('Haftalık sayaçlar sıfırlandı. 2. Hafta başlıyor.','normal');
-  toast('📅 Hafta sıfırlandı — 2. Hafta','ok');
+  if(S.stats.cyclePosition === 1){
+    // 1. → 2. hafta geçişi (manuel)
+    if(!window.confirm('1. haftadan 2. haftaya geçilsin mi?\n• 1. hafta verisi arşivlenir\n• 2. hafta sıfırdan başlar'))return;
+    S.stats.week2 = S.stats.week1 || 0;
+    S.stats.dailyDriveW2 = [...(S.stats.dailyDrive || [0,0,0,0,0,0,0])];
+    S.stats.week1 = 0;
+    S.stats.week = 0;
+    S.stats.dailyDrive = [0,0,0,0,0,0,0];
+    S.stats.cyclePosition = 2;
+    S.stats.dweek = S.stats.week2 || 0;
+    S.stats.currentWeekKey = getWeekKey(Date.now());
+    _weekView = 2; S.weekView = 2;
+    selectWeekView(2);
+    speak('İkinci hafta başladı.','normal');
+    toast('📅 2. Hafta başladı','ok');
+  } else {
+    // 2. hafta → YENİ DÖNGÜ (HER ŞEY SIFIR)
+    if(!window.confirm('2 haftalık döngü tamamlansın mı?\n• Tüm veriler silinir (1. ve 2. hafta)\n• Yeni döngü sıfırdan başlar'))return;
+    S.stats.week1 = 0;
+    S.stats.week2 = 0;
+    S.stats.week = 0;
+    S.stats.dweek = 0;
+    S.stats.dailyDrive = [0,0,0,0,0,0,0];
+    S.stats.dailyDriveW2 = [0,0,0,0,0,0,0];
+    S.stats.tenHourUsed = 0;
+    S.stats.shortRestUsed = 0;
+    S.stats.daysDriven = 0;
+    S.stats.cyclePosition = 1;
+    S.stats.cycleStartKey = getWeekKey(Date.now());
+    S.stats.currentWeekKey = getWeekKey(Date.now());
+    S.violations = []; // 2 haftalık ihlaller de temizlenir
+    S.log = []; // 2 haftalık tüm kayıtlar da silinir
+    _weekView = 1; S.weekView = 1;
+    selectWeekView(1);
+    speak('Yeni döngü başladı. Tüm sayaçlar sıfırlandı.','normal');
+    toast('🔄 Yeni 2 haftalık döngü başladı','ok');
+  }
   renderAll();save();
 }
 
@@ -2576,23 +2960,18 @@ function selectWeekView(w){
   _weekView=w;S.weekView=w;
   document.getElementById('wt1')?.classList.toggle('active',w===1);
   document.getElementById('wt2')?.classList.toggle('active',w===2);
-  // KALAN SÜRE: 1.Hafta=56s, 2.Hafta=90s toplamdan hesapla
+  // Yeni mantık: w=1 → 1. Hafta verisi, w=2 → 2. Hafta verisi (cyclePosition'a göre)
+  const veri = haftaVeriAl(w);
   const e=id=>document.getElementById(id);
-  if(w===1){
-    const kalan=Math.max(0,K.DRIVE_WEEK-(S.stats.week1||S.stats.week));
-    if(e('bw-remain'))e('bw-remain').textContent=fmtHM(kalan);
-    if(e('bw-remain'))e('bw-remain').style.color=kalan<10800?'var(--red)':kalan<21600?'var(--orange)':'var(--green)';
-    if(e('bw-total'))e('bw-total').textContent=fmtHM(S.stats.week1||S.stats.week);
-    if(e('lbl-dweek-limit'))e('lbl-dweek-limit').innerHTML='Limit<br>56 saat';
-    if(e('rem-dweek'))e('rem-dweek').textContent=fmtHM(Math.max(0,K.DRIVE_WEEK-(S.stats.week1||S.stats.week)));
-  } else {
-    const kalan=Math.max(0,K.DRIVE_2WEEK-S.stats.dweek);
-    if(e('bw-remain'))e('bw-remain').textContent=fmtHM(kalan);
-    if(e('bw-remain'))e('bw-remain').style.color=kalan<18000?'var(--red)':kalan<36000?'var(--orange)':'var(--green)';
-    if(e('bw-total'))e('bw-total').textContent=fmtHM(S.stats.dweek);
-    if(e('lbl-dweek-limit'))e('lbl-dweek-limit').innerHTML='Limit<br>90 saat';
-    if(e('rem-dweek'))e('rem-dweek').textContent=fmtHM(Math.max(0,K.DRIVE_2WEEK-S.stats.dweek));
+  const kalan = Math.max(0, K.DRIVE_WEEK - veri.toplam);
+  if(e('bw-remain')){
+    e('bw-remain').textContent = fmtHM(kalan);
+    e('bw-remain').style.color = kalan<10800?'var(--red)':kalan<21600?'var(--orange)':'var(--green)';
   }
+  if(e('bw-total')) e('bw-total').textContent = fmtHM(veri.toplam);
+  if(e('lbl-dweek-limit')) e('lbl-dweek-limit').innerHTML = 'Limit<br>56 saat';
+  if(e('rem-dweek')) e('rem-dweek').textContent = fmtHM(kalan);
+  // 2 haftalık toplam — her zaman dweek
   renderBiWeekChart();save();
 }
 
@@ -2886,6 +3265,9 @@ function renderDaily(){
 function renderWeekly(){
   const wl=document.getElementById('week-lbl');
   if(wl)wl.textContent=`Hafta ${_weekView===2?'2':'1'}`;
+  // Chart başlığı da güncellesin (1. Hafta / 2. Hafta)
+  const cwl = document.getElementById('chart-week-lbl');
+  if(cwl) cwl.textContent = (_weekView === 2) ? '2. Hafta' : '1. Hafta';
   setGauge('week',S.stats.week,K.DRIVE_WEEK,'var(--orange)');
   const e=id=>document.getElementById(id);
   if(e('w-drive'))e('w-drive').textContent=fmtHM(S.stats.week);
@@ -2901,14 +3283,18 @@ function renderWeekly(){
   const chart = e('week-chart');
   if (chart) {
     const gunIsimleri = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
-    const dailyData = (_weekView === 2) ? S.stats.dailyDriveW2 : S.stats.dailyDrive;
+    // Doğru veri kaynağı (cyclePosition + sekme tıklamasına göre)
+    const veri = haftaVeriAl(_weekView);
+    const dailyData = veri.gunluk;
+    const isAktifHafta = veri.aktif; // Sadece aktif hafta için "bugün" işaretle
     
     let dObj = new Date();
     let bugunIdx = (dObj.getDay() === 0) ? 6 : dObj.getDay() - 1;
 
     chart.innerHTML = dailyData.map((saniye, i) => {
       const yukseklik = Math.min((saniye / 36000) * 100, 100);
-      const isToday = (i === bugunIdx);
+      // Sadece aktif (current) haftada bugün işareti olsun, arşivde olmasın
+      const isToday = isAktifHafta && (i === bugunIdx);
       
       // RENK AYARI: Bugün Turuncu, Diğer Günler Mavi
       const barColor = isToday ? 'var(--orange)' : 'var(--blue)';
@@ -2951,8 +3337,10 @@ function renderBiWeekChart(){
   // Sabit Gün İsimleri (Pazartesi'den başlar)
   const gunIsimleri = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
   
-  // Hangi hafta seçiliyse (W1/W2) onun verisini al
-  const data = _weekView === 2 ? S.stats.dailyDriveW2 : S.stats.dailyDrive;
+  // Doğru veri kaynağı (cyclePosition + sekme tıklamasına göre)
+  const veri = haftaVeriAl(_weekView);
+  const data = veri.gunluk;
+  const isAktifHafta = veri.aktif;
   
   // Gerçek takvim gününü bul (Pzt=0... Paz=6)
   let dObj = new Date();
@@ -2960,7 +3348,7 @@ function renderBiWeekChart(){
 
   chart.innerHTML = data.map((saniye, i) => {
     const yukseklik = Math.min((saniye / 36000) * 100, 100);
-    const isToday = (i === bugunIdx);
+    const isToday = isAktifHafta && (i === bugunIdx);
     
     // 2 Haftalık sayfasında barlar Mavi, bugün ise Turuncu olur
     const barColor = isToday ? 'var(--orange)' : 'var(--blue)';
@@ -3064,31 +3452,53 @@ const DETAIL_INFO={
 /* ══ GÜN DETAY — Resim 8 tasarımı (korumasız, her zaman override eder) ══ */
 window.gunDetayAc = function(gunIdx){
   const gunIsimleri = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
-  const data = (_weekView === 2) ? S.stats.dailyDriveW2 : S.stats.dailyDrive;
+  const veri = haftaVeriAl(_weekView);
+  const data = veri.gunluk;
   const surusSaniye = data[gunIdx] || 0;
   const gunAdi = gunIsimleri[gunIdx] || ('Gün ' + gunIdx);
   const modal = document.getElementById('modal');
   const mh = document.getElementById('modal-head');
   if(!modal) return;
 
-  // O güne ait logları bul
+  // ★ KRİTİK: Hangi haftanın gününe bakıyoruz?
+  // veri.aktif: bu hafta mı (true) yoksa arşiv hafta mı (false)
+  const isAktifHafta = veri.aktif;
+
+  // ★ HEDEF TARİH HESAPLAMA
+  // Sekmeye göre + cyclePosition'a göre 7 gün geriye gitmemiz gerekebilir
+  // 1. Hafta sekmesi + cyclePosition=2 → ARŞİV (geçen hafta) = 7 gün geriye
+  // 2. Hafta sekmesi + cyclePosition=1 → henüz yok (gelecek hafta - log yok)
   const bugun = new Date();
   const haftaGunu = bugun.getDay();
   const pazartesiIndex = (haftaGunu === 0) ? -6 : 1 - haftaGunu;
   const hedefGun = new Date(bugun);
-  hedefGun.setDate(bugun.getDate() + pazartesiIndex + gunIdx);
+  
+  let haftaOffset = 0; // 0 = bu hafta, -7 = geçen hafta, +7 = gelecek hafta
+  const cp = S.stats.cyclePosition || 1;
+  if(cp === 2 && _weekView === 1){
+    // 2. haftadayız, kullanıcı 1. Hafta (arşiv) sekmesini açtı → 7 gün geriye
+    haftaOffset = -7;
+  } else if(cp === 1 && _weekView === 2){
+    // 1. haftadayız, kullanıcı 2. Hafta (gelecek) sekmesini açtı → log yok
+    haftaOffset = 7;
+  }
+  
+  hedefGun.setDate(bugun.getDate() + pazartesiIndex + gunIdx + haftaOffset);
   hedefGun.setHours(0,0,0,0);
   const hedefSon = new Date(hedefGun); hedefSon.setHours(23,59,59,999);
   const hedefBasMs = hedefGun.getTime();
   const hedefSonMs = hedefSon.getTime();
-  // ★ Hedef günle KESİŞEN tüm loglar (gece yarısını aşan dahil)
-  const gunLoglari = S.log.filter(l => {
+  
+  // ★ Logları HER ZAMAN filtrele (gerçek tarih bazlı) — log silinmez, hafta geçince de durur
+  // Sadece "gelecek hafta" sekmesinde (henüz çalışılmamış) log gösterme
+  const isGelecekHafta = (cp === 1 && _weekView === 2);
+  const gunLoglari = !isGelecekHafta ? S.log.filter(l => {
     if(!l.start) return false;
     const e = l.end || (l.start + (l.dur||0)*1000);
     return l.start <= hedefSonMs && e >= hedefBasMs;
-  });
+  }) : [];
 
-  // Bugün mü? — aktif modu da ekle
+  // Bugün mü? — aktif modu da ekle (sadece bu haftanın bugünü)
   const bugunMs = new Date(); bugunMs.setHours(0,0,0,0);
   const hedefBugun = hedefGun.getTime() === bugunMs.getTime();
   const canliLogs = [...gunLoglari];
@@ -3111,9 +3521,15 @@ window.gunDetayAc = function(gunIdx){
     else if(l.mode==='calisma') toplamCalisma += kesisenSn;
     else if(l.mode==='hazir') toplamHazir += kesisenSn;
   });
+  
+  // ★ Eğer hiç log yoksa ama günlük data'da değer varsa (çok eski ya da log silinmiş)
+  // Yine de günlük toplamı göster
+  if(toplamSurus === 0 && surusSaniye > 0 && canliLogs.length === 0){
+    toplamSurus = surusSaniye;
+  }
 
-  // Bugünse gerçek sayaçtan al
-  const gercekSurus = hedefBugun ? S.stats.drive : surusSaniye;
+  // Bugünse gerçek sayaçtan al (canlı), başka günlerde toplam logdan veya günlük datadan
+  const gercekSurus = hedefBugun ? S.stats.drive : (toplamSurus || surusSaniye);
   const driveLimit = S.extendedDriveApplied ? K.DRIVE_DAY_EXT : K.DRIVE_DAY;
   const ratio = Math.min(1, gercekSurus / driveLimit);
   const pct = Math.round(ratio * 100);
@@ -3246,8 +3662,8 @@ window.gunDetayAc = function(gunIdx){
     }).join('');
   }
 
-  // İhlaller
-  const gunIhlaller = S.violations.filter(v=>v.ts&&v.ts>=hedefGun.getTime()&&v.ts<=hedefSon.getTime());
+  // İhlaller — hedef günün gerçek tarihinde (gelecek hafta için boş)
+  const gunIhlaller = !isGelecekHafta ? S.violations.filter(v=>v.ts&&v.ts>=hedefGun.getTime()&&v.ts<=hedefSon.getTime()) : [];
   const ihlalHTML = gunIhlaller.length
     ? gunIhlaller.map(v=>`
       <div style="display:flex;gap:8px;align-items:flex-start;background:#1a0808;border-left:3px solid #ef4444;border-radius:0 4px 4px 0;padding:7px 10px;margin-bottom:5px;">
@@ -3264,7 +3680,19 @@ window.gunDetayAc = function(gunIdx){
   document.getElementById('modal-sub').textContent = 'Günlük sürüş kaydı';
   if(mh) mh.style.borderBottom = '2px solid var(--blue)';
 
+  // ★ Arşiv hafta bilgi kartı (eğer 1. Hafta sekmesinde 2. haftadayız ise)
+  const arsivBilgi = (!isAktifHafta && cp === 2) ? 
+    `<div style="display:flex;align-items:center;gap:8px;background:#0a1828;border:1px solid #1c4a6a;border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+      <span style="font-size:1rem;">📋</span>
+      <div style="flex:1;font-family:var(--sans);font-size:.85rem;color:#60a5fa;font-weight:700;">1. Hafta kayıtları (geçen hafta) — 2. Hafta bitince temizlenir.</div>
+    </div>` : (isGelecekHafta ?
+    `<div style="display:flex;align-items:center;gap:8px;background:#1a1408;border:1px solid #5c4a1a;border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+      <span style="font-size:1rem;">⏳</span>
+      <div style="flex:1;font-family:var(--sans);font-size:.85rem;color:#fbbf24;font-weight:700;">2. Hafta henüz başlamadı.</div>
+    </div>` : '');
+
   document.getElementById('modal-body').innerHTML = `
+    ${arsivBilgi}
 
     <!-- TARİH + ÜLKE SATIRI -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 12px;background:var(--panel2);border-radius:6px;flex-wrap:wrap;">
@@ -3690,19 +4118,48 @@ function checkDayRollover(){
     // Bir sonraki günün 00:00:00.000'ından yeni segment başlat
     const ertesi=new Date(segBas); ertesi.setDate(ertesi.getDate()+1); ertesi.setHours(0,0,0,0);
 
-    // ★ Pazar (0) → Pazartesi (1) geçişi ve hâlâ 1. haftadaysak → 2. haftaya geç
-    // 1. hafta verisi DOKUNULMAZ. 2. haftanın günleri sıfırdan başlar.
-    const oncekiGun=new Date(segBas).getDay(); // 0=Paz, 1=Pzt, ...
-    const yeniGun=ertesi.getDay();
-    if(oncekiGun===0 && yeniGun===1 && _weekView===1){
-      _weekView=2; S.weekView=2;
-      // S.stats.week1, dailyDrive, week toplam sayaçları — HİÇBİRİNE DOKUNMA
-      // dailyDriveW2 zaten 0'dan başlar (freshS'te), applyS artık ona yazacak
+    // ★ HAFTA GEÇİŞİ TESPİTİ — 2 haftalık döngü mantığı
+    const oncekiHafta = getWeekKey(segBas);
+    const yeniHafta = getWeekKey(ertesi.getTime());
+    if(oncekiHafta !== yeniHafta){
+      // Hafta DEĞİŞTİ — Pazar 23:59 → Pazartesi 00:00 geçişi
       try{
-        if(typeof toast==='function') toast('📅 Yeni hafta başladı — 2. Hafta','ok',4000);
-        if(typeof speak==='function') speak('Yeni hafta başladı.','normal');
-        if(typeof selectWeekView==='function') selectWeekView(2);
-      }catch(e){}
+        if(S.stats.cyclePosition === 1){
+          // 1. → 2. hafta: 1. hafta arşivlenir, 2. hafta sıfırdan başlar
+          S.stats.week2 = S.stats.week1 || 0;
+          S.stats.dailyDriveW2 = [...(S.stats.dailyDrive || [0,0,0,0,0,0,0])];
+          S.stats.week1 = 0;
+          S.stats.week = 0;
+          S.stats.dailyDrive = [0,0,0,0,0,0,0];
+          S.stats.cyclePosition = 2;
+          S.stats.currentWeekKey = yeniHafta;
+          S.stats.dweek = S.stats.week2 || 0;
+          _weekView = 2; S.weekView = 2;
+          if(typeof toast==='function') toast('📅 2. Hafta başladı','ok',4000);
+          if(typeof speak==='function') speak('İkinci hafta başladı.','normal');
+          if(typeof selectWeekView==='function') selectWeekView(2);
+        } else {
+          // 2. → YENİ DÖNGÜ: HER ŞEY SIFIRLANIR (geriye dönük tüm veriler)
+          S.stats.week1 = 0;
+          S.stats.week2 = 0;
+          S.stats.week = 0;
+          S.stats.dweek = 0;
+          S.stats.dailyDrive = [0,0,0,0,0,0,0];
+          S.stats.dailyDriveW2 = [0,0,0,0,0,0,0];
+          S.stats.tenHourUsed = 0;
+          S.stats.shortRestUsed = 0;
+          S.stats.daysDriven = 0;
+          S.stats.cyclePosition = 1;
+          S.stats.cycleStartKey = yeniHafta;
+          S.stats.currentWeekKey = yeniHafta;
+          S.violations = []; // 2 haftalık ihlaller temizlenir
+          S.log = []; // 2 haftalık tüm kayıtlar da silinir
+          _weekView = 1; S.weekView = 1;
+          if(typeof toast==='function') toast('🔄 Yeni 2 haftalık döngü başladı','ok',4500);
+          if(typeof speak==='function') speak('Yeni döngü başladı. Tüm sayaçlar sıfırlandı.','normal');
+          if(typeof selectWeekView==='function') selectWeekView(1);
+        }
+      }catch(e){console.warn('hafta geçişi hata:',e);}
     }
 
     segBas=ertesi.getTime();
@@ -3869,11 +4326,19 @@ let D={
   crew2:{name:'',card:''},
   settings:{warnD:480,warnC:240,warnW:50},
   trips:[],entries:[],borders:[],transports:[],cabotages:[],debts:[],
+  fuels:[], // ★ Yakıt/KM kayıtları
   activeTrip:null,
   curAct:null, curActStart:null,
   lastCountry:'TR',
 };
-function dLoad(){try{const r=localStorage.getItem(DSK);if(r)D={...D,...JSON.parse(r)};}catch(e){}}
+function dLoad(){
+  try{
+    const r=localStorage.getItem(DSK);
+    if(r)D={...D,...JSON.parse(r)};
+    // Eski yedeklerde fuels yoksa boş array yap
+    if(!Array.isArray(D.fuels)) D.fuels = [];
+  }catch(e){}
+}
 function dSave(){try{localStorage.setItem(DSK,JSON.stringify(D));}catch(e){}}
 
 /* ── Yardımcılar ── */
@@ -3921,6 +4386,7 @@ window.dtcoNavTo=function(page){
   // Sayfa başlığını güncelle
   const titles={dashboard:'Kontrol Paneli',activity:'Aktivite Kaydı',trip:'Sefer Yönetimi',
     border:'Sınır Geçişleri',transport:'Feribot / Tren',cabotage:'Kabotar Takibi',
+    fuel:'Yakıt / KM Takibi',
     weekly:'Haftalık Görünüm',debt:'Dinlenme Borcu',crew:'Ekip Sürüşü',
     rules:'Yasal Kurallar',report:'Rapor / Çıktı',settings:'Ayarlar'};
   const pt=g('dtco-page-title');if(pt)pt.textContent=titles[page]||page;
@@ -3935,6 +4401,15 @@ window.dtcoNavTo=function(page){
   if(page==='border')dRenderBorders();
   if(page==='transport')dRenderTransports();
   if(page==='cabotage')dRenderCabotages();
+  if(page==='fuel'){
+    dRenderFuel();
+    // Tarih alanını şimdiki zamanla doldur
+    const fd = g('d-fuel-date');
+    if(fd && !fd.value){
+      const now = new Date();
+      fd.value = now.toISOString().slice(0,16);
+    }
+  }
   if(page==='activity')dRenderLog();
   if(page==='report'){const now=new Date();const rf=new Date(now);rf.setDate(rf.getDate()-28);const df=g('d-rpt-from');const dt=g('d-rpt-to');if(df)df.value=rf.toISOString().slice(0,10);if(dt)dt.value=todayStr();}
 };
@@ -4537,6 +5012,113 @@ window.dRenderWeekly=function(){
 };
 function dGetWeekStart(d){const dt=new Date(d),day=dt.getDay();dt.setDate(dt.getDate()+(day===0?-6:1-day));dt.setHours(0,0,0,0);return dt;}
 
+/* ═══════════════════════════════════════════════════
+   ⛽ YAKIT / KM TAKİBİ
+═══════════════════════════════════════════════════ */
+window.dFuelEkle = function(){
+  const tarih = (g('d-fuel-date')||{}).value;
+  const tip = (g('d-fuel-type')||{}).value || 'dolum';
+  const km = parseFloat((g('d-fuel-km')||{}).value) || 0;
+  const lt = parseFloat((g('d-fuel-lt')||{}).value) || 0;
+  const fiyat = parseFloat((g('d-fuel-price')||{}).value) || 0;
+  const not = (g('d-fuel-note')||{}).value || '';
+  
+  if(!tarih){ alert('⚠️ Tarih girilmedi'); return; }
+  if(km <= 0 && lt <= 0){ alert('⚠️ KM veya yakıt değeri girin'); return; }
+  
+  if(!D.fuels) D.fuels = [];
+  D.fuels.push({
+    id: Date.now(),
+    tarih: tarih,
+    tip: tip,
+    km: km,
+    lt: lt,
+    fiyat: fiyat,
+    maliyet: lt * fiyat,
+    not: not,
+  });
+  
+  dSave();
+  dRenderFuel();
+  
+  // Form temizle
+  ['d-fuel-km','d-fuel-lt','d-fuel-price','d-fuel-note'].forEach(id=>{
+    const e = g(id); if(e) e.value = '';
+  });
+  
+  if(typeof dToast === 'function') dToast('✅ Yakıt kaydı eklendi','ok');
+};
+
+window.dDelFuel = function(id){
+  if(!confirm('Kayıt silinsin mi?')) return;
+  D.fuels = (D.fuels || []).filter(f => f.id !== id);
+  dSave();
+  dRenderFuel();
+};
+
+function dRenderFuel(){
+  if(!D.fuels) D.fuels = [];
+  
+  // Tarih sıralı (yeniden eskiye)
+  const sorted = [...D.fuels].sort((a,b) => 
+    new Date(b.tarih).getTime() - new Date(a.tarih).getTime()
+  );
+  
+  // Toplam hesap
+  const kalkislar = D.fuels.filter(f => f.tip === 'kalkis').sort((a,b) => 
+    new Date(a.tarih).getTime() - new Date(b.tarih).getTime()
+  );
+  const varislar = D.fuels.filter(f => f.tip === 'varis').sort((a,b) => 
+    new Date(b.tarih).getTime() - new Date(a.tarih).getTime()
+  );
+  
+  let toplamKm = 0;
+  if(kalkislar.length > 0 && varislar.length > 0){
+    const ilkKm = kalkislar[0].km;
+    const sonKm = varislar[0].km;
+    if(sonKm > ilkKm) toplamKm = sonKm - ilkKm;
+  }
+  
+  const toplamLt = D.fuels.reduce((s,f) => s + (f.lt || 0), 0);
+  const toplamMaliyet = D.fuels.reduce((s,f) => s + (f.maliyet || 0), 0);
+  const tuketim = (toplamKm > 0 && toplamLt > 0) 
+    ? (toplamLt / toplamKm * 100).toFixed(1) 
+    : '—';
+  
+  // Stat boxes
+  const e = id => document.getElementById(id);
+  if(e('d-fuel-toplam-km')) e('d-fuel-toplam-km').textContent = toplamKm.toLocaleString('tr-TR') + ' km';
+  if(e('d-fuel-toplam-lt')) e('d-fuel-toplam-lt').textContent = toplamLt.toFixed(1) + ' L';
+  if(e('d-fuel-tuketim')) e('d-fuel-tuketim').textContent = tuketim + (tuketim === '—' ? '' : ' L/100km');
+  if(e('d-fuel-maliyet')) e('d-fuel-maliyet').textContent = '€ ' + toplamMaliyet.toFixed(2);
+  
+  // Tablo
+  const tbody = e('d-fuel-log');
+  if(tbody){
+    if(sorted.length === 0){
+      tbody.innerHTML = '<tr><td colspan="7"><div class="d-empty">Henüz kayıt yok</div></td></tr>';
+    } else {
+      const tipIcon = {kalkis: '🚩 Kalkış', dolum: '⛽ Dolum', varis: '🏁 Varış'};
+      tbody.innerHTML = sorted.map(f => {
+        const tarihStr = new Date(f.tarih).toLocaleString('tr-TR', {
+          day:'2-digit', month:'2-digit', year:'2-digit',
+          hour:'2-digit', minute:'2-digit'
+        });
+        return '<tr>' +
+          '<td style="font-family:var(--mono);font-size:.82rem">' + tarihStr + '</td>' +
+          '<td>' + (tipIcon[f.tip] || f.tip) + '</td>' +
+          '<td style="font-family:var(--mono)">' + (f.km > 0 ? f.km.toLocaleString('tr-TR') + ' km' : '—') + '</td>' +
+          '<td style="font-family:var(--mono)">' + (f.lt > 0 ? f.lt.toFixed(1) + ' L' : '—') + '</td>' +
+          '<td style="font-family:var(--mono);color:var(--gold)">' + (f.maliyet > 0 ? '€ ' + f.maliyet.toFixed(2) : '—') + '</td>' +
+          '<td style="font-size:.78rem">' + (f.not || '—') + '</td>' +
+          '<td><button class="d-btn d-btn-d" onclick="dDelFuel(' + f.id + ')" style="padding:4px 8px;font-size:.7rem;">🗑</button></td>' +
+        '</tr>';
+      }).join('');
+    }
+  }
+}
+window.dRenderFuel = dRenderFuel;
+
 /* ────────────────── DİNLENME BORCU ────────────────── */
 window.dUpdateDebtPay=function(){
   const el=g('d-debt-date');if(!el||!el.value)return;
@@ -4615,11 +5197,29 @@ function dLoadSettings(){
   const wc=g('d-warn-c');if(wc)wc.value=D.settings.warnC||240;
   const ww=g('d-warn-w');if(ww)ww.value=D.settings.warnW||50;
   if(D.crew2){const cn=g('d-crew2-name');if(cn)cn.value=D.crew2.name||'';const cc=g('d-crew2-card');if(cc)cc.value=D.crew2.card||'';}
+  // ★ Belge tarihleri
+  const belgeAlanlar = [
+    ['d-s-card-exp', 'cardExp'],
+    ['d-s-license-exp', 'licenseExp'],
+    ['d-s-inspection-exp', 'inspectionExp'],
+    ['d-s-insurance-exp', 'insuranceExp'],
+  ];
+  belgeAlanlar.forEach(([id, key]) => {
+    const el = g(id);
+    if(el) el.value = (D.driver[key]) || '';
+  });
+  // Süre uyarılarını render et
+  belgeUyarilariRender();
 }
 window.dSaveSettings=function(){
   D.driver.name=(g('d-s-name')||{}).value;D.driver.card=(g('d-s-card')||{}).value;
   D.driver.plate=(g('d-s-plate')||{}).value;D.driver.vehicle=(g('d-s-vehicle')||{}).value;
   D.driver.company=(g('d-s-company')||{}).value;D.driver.homeCountry=(g('d-s-home-country')||{}).value;
+  // ★ Belge tarihleri
+  D.driver.cardExp=(g('d-s-card-exp')||{}).value || '';
+  D.driver.licenseExp=(g('d-s-license-exp')||{}).value || '';
+  D.driver.inspectionExp=(g('d-s-inspection-exp')||{}).value || '';
+  D.driver.insuranceExp=(g('d-s-insurance-exp')||{}).value || '';
   D.settings.warnD=parseInt((g('d-warn-d')||{}).value)||480;
   D.settings.warnC=parseInt((g('d-warn-c')||{}).value)||240;
   D.settings.warnW=parseInt((g('d-warn-w')||{}).value)||50;
@@ -4627,8 +5227,77 @@ window.dSaveSettings=function(){
   const sbn=g('dsb-name'),sbp=g('dsb-plate');
   if(sbn)sbn.textContent=D.driver.name||'Sürücü girilmedi';
   if(sbp)sbp.textContent=D.driver.plate||'Plaka girilmedi';
+  belgeUyarilariRender();
   dToast('💾 Ayarlar kaydedildi','ok');
 };
+
+/* ★ Belge süre uyarıları - 30 gün önce uyarı, 60 gün önce hatırlatma */
+function belgeUyarilariRender(){
+  const kutu = g('d-belge-uyari');
+  if(!kutu) return;
+  
+  const belgeler = [
+    {key:'cardExp', isim:'🪪 Sürücü Kartı'},
+    {key:'licenseExp', isim:'🪪 Ehliyet'},
+    {key:'inspectionExp', isim:'🔧 Araç Muayene'},
+    {key:'insuranceExp', isim:'🛡️ Trafik Sigortası'},
+  ];
+  
+  const simdi = new Date();
+  simdi.setHours(0,0,0,0);
+  const uyarilar = [];
+  
+  belgeler.forEach(b => {
+    const tarihStr = D.driver && D.driver[b.key];
+    if(!tarihStr) return;
+    
+    const son = new Date(tarihStr);
+    son.setHours(0,0,0,0);
+    const kalanGun = Math.floor((son - simdi) / (24*60*60*1000));
+    
+    if(kalanGun < 0){
+      uyarilar.push({
+        tip:'expired',
+        renk:'#ef4444',
+        bg:'#3a0d0d',
+        icon:'❌',
+        mesaj: b.isim + ' süresi GEÇMİŞ! (' + Math.abs(kalanGun) + ' gün önce)',
+      });
+    } else if(kalanGun <= 30){
+      uyarilar.push({
+        tip:'urgent',
+        renk:'#fbbf24',
+        bg:'#3a2f08',
+        icon:'⚠️',
+        mesaj: b.isim + ' bitiyor: ' + kalanGun + ' gün kaldı (' + tarihStr + ')',
+      });
+    } else if(kalanGun <= 60){
+      uyarilar.push({
+        tip:'soon',
+        renk:'#3b82f6',
+        bg:'#0d1f3a',
+        icon:'ℹ️',
+        mesaj: b.isim + ' yaklaşıyor: ' + kalanGun + ' gün kaldı',
+      });
+    }
+  });
+  
+  if(uyarilar.length === 0){
+    kutu.style.display = 'none';
+    kutu.innerHTML = '';
+    return;
+  }
+  
+  kutu.style.display = 'block';
+  kutu.innerHTML = '<div style="font-family:var(--sans);font-size:.85rem;font-weight:700;color:#a0b8d0;letter-spacing:1px;margin-bottom:8px;">📋 BELGE SÜRELERİ</div>' +
+    uyarilar.map(u => 
+      '<div style="display:flex;align-items:center;gap:8px;background:' + u.bg + ';border-left:3px solid ' + u.renk + ';border-radius:0 4px 4px 0;padding:8px 10px;margin-bottom:4px;">' +
+      '<span style="font-size:1.1rem;">' + u.icon + '</span>' +
+      '<div style="flex:1;font-family:var(--sans);font-size:.85rem;font-weight:700;color:' + u.renk + ';">' + u.mesaj + '</div>' +
+      '</div>'
+    ).join('');
+}
+window.belgeUyarilariRender = belgeUyarilariRender;
 window.dImportData=function(ev){
   const f=ev.target.files[0];if(!f)return;
   const r=new FileReader();r.onload=e=>{try{D={...D,...JSON.parse(e.target.result)};dSave();dLoadSettings();dUpdateDashboard();dToast('📥 Veriler içe aktarıldı','ok');}catch(err){dToast('Dosya okunamadı','warn');}};r.readAsText(f);
@@ -4680,6 +5349,326 @@ window.dtcoReset=function(){
     trips:[],entries:[],borders:[],transports:[],cabotages:[],debts:[],
     activeTrip:null,curAct:null,curActStart:null,lastCountry:'TR'};
   dSave();dUpdateDashboard();dToast('🗑 DTCO verileri sıfırlandı','warn');
+};
+
+/* ═══════════════════════════════════════════════════
+   📦 TÜM SİSTEM YEDEKLEME (Ana sistem + DTCO + Ayarlar)
+═══════════════════════════════════════════════════ */
+window.tumYedekAl = function(){
+  try {
+    const yedek = {
+      versiyon: '1.0',
+      tarih: new Date().toISOString(),
+      uygulama: 'HÇ TACHO PRO',
+      // Ana sistem state
+      anaSistem: window.S || null,
+      // DTCO 4.1 state
+      dtco: window.D || null,
+      // Memory - kullanıcı edit'leri
+      not: 'Bu dosyayı saklayın - tablet bozulursa geri yüklemek için kullanılır.',
+    };
+    
+    const json = JSON.stringify(yedek, null, 2);
+    const blob = new Blob([json], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    
+    const d = new Date();
+    const tarihStr = d.getFullYear() + '-' + 
+      String(d.getMonth()+1).padStart(2,'0') + '-' + 
+      String(d.getDate()).padStart(2,'0') + '_' + 
+      String(d.getHours()).padStart(2,'0') + 
+      String(d.getMinutes()).padStart(2,'0');
+    
+    a.href = url;
+    a.download = 'hctacho-yedek-' + tarihStr + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    if(typeof window.toast === 'function') window.toast('✅ Yedek dosyası indirildi','ok',3500);
+  } catch(err){
+    console.error('Yedekleme hatası:', err);
+    alert('❌ Yedekleme başarısız: ' + err.message);
+  }
+};
+
+window.tumYedekYukle = function(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  
+  if(!confirm('⚠️ DİKKAT!\n\nMevcut tüm verilerin üzerine yazılacak.\nDevam etmek istediğinize emin misiniz?\n\n(Önce mevcut verinizi yedeklemenizi öneririm)')) {
+    event.target.value = '';
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const yedek = JSON.parse(e.target.result);
+      
+      if(!yedek.uygulama || !yedek.uygulama.includes('HÇ TACHO')){
+        alert('❌ Bu dosya HÇ TACHO yedek dosyası değil.');
+        event.target.value = '';
+        return;
+      }
+      
+      // Ana sistem geri yükle
+      if(yedek.anaSistem){
+        try {
+          localStorage.setItem('tako_v6', JSON.stringify(yedek.anaSistem));
+        } catch(err) {
+          console.warn('Ana sistem yükleme hatası:', err);
+        }
+      }
+      
+      // DTCO geri yükle
+      if(yedek.dtco){
+        try {
+          localStorage.setItem('dtco41_v4', JSON.stringify(yedek.dtco));
+        } catch(err) {
+          console.warn('DTCO yükleme hatası:', err);
+        }
+      }
+      
+      alert('✅ Yedek başarıyla yüklendi!\n\nUygulama yeniden yüklenecek.');
+      // Sayfayı yenile - state taze yüklensin
+      location.reload();
+    } catch(err){
+      console.error('Geri yükleme hatası:', err);
+      alert('❌ Geri yükleme başarısız: ' + err.message + '\n\nDosya bozuk veya yanlış format olabilir.');
+      event.target.value = '';
+    }
+  };
+  reader.onerror = function(){
+    alert('❌ Dosya okunamadı.');
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+};
+
+/* ═══════════════════════════════════════════════════
+   📄 PDF RAPOR ÜRETİMİ (Yetkili kontrol için)
+═══════════════════════════════════════════════════ */
+
+// Yardımcı: HTML rapor sayfası oluştur ve yazdır (PDF olarak kaydet seçeneği)
+function _raporPenceresiAc(html, baslik){
+  const w = window.open('', '_blank', 'width=800,height=900');
+  if(!w){
+    alert('❌ Açılır pencere engellendi.\nTarayıcı ayarlarından izin verin.');
+    return;
+  }
+  w.document.write(html);
+  w.document.close();
+  // Otomatik yazdır penceresi açma — kullanıcı kendisi karar versin
+  setTimeout(()=>{
+    try { w.focus(); } catch(e){}
+  }, 500);
+}
+
+// Saniyeyi insan-okunabilir formata çevir
+function _hmFormat(sn){
+  sn = Math.max(0, Math.floor(sn || 0));
+  const s = Math.floor(sn / 3600);
+  const d = Math.floor((sn % 3600) / 60);
+  return String(s).padStart(2,'0') + ':' + String(d).padStart(2,'0');
+}
+
+// Tarih formatı
+function _tarihFormat(ms){
+  const d = new Date(ms);
+  return d.getDate().toString().padStart(2,'0') + '.' +
+         (d.getMonth()+1).toString().padStart(2,'0') + '.' +
+         d.getFullYear();
+}
+
+function _saatFormat(ms){
+  const d = new Date(ms);
+  return d.getHours().toString().padStart(2,'0') + ':' +
+         d.getMinutes().toString().padStart(2,'0');
+}
+
+// Belirli gün aralığı için rapor verisi topla
+function _raporVeriHazirla(gunSayisi){
+  const S = window.S;
+  if(!S) return null;
+  
+  const simdi = Date.now();
+  const baslangic = simdi - (gunSayisi * 24 * 60 * 60 * 1000);
+  
+  // O dönemdeki loglar
+  const loglar = (S.log || []).filter(l => l.start && l.start >= baslangic);
+  const ihlaller = (S.violations || []).filter(v => v.ts && v.ts >= baslangic);
+  
+  // Günlere göre grupla
+  const gunler = {};
+  loglar.forEach(l => {
+    const d = new Date(l.start);
+    d.setHours(0,0,0,0);
+    const key = d.getTime();
+    if(!gunler[key]){
+      gunler[key] = { tarih: key, surus:0, mola:0, calisma:0, hazir:0, kayitlar:[] };
+    }
+    const dur = l.dur || 0;
+    if(l.mode === 'surus') gunler[key].surus += dur;
+    else if(l.mode === 'dinlenme') gunler[key].mola += dur;
+    else if(l.mode === 'calisma') gunler[key].calisma += dur;
+    else if(l.mode === 'hazir') gunler[key].hazir += dur;
+    gunler[key].kayitlar.push(l);
+  });
+  
+  return {
+    baslangic: baslangic,
+    bitis: simdi,
+    gunler: Object.values(gunler).sort((a,b)=>a.tarih - b.tarih),
+    toplamSurus: loglar.filter(l=>l.mode==='surus').reduce((a,l)=>a+(l.dur||0), 0),
+    toplamMola: loglar.filter(l=>l.mode==='dinlenme').reduce((a,l)=>a+(l.dur||0), 0),
+    toplamCalisma: loglar.filter(l=>l.mode==='calisma').reduce((a,l)=>a+(l.dur||0), 0),
+    ihlaller: ihlaller,
+    surucu: (window.D && window.D.driver) || {},
+  };
+}
+
+// Rapor HTML şablonu üret
+function _raporHTML(veri, baslik){
+  const surucu = veri.surucu || {};
+  const tarihAraligi = _tarihFormat(veri.baslangic) + ' — ' + _tarihFormat(veri.bitis);
+  
+  let gunlerHTML = '';
+  if(veri.gunler.length === 0){
+    gunlerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#666;">Bu dönemde kayıt bulunamadı</td></tr>';
+  } else {
+    gunlerHTML = veri.gunler.map(g => {
+      const d = new Date(g.tarih);
+      const gunIsim = ['Pazar','Pzt','Salı','Çar','Per','Cuma','Cmt'][d.getDay()];
+      return `
+        <tr>
+          <td>${_tarihFormat(g.tarih)} ${gunIsim}</td>
+          <td style="color:#22c55e;font-weight:700;">${_hmFormat(g.surus)}</td>
+          <td style="color:#3b82f6;">${_hmFormat(g.mola)}</td>
+          <td style="color:#fbbf24;">${_hmFormat(g.calisma)}</td>
+          <td style="color:#a855f7;">${_hmFormat(g.hazir)}</td>
+          <td>${g.kayitlar.length} kayıt</td>
+        </tr>`;
+    }).join('');
+  }
+  
+  let ihlalHTML = '';
+  if(veri.ihlaller.length === 0){
+    ihlalHTML = '<p style="color:#22c55e;font-weight:700;">✓ Bu dönemde ihlal yok</p>';
+  } else {
+    ihlalHTML = '<table><thead><tr><th>Tarih</th><th>Saat</th><th>Tip</th><th>Açıklama</th></tr></thead><tbody>' +
+      veri.ihlaller.map(v => `
+        <tr>
+          <td>${_tarihFormat(v.ts)}</td>
+          <td>${_saatFormat(v.ts)}</td>
+          <td><b style="color:${v.sev==='L3'?'#dc2626':'#fbbf24'};">${v.sev||'L2'}</b></td>
+          <td>${v.desc || v.type || ''}</td>
+        </tr>`).join('') + '</tbody></table>';
+  }
+  
+  return `<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>${baslik} - HÇ TACHO PRO</title>
+<style>
+  @media print {
+    @page { margin: 1.5cm; size: A4; }
+    body { font-size: 11pt; }
+    .no-print { display: none !important; }
+  }
+  body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.5; color: #222; padding: 20px; max-width: 800px; margin: 0 auto; background: white; }
+  h1 { color: #1e40af; border-bottom: 3px solid #1e40af; padding-bottom: 8px; margin-bottom: 5px; }
+  h2 { color: #1e40af; margin-top: 25px; padding-left: 8px; border-left: 4px solid #1e40af; }
+  .meta { color: #666; font-size: .9em; margin-bottom: 20px; }
+  .info-box { background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px; margin-bottom: 20px; }
+  .info-box b { color: #1e40af; }
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+  .stat-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px; text-align: center; }
+  .stat-card .lbl { font-size: .75em; color: #666; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+  .stat-card .val { font-size: 1.6em; font-weight: 700; color: #1e40af; margin-top: 5px; font-family: 'Courier New', monospace; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: .9em; }
+  table th { background: #1e40af; color: white; padding: 8px 10px; text-align: left; font-size: .8em; letter-spacing: .5px; }
+  table td { padding: 7px 10px; border-bottom: 1px solid #e5e7eb; }
+  table tr:nth-child(even) td { background: #f9fafb; }
+  .footer { margin-top: 40px; padding-top: 15px; border-top: 1px solid #e5e7eb; color: #888; font-size: .8em; }
+  .print-btn { background: #1e40af; color: white; padding: 12px 28px; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; margin: 15px 0; font-weight: 700; }
+  .print-btn:hover { background: #1e3a8a; }
+  .warning-box { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 6px; padding: 10px; margin: 15px 0; font-size: .85em; }
+</style>
+</head>
+<body>
+  <div class="no-print">
+    <button class="print-btn" onclick="window.print()">🖨 PDF olarak kaydet / Yazdır</button>
+    <span style="color:#888;margin-left:10px;">→ Yazdır penceresinde "PDF olarak kaydet" seçeneği</span>
+  </div>
+  
+  <h1>${baslik}</h1>
+  <div class="meta">
+    <b>Rapor Dönemi:</b> ${tarihAraligi}<br>
+    <b>Oluşturma:</b> ${new Date().toLocaleString('tr-TR')}<br>
+    <b>Uygulama:</b> HÇ TACHO PRO (AB Yönetmeliği EC 561/2006 + EU 2020/1054)
+  </div>
+  
+  <div class="info-box">
+    <b>SÜRÜCÜ BİLGİLERİ</b><br>
+    Ad Soyad: ${surucu.name || '—'}<br>
+    Kart No: ${surucu.card || '—'}<br>
+    Plaka: ${surucu.plate || '—'}<br>
+    Şirket: ${surucu.company || '—'}
+  </div>
+  
+  <h2>📊 Özet</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="lbl">TOPLAM SÜRÜŞ</div>
+      <div class="val" style="color:#16a34a;">${_hmFormat(veri.toplamSurus)}</div>
+    </div>
+    <div class="stat-card">
+      <div class="lbl">TOPLAM MOLA</div>
+      <div class="val" style="color:#2563eb;">${_hmFormat(veri.toplamMola)}</div>
+    </div>
+    <div class="stat-card">
+      <div class="lbl">TOPLAM ÇALIŞMA</div>
+      <div class="val" style="color:#d97706;">${_hmFormat(veri.toplamCalisma)}</div>
+    </div>
+  </div>
+  
+  <h2>📅 Günlük Detay</h2>
+  <table>
+    <thead>
+      <tr><th>Tarih</th><th>Sürüş</th><th>Mola</th><th>Çalışma</th><th>Hazır</th><th>Kayıt Sayısı</th></tr>
+    </thead>
+    <tbody>${gunlerHTML}</tbody>
+  </table>
+  
+  <h2>⚠️ İhlaller (L2/L3 - Ciddi)</h2>
+  ${ihlalHTML}
+  
+  <div class="warning-box">
+    ℹ️ <b>Önemli:</b> Bu rapor uygulama içi takip kayıtlarından oluşturulmuştur. Resmi denetimlerde gerçek dijital takograf cihazınız esastır. Bu belge yalnızca destekleyici niteliktedir.
+  </div>
+  
+  <div class="footer">
+    HÇ TACHO PRO — AB Yasal Takip Pro<br>
+    Rapor: ${new Date().toISOString()}
+  </div>
+</body>
+</html>`;
+}
+
+window.haftalikRaporOlustur = function(){
+  const veri = _raporVeriHazirla(7);
+  if(!veri){ alert('❌ Rapor verisi alınamadı.'); return; }
+  const html = _raporHTML(veri, 'Haftalık Sürüş Raporu (Son 7 Gün)');
+  _raporPenceresiAc(html, 'Haftalık Rapor');
+};
+
+window.dortHaftaRaporOlustur = function(){
+  const veri = _raporVeriHazirla(28);
+  if(!veri){ alert('❌ Rapor verisi alınamadı.'); return; }
+  const html = _raporHTML(veri, '28 Günlük Sürüş Raporu (AB Yönetmeliği)');
+  _raporPenceresiAc(html, '28 Günlük Rapor');
 };
 
 /* ────────────────── SEL-START / SEL-END HOOK ────────────────── */
