@@ -1945,6 +1945,17 @@ select{font:inherit}
         ■ GPS DURDUR
       </button>
     </div>
+    
+    <!-- ★ GPS YENİLE - Sorun yaşandığında manuel düzeltme -->
+    <div style="margin-top:10px;">
+      <button class="d-btn" onclick="gpsManuelYenile()" 
+        style="width:100%;padding:12px;background:#1a2438;border:1px solid #2563eb;color:#60a5fa;font-size:.85rem;font-weight:700;">
+        🔄 GPS'i Yenile (Sorun Yaşıyorsanız)
+      </button>
+      <div style="margin-top:6px;font-family:var(--sans);font-size:.74rem;color:#7a92b0;line-height:1.4;">
+        💡 GPS donduğunda, sinyal yok dediğinde, veya hız güncellenmediğinde tıklayın.
+      </div>
+    </div>
   </div>
 
 <div class="d-card">
@@ -4181,6 +4192,18 @@ function bootSystem(){
   document.getElementById('boot').classList.add('hidden');
   save();speak('AB Yasal Takograf Pro aktif. İyi yolculuklar.','normal');
   toast('✅ Sistem aktif','ok');updateStatusBar();
+  
+  // ★ Boot sonrası GPS otomatik başlatma kontrolü
+  setTimeout(()=>{
+    try {
+      const oncekiAktif = localStorage.getItem('gps_aktif') === '1';
+      console.log('[BOOT] GPS auto-start kontrol. oncekiAktif:', oncekiAktif);
+      if(oncekiAktif && !window.gpsAktif && typeof window.gpsBaslat === 'function'){
+        console.log('[BOOT] GPS otomatik başlatılıyor');
+        window.gpsBaslat();
+      }
+    } catch(e){ console.warn('[BOOT] GPS auto-start hata:', e); }
+  }, 800);
 }
 
 /* ══ GÜN GEÇİŞİ — 00:00'da aktif segmenti kes, yeni gün için yeniden başlat ══ */
@@ -6169,6 +6192,9 @@ let gpsBaslangicMs = 0; // GPS aktivasyon zamanı
 let gpsKonumGecmisi = []; // Hız null olduğunda hesap için son konumlar
 let durusOnayMs = 0; // Duruş kararı için bekleme zamanı (anlık trafik ışığı için)
 let gpsSonyalKayipMs = 0; // GPS sinyali kayıp zamanı
+let gpsSonGuncelleme = 0; // ★ Son konum güncellemesi - watchdog için
+let gpsWatchdogId = null; // ★ Watchdog interval ID
+let gpsYenidenBaslatmaSayisi = 0; // ★ Yeniden başlatma sayacı (sınırsız döngü önlemek için)
 
 // Mesafeyi sayfa yenilenmesinde de koru
 function gpsKayitYap(){
@@ -6336,6 +6362,9 @@ window.gpsBaslat = function(){
   try{
     let ilkKonumGeldi = false;
     
+    // ★ Watchdog için son güncelleme zamanını başlat
+    gpsSonGuncelleme = Date.now();
+    
     gpsWatchId = navigator.geolocation.watchPosition(
       function(pos){
         // İlk konum geldiğinde kullanıcıya bilgi ver
@@ -6417,6 +6446,8 @@ window.gpsDurdur = function(){
   sonModDegisikligi = 0;
   durusOnayMs = 0;
   gpsSonyalKayipMs = 0;
+  gpsSonGuncelleme = 0;
+  gpsYenidenBaslatmaSayisi = 0;
   
   // localStorage'tan da temizle
   try {
@@ -6440,6 +6471,10 @@ window.gpsDurdur = function(){
 /* ── Konum Güncelleme — AKILLI Takograf mantığı ── */
 function gpsGuncelle(pos){
   if(!gpsAktif) return;
+  
+  // ★ Son başarılı güncelleme zamanını kaydet (watchdog için)
+  gpsSonGuncelleme = Date.now();
+  gpsYenidenBaslatmaSayisi = 0; // Başarılı güncelleme geldi, sayacı sıfırla
   
   // GPS sinyali geri geldiyse kayıp flagini sıfırla
   gpsSonyalKayipMs = 0;
@@ -6571,6 +6606,7 @@ function gpsUIGuncelle(){
   const hizEl = document.getElementById('gps-ayar-hiz');
   const durusEl = document.getElementById('gps-ayar-durus');
   const mesafeEl = document.getElementById('gps-ayar-mesafe');
+  const durumEl = document.getElementById('gps-ayar-durum');
   
   if(hizEl){
     hizEl.textContent = Math.round(sonHiz) + ' km/h';
@@ -6583,7 +6619,6 @@ function gpsUIGuncelle(){
     if(durusBaslangic){
       const sn = Math.floor((Date.now() - durusBaslangic) / 1000);
       durusEl.textContent = sn >= 60 ? Math.floor(sn/60)+'dk '+(sn%60)+'sn' : sn+'sn';
-      // 2 dk yaklaşıyorsa renk değişsin
       if(sn >= 90) durusEl.style.color = 'var(--orange)';
       else durusEl.style.color = 'var(--text)';
     } else {
@@ -6595,6 +6630,32 @@ function gpsUIGuncelle(){
   if(mesafeEl){
     mesafeEl.textContent = (toplamMesafe/1000).toFixed(1) + ' km';
     mesafeEl.style.color = toplamMesafe > 0 ? 'var(--blue)' : 'var(--sub)';
+  }
+  
+  // ★ DURUM göstergesi - GPS sağlığı
+  if(durumEl){
+    if(!gpsAktif){
+      durumEl.textContent = 'Pasif';
+      durumEl.style.color = 'var(--sub)';
+    } else if(gpsSonGuncelleme === 0){
+      durumEl.textContent = '⏳ Sinyal aranıyor';
+      durumEl.style.color = 'var(--gold)';
+    } else {
+      const sonGFarki = (Date.now() - gpsSonGuncelleme) / 1000;
+      if(sonGFarki < 10){
+        durumEl.textContent = '🟢 Aktif';
+        durumEl.style.color = 'var(--green)';
+      } else if(sonGFarki < 30){
+        durumEl.textContent = '🟡 Sinyal gecikti';
+        durumEl.style.color = 'var(--gold)';
+      } else if(sonGFarki < 60){
+        durumEl.textContent = '🟠 Sinyal zayıf';
+        durumEl.style.color = 'var(--orange)';
+      } else {
+        durumEl.textContent = '🔴 Sinyal yok';
+        durumEl.style.color = 'var(--red)';
+      }
+    }
   }
 }
 
@@ -6642,9 +6703,56 @@ function gpsButonuHazirla(){
   setInterval(gorunumGuncelle, 1000);
 
   // Tıklama: BASİT mantık
+  let longPressTimer = null;
+  let longPressTriggered = false;
+  
+  // ★ UZUN BAS = GPS Yenile (1.5 saniye)
+  btn.addEventListener('pointerdown', function(){
+    longPressTriggered = false;
+    longPressTimer = setTimeout(()=>{
+      longPressTriggered = true;
+      console.log('[GPS-BTN] Uzun bas - GPS yenileniyor...');
+      
+      if(window.gpsAktif){
+        // GPS açıksa yeniden başlat
+        if(typeof gpsYenidenBaslat === 'function'){
+          gpsYenidenBaslat();
+        } else if(typeof window.gpsBaslat === 'function'){
+          window.gpsDurdur();
+          setTimeout(()=>window.gpsBaslat(), 500);
+        }
+      } else {
+        // GPS kapalıysa aç
+        if(typeof window.gpsBaslat === 'function'){
+          window.gpsBaslat();
+        }
+      }
+      
+      // Görsel feedback - butona pulse efekti
+      btn.style.transform = 'scale(0.85)';
+      setTimeout(()=>{ btn.style.transform = ''; }, 200);
+    }, 1500); // 1.5 sn uzun bas
+  });
+  
+  btn.addEventListener('pointerup', function(){
+    if(longPressTimer){ clearTimeout(longPressTimer); longPressTimer = null; }
+  });
+  btn.addEventListener('pointerleave', function(){
+    if(longPressTimer){ clearTimeout(longPressTimer); longPressTimer = null; }
+  });
+  btn.addEventListener('pointercancel', function(){
+    if(longPressTimer){ clearTimeout(longPressTimer); longPressTimer = null; }
+  });
+  
   btn.addEventListener('click', function(e){
     e.preventDefault();
     e.stopPropagation();
+    
+    // Uzun bas tetiklendiyse normal click'i yoksay
+    if(longPressTriggered){
+      longPressTriggered = false;
+      return;
+    }
     
     const aktif = (window.gpsAktif === true);
     console.log('[GPS-BTN] Tıklama. Mevcut:', aktif ? 'AÇIK' : 'KAPALI');
@@ -6672,43 +6780,215 @@ function gpsButonuHazirla(){
     setTimeout(gorunumGuncelle, 300);
     setTimeout(gorunumGuncelle, 1000);
   });
+  
+  // Tooltip'e long press bilgisi ekle
+  btn.title = 'GPS — Tek bas: Aç/Kapat | Uzun bas (1.5sn): Yenile';
 }
 
 document.addEventListener('DOMContentLoaded', function(){
+  console.log('[GPS] DOMContentLoaded tetiklendi');
+  
   const bootBtn = document.getElementById('boot-btn');
-  if(bootBtn){
+  const bootEl = document.getElementById('boot');
+  const bootGorunur = bootEl && !bootEl.classList.contains('hidden');
+  
+  // GPS butonu hazırla (ne olursa olsun)
+  gpsButonuHazirla();
+  
+  // Watchdog'u her durumda başlat (kontrol amaçlı)
+  setTimeout(()=>{
+    if(typeof gpsWatchdogBaslat === 'function') gpsWatchdogBaslat();
+  }, 1000);
+  
+  // ★ Önceden GPS açıksa otomatik başlatma — ne olursa olsun çalışır
+  setTimeout(gpsAutoBaslat, 1500);
+  
+  // Boot butonu göründüğünde, kullanıcı bastığında ekstra başlatma
+  if(bootBtn && bootGorunur){
+    console.log('[GPS] Boot butonu görünür, kullanıcı bekleniyor');
     bootBtn.addEventListener('click', function(){
-      setTimeout(gpsButonuHazirla, 400);
-      // ★ Önceden GPS açıksa otomatik tekrar başlat
-      setTimeout(gpsAutoBaslat, 800);
+      console.log('[GPS] Boot butonuna basıldı, GPS kontrol ediliyor');
+      // Boot sonrası tekrar dene
+      setTimeout(gpsAutoBaslat, 500);
+      setTimeout(gpsAutoBaslat, 2000);
     }, {once:true});
-  } else {
-    gpsButonuHazirla();
-    setTimeout(gpsAutoBaslat, 500);
   }
 });
 
-/* ★ Sayfa yenilendiğinde önceki GPS durumunu kontrol et ve gerekirse otomatik başlat */
-function gpsAutoBaslat(){
-  try {
-    const oncekiAktif = localStorage.getItem('gps_aktif') === '1';
-    // Önceki mesafeyi yükle
-    gpsKayitOku();
-    
-    if(oncekiAktif && !gpsAktif){
-      console.log('[GPS] Sayfa yenilenmiş, GPS otomatik başlatılıyor...');
-      // Kullanıcıya sorma — sessizce devam et (yola çıkmışsa fark etmesin)
-      setTimeout(()=>{
+// ★ Sayfa yüklenmesi tamamlandığında SON kontrol (çift güvenlik)
+window.addEventListener('load', function(){
+  console.log('[GPS] window.load tetiklendi');
+  setTimeout(()=>{
+    // Eğer GPS aktif olması gerekirken hala değilse zorla başlat
+    try {
+      const oncekiAktif = localStorage.getItem('gps_aktif') === '1';
+      if(oncekiAktif && !gpsAktif){
+        console.log('[GPS] window.load: GPS hala başlatılmamış, zorla başlatılıyor');
         if(typeof window.gpsBaslat === 'function'){
           window.gpsBaslat();
           if(typeof window.toast === 'function'){
-            window.toast('📡 GPS otomatik devam ettirildi','info',3000);
+            window.toast('📡 GPS otomatik açıldı','ok',3000);
           }
         }
-      }, 1000);
+      }
+    } catch(e){ console.warn('[GPS] window.load hata:', e); }
+  }, 2500);
+});
+
+/* ★ Sayfa yenilendiğinde önceki GPS durumunu kontrol et ve gerekirse otomatik başlat */
+let _gpsAutoBaslatDeneme = 0;
+function gpsAutoBaslat(){
+  try {
+    const oncekiAktif = localStorage.getItem('gps_aktif') === '1';
+    
+    // Önceki mesafeyi yükle (ilk seferde)
+    if(_gpsAutoBaslatDeneme === 0){
+      gpsKayitOku();
     }
+    _gpsAutoBaslatDeneme++;
+    
+    console.log('[GPS] gpsAutoBaslat çağrıldı. oncekiAktif:', oncekiAktif, 'gpsAktif:', gpsAktif, 'deneme:', _gpsAutoBaslatDeneme);
+    
+    if(oncekiAktif && !gpsAktif){
+      // GPS aktif olması gerekirken aktif değil → BAŞLAT
+      console.log('[GPS] Otomatik başlatma koşulu sağlandı');
+      
+      if(typeof window.gpsBaslat === 'function'){
+        window.gpsBaslat();
+        if(typeof window.toast === 'function'){
+          window.toast('📡 GPS otomatik devam ettirildi','info',3000);
+        }
+        _gpsAutoBaslatDeneme = 0; // Başarılı, sıfırla
+      } else {
+        // Fonksiyon hazır değil — biraz sonra tekrar dene (max 5 kere)
+        if(_gpsAutoBaslatDeneme < 5){
+          console.log('[GPS] gpsBaslat hazır değil, 1 sn sonra tekrar denenecek');
+          setTimeout(gpsAutoBaslat, 1000);
+        } else {
+          console.error('[GPS] gpsBaslat 5 deneme sonrasında hala hazır değil');
+          _gpsAutoBaslatDeneme = 0;
+        }
+      }
+    } else if(oncekiAktif && gpsAktif){
+      // GPS zaten aktif sayılıyor — ama gerçekten çalışıyor mu?
+      // gpsSonGuncelleme çok eski ise yenile
+      const sonGFarki = gpsSonGuncelleme ? (Date.now() - gpsSonGuncelleme) : 999999;
+      if(sonGFarki > 30000){
+        console.log('[GPS] Aktif görünüyor ama 30+ sn güncelleme yok, yenileniyor');
+        if(typeof gpsYenidenBaslat === 'function'){
+          gpsYenidenBaslat();
+        }
+      }
+    }
+    
+    // ★ WATCHDOG'u başlat — ister GPS açık olsun ister kapalı, kontrol amaçlı çalışır
+    if(typeof gpsWatchdogBaslat === 'function') gpsWatchdogBaslat();
   } catch(e){ console.warn('[GPS] auto-baslat hata:', e); }
 }
+
+/* ═══════════════════════════════════════════════════
+   🐕 WATCHDOG — GPS donmuş mu kontrol et, donduysa yeniden başlat
+═══════════════════════════════════════════════════ */
+function gpsWatchdogBaslat(){
+  // Önce eski watchdog'u durdur
+  if(gpsWatchdogId) clearInterval(gpsWatchdogId);
+  
+  // Her 20 saniyede bir kontrol et
+  gpsWatchdogId = setInterval(()=>{
+    if(!gpsAktif) return; // GPS pasifse hiçbir şey yapma
+    
+    // Son başarılı güncelleme ne zamandı?
+    const simdi = Date.now();
+    const sonGuncellemeFarki = gpsSonGuncelleme ? (simdi - gpsSonGuncelleme) : 0;
+    
+    // 60 saniyeden uzun süredir konum güncellemesi yoksa → GPS donmuş demektir
+    if(gpsSonGuncelleme && sonGuncellemeFarki > 60000){
+      console.warn('[GPS Watchdog] GPS 60+ sn güncellenmiyor — yeniden başlatılıyor...');
+      
+      // Sınırsız döngü önleyici
+      gpsYenidenBaslatmaSayisi++;
+      if(gpsYenidenBaslatmaSayisi > 5){
+        console.error('[GPS Watchdog] 5 kere yeniden başlatma denendi, kullanıcıya bildiriliyor');
+        if(typeof window.toast === 'function'){
+          window.toast('⚠️ GPS sürekli sinyal kaybediyor — Manuel yenileyin','warn',6000);
+        }
+        gpsYenidenBaslatmaSayisi = 0;
+        // Sayacı sıfırla, sonraki kontrolde tekrar dener
+        return;
+      }
+      
+      // GPS'i yeniden başlat
+      gpsYenidenBaslat();
+    }
+  }, 20000); // Her 20 sn kontrol
+}
+
+/* ★ GPS'i yeniden başlat — mevcut watch'ı temizle, yeniden aç */
+function gpsYenidenBaslat(){
+  console.log('[GPS] Yeniden başlatılıyor...');
+  
+  // Mevcut watch'ı temizle
+  if(gpsWatchId !== null){
+    try{ navigator.geolocation.clearWatch(gpsWatchId); }catch(e){}
+    gpsWatchId = null;
+  }
+  
+  // Tek seferlik konum al, sonra watch yeniden başlat
+  if(!navigator.geolocation) return;
+  
+  try {
+    gpsWatchId = navigator.geolocation.watchPosition(
+      gpsGuncelle,
+      function(err){
+        console.warn('[GPS Yeniden] hata:', err.code, err.message);
+        // Çok agresif olma, sadece logla
+      },
+      {enableHighAccuracy:true, maximumAge:5000, timeout:30000}
+    );
+    gpsSonGuncelleme = Date.now(); // Watchdog'a "yeni başladı, beklesin" der
+    
+    // Kullanıcıya bilgi
+    if(typeof window.toast === 'function'){
+      window.toast('🔄 GPS yenilendi','info',2500);
+    }
+  } catch(e){
+    console.error('[GPS] Yeniden başlatma başarısız:', e);
+  }
+}
+
+/* ★ Manuel yenileme — kullanıcı "GPS Yenile" butonuna basınca */
+window.gpsManuelYenile = function(){
+  if(!gpsAktif){
+    // GPS pasif - başlat
+    if(typeof window.gpsBaslat === 'function'){
+      window.gpsBaslat();
+    }
+  } else {
+    // GPS aktif - yeniden başlat
+    gpsYenidenBaslat();
+    // Görsel feedback
+    if(typeof window.speak === 'function'){
+      window.speak('GPS yenilendi.','normal');
+    }
+  }
+};
+
+/* ★ VISIBILITY DEĞİŞİMİ — Ön plana dönüldüğünde GPS'i yenile */
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'visible' && gpsAktif){
+    // Ön plana döndük, GPS aktifti → watch hala çalışıyor mu kontrol et
+    console.log('[GPS] Ön plana döndü, durum kontrol ediliyor...');
+    
+    // Son güncelleme 30+ sn önceyse yeniden başlat
+    const simdi = Date.now();
+    const sonGuncellemeFarki = gpsSonGuncelleme ? (simdi - gpsSonGuncelleme) : 999999;
+    
+    if(sonGuncellemeFarki > 30000){
+      console.log('[GPS] Arkada bekledi, yeniden başlatılıyor...');
+      setTimeout(gpsYenidenBaslat, 500);
+    }
+  }
+});
 
 })();
 
