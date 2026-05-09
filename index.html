@@ -6484,18 +6484,39 @@ function gpsGuncelle(pos){
   
   // ★ HIZ NULL veya 0 ise → koordinat farkından hesapla
   // (Bazı cihazlarda speed null gelebilir, bizim manuel hesabımız yedek olur)
+  // ⚠️ ÖNEMLİ: Sadece accuracy iyi (≤30m) ve mesafe yeterli (≥5m) ise güvenilir
   if((hiz === null || hiz < 0.5) && sonKonum){
     const sonKonumZamani = sonKonum.zaman || 0;
     const gecenSn = (Date.now() - sonKonumZamani) / 1000;
-    if(gecenSn > 0 && gecenSn < 30){ // 30 sn'den eski değil
+    const oncekiAccuracy = sonKonum.accuracy || 0;
+    const yeniAccuracy = pos.coords.accuracy || 0;
+    
+    if(gecenSn > 0 && gecenSn < 30){
       const d = hesaplaMesafe(sonKonum.lat, sonKonum.lng, pos.coords.latitude, pos.coords.longitude);
-      // d metre cinsinden, hız km/h'ye çevir
-      const tahminHiz = (d / gecenSn) * 3.6;
-      // Eğer tahmin daha makul ise onu kullan
-      if(tahminHiz > 0.5 && tahminHiz < 200){
-        hiz = tahminHiz;
-      } else if(hiz === null){
+      
+      // ★ GPS gürültü filtresi:
+      // - Hareket 5 metreden azsa → DURUYOR demektir
+      // - Önceki/yeni accuracy 30 metreden kötüyse → güvenilmez
+      // - Hareket toplam accuracy'den küçükse → GPS gürültüsü
+      const accuracyToplami = (oncekiAccuracy + yeniAccuracy) / 2;
+      
+      if(d < 5){
+        // 5 metreden az hareket → araç DURUYOR
         hiz = 0;
+      } else if(d < accuracyToplami){
+        // Hareket, GPS doğruluğundan az → gürültü, GUVENILMEZ
+        hiz = 0;
+      } else if(yeniAccuracy > 30){
+        // Doğruluk kötü → güvenme
+        hiz = 0;
+      } else {
+        // Güvenilir hesap
+        const tahminHiz = (d / gecenSn) * 3.6;
+        if(tahminHiz >= 1 && tahminHiz < 200){
+          hiz = tahminHiz;
+        } else {
+          hiz = 0;
+        }
       }
     } else {
       if(hiz === null) hiz = 0;
@@ -6504,6 +6525,12 @@ function gpsGuncelle(pos){
   
   if(hiz === null) hiz = 0;
   if(hiz < 0) hiz = 0;
+  
+  // ★ DÜŞÜK HIZ FİLTRESİ — 1-2 km/h gibi minik hızlar GPS gürültüsü olabilir
+  // Bunları "duruyor" say
+  if(hiz < 2){
+    hiz = 0;
+  }
   
   // GPS doğruluğu kötüyse (accuracy çok yüksek = belirsiz konum) hızı düzelt
   const accuracy = pos.coords.accuracy || 0;
@@ -6516,8 +6543,46 @@ function gpsGuncelle(pos){
 
   if(sonKonum){
     const d = hesaplaMesafe(sonKonum.lat, sonKonum.lng, pos.coords.latitude, pos.coords.longitude);
-    // ★ Bayrak değerleri: 5 km'den uzun atlamaları kabul etme (GPS sıçraması)
-    if(d > 0 && d < 5000){
+    
+    // ★ ARAÇ DURUYOR FİLTRESİ — GPS sıçramalarını ENGELLEMEK için sıkı kurallar
+    let kabulEt = false;
+    
+    // Kural 1: Hız 3 km/h'nin altındaysa (duruyor sayılır) → MESAFE EKLEME
+    // Bu en önemli kural: araç durduğunda GPS rastgele kaysa bile sayılmaz
+    if(sonHiz < 3){
+      kabulEt = false;
+    }
+    // Kural 2: Hareket 5 metreden azsa → GPS gürültüsü, sayma
+    else if(d < 5){
+      kabulEt = false;
+    }
+    // Kural 3: Doğruluk 30 metreden kötüyse → güvenilmez, sayma
+    else if(accuracy > 30){
+      kabulEt = false;
+    }
+    // Kural 4: Beklenmeyen sıçrama (5 km'den uzun) → GPS atlaması
+    else if(d > 5000){
+      kabulEt = false;
+    }
+    // Kural 5: Önceki konumun zamanı çok yakınsa beklenmedik hızlı atlama
+    else if(sonKonum.zaman){
+      const gecenSn = (Date.now() - sonKonum.zaman) / 1000;
+      // Mantıksız hız (>200 km/h) atlamasını engelle
+      if(gecenSn > 0 && gecenSn < 30){
+        const tahminHiz = (d / gecenSn) * 3.6;
+        if(tahminHiz > 200){
+          kabulEt = false; // Mantıksız sıçrama
+        } else {
+          kabulEt = true;
+        }
+      } else {
+        kabulEt = true;
+      }
+    } else {
+      kabulEt = true;
+    }
+    
+    if(kabulEt){
       toplamMesafe += d;
       // Her güncellemede localStorage'a kaydet (sürüş kaybolmasın)
       gpsKayitYap();
