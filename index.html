@@ -6190,6 +6190,7 @@ let gpsInterval = null;
 let sonModDegisikligi = 0; // Mod kararsızlığını önler
 let gpsBaslangicMs = 0; // GPS aktivasyon zamanı
 let gpsKonumGecmisi = []; // Hız null olduğunda hesap için son konumlar
+let gpsHizGecmisi = []; // ★ Son 5 hız değeri - yumuşatma için (medyan filtre)
 let durusOnayMs = 0; // Duruş kararı için bekleme zamanı (anlık trafik ışığı için)
 let gpsSonyalKayipMs = 0; // GPS sinyali kayıp zamanı
 let gpsSonGuncelleme = 0; // ★ Son konum güncellemesi - watchdog için
@@ -6334,6 +6335,8 @@ window.gpsBaslat = function(){
   durusOnayMs = 0;
   gpsSonyalKayipMs = 0;
   gpsBaslangicMs = Date.now();
+  gpsHizGecmisi = []; // ★ Hız geçmişini temizle
+  gpsKonumGecmisi = [];
   
   // ★ HEMEN aktif olarak işaretle — kullanıcı hemen geri bildirim alsın
   setGpsAktif(true);
@@ -6354,6 +6357,24 @@ window.gpsBaslat = function(){
   if(S && !S.audioUnlocked) S.audioUnlocked = true;
   const bootEl = document.getElementById('boot');
   if(bootEl) bootEl.style.display = 'none';
+  
+  // ★ ÖNEMLİ: GPS açılırken AKTİF MOD VARSA durdur — kullanıcı hareket edince başlar
+  // Bu, "GPS açılınca otomatik sayaç başlıyor" sorununu çözer
+  if(S && S.mode){
+    // Eğer önceden bir mod aktifse, mevcut süreyi log'a kaydet ve modu kapat
+    if(S.modeStartMs){
+      const dur = Math.floor((Date.now() - S.modeStartMs) / 1000);
+      if(dur > 0){
+        if(!S.log) S.log = [];
+        S.log.push({mode: S.mode, start: S.modeStartMs, end: Date.now(), dur: dur});
+        if(S.log.length > 300) S.log.shift();
+      }
+    }
+    S.mode = null;
+    S.modeStartMs = null;
+    console.log('[GPS] Önceki aktif mod durduruldu, hareket beklenecek');
+  }
+  
   if(typeof window.startTicker === 'function') window.startTicker();
   if(S) S.lastTickMs = Date.now();
   if(typeof window.renderAll === 'function') window.renderAll();
@@ -6448,6 +6469,8 @@ window.gpsDurdur = function(){
   gpsSonyalKayipMs = 0;
   gpsSonGuncelleme = 0;
   gpsYenidenBaslatmaSayisi = 0;
+  gpsHizGecmisi = []; // ★ Hız geçmişini temizle
+  gpsKonumGecmisi = [];
   
   // localStorage'tan da temizle
   try {
@@ -6539,6 +6562,35 @@ function gpsGuncelle(pos){
     if(hiz < 5){ hiz = sonHiz; } // Sapma yapmasın
   }
   
+  // ★ MEDYAN FİLTRE — Son 5 değerin medyanını al, sıçramaları yumuşat
+  // 0→4→0→7 gibi atlamaları engeller
+  gpsHizGecmisi.push(hiz);
+  if(gpsHizGecmisi.length > 5) gpsHizGecmisi.shift();
+  
+  // Eğer en az 3 değer varsa medyan al
+  if(gpsHizGecmisi.length >= 3){
+    const sirali = [...gpsHizGecmisi].sort((a,b) => a - b);
+    const medyan = sirali[Math.floor(sirali.length / 2)];
+    
+    // ★ ANTI-SIÇRAMA: Mevcut hız ile medyan çok farklıysa medyanı kullan
+    const fark = Math.abs(hiz - medyan);
+    if(fark > 8 && medyan < 5){
+      // 0-5 km/h aralığında ani sıçrama → medyanı kullan (genelde duruyor)
+      hiz = medyan;
+    } else if(fark > 20){
+      // Çok aşırı sıçrama (>20 km/h fark) → medyanı kullan
+      hiz = medyan;
+    }
+    // Yoksa GPS'in dediğine güven
+  }
+  
+  // ★ DURUŞ KARARLI: Eğer önceki hız da 0, mevcut da düşükse, kalıcı duruşu pekiştir
+  // Hız geçmişinde 3+ kez 0 varsa → duruyor say
+  const sifirSayisi = gpsHizGecmisi.filter(v => v === 0).length;
+  if(sifirSayisi >= 3 && hiz < 5){
+    hiz = 0;
+  }
+  
   sonHiz = Math.round(hiz * 10) / 10;
 
   if(sonKonum){
@@ -6609,8 +6661,8 @@ function gpsGuncelle(pos){
   const S = getS();
   const simdi = Date.now();
   const SURUS_ESIK = 3; // km/h
-  const DURMA_ONAY_SN = 120; // 2 dakika sürekli durma → mod değişir (trafik ışığı korunur)
-  const MIN_MOD_DEGISIM_SN = 30; // En az 30 sn mod değiştirmeden bekle (kararsızlık önler)
+  const DURMA_ONAY_SN = 45; // 45 saniye sürekli durma → çalışma modu (trafik ışığı toleransı korunur)
+  const MIN_MOD_DEGISIM_SN = 20; // En az 20 sn mod değiştirmeden bekle (kararsızlık önler)
 
   if(sonHiz >= SURUS_ESIK){
     // ===== HAREKET — sürüş =====
@@ -6623,8 +6675,10 @@ function gpsGuncelle(pos){
     
     // Sürüş moduna geç (eğer değilse) — kararsızlık önleyici
     if(S && S.mode !== 'surus'){
-      // Mod değişimi için kontrol: en az 30 sn beklesin (titreşim önler)
-      if(!sonModDegisikligi || (simdi - sonModDegisikligi) > MIN_MOD_DEGISIM_SN * 1000){
+      // ★ Mod NULL ise (GPS yeni açıldı) hemen başlat, kararsızlık beklemesi yok
+      // Mod başka modsa (çalışma'dan dönüyor) MIN_MOD_DEGISIM_SN bekle
+      const beklesin = S.mode && S.mode !== 'surus';
+      if(!beklesin || !sonModDegisikligi || (simdi - sonModDegisikligi) > MIN_MOD_DEGISIM_SN * 1000){
         if(typeof window.setMode === 'function'){
           window.setMode('surus', 'gps');
           sonModDegisikligi = simdi;
