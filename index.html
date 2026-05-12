@@ -5204,10 +5204,53 @@ const KAMYON_YASAK = {
     { ad: 'AZYOL - Yol İdaresi', url: 'https://www.aaa.org.az/' }
   ]},
   
-  'Belçika': { flag:'🇧🇪', ozet:'AB ülkesi - yaz aylarında bazı bölgesel yasaklar. Detaylı bilgi için resmi kaynaklara bakın.', haftaSonu:'Bilinmiyor', resmiKaynak:[
-    { ad: 'Mobilit Belgium', url: 'https://mobilit.belgium.be/' },
-    { ad: 'IRU - Belçika (EN)', url: 'https://www.iru.org/where-we-work/europe/belgium' }
-  ]},
+  'Hollanda': {
+    flag: '🇳🇱',
+    ozet: 'Normal kamyonlar için GENEL YASAK YOK. Pazar/tatil günleri çoğu yolda serbest. Özel/büyük taşımacılık (>4m, >30m) için kısıtlamalar var. Şehir merkezlerinde düşük emisyon bölgeleri (LEZ).',
+    haftaSonu: 'Normal kamyon: yok. Büyük taşıma: Cmt 09:00 - Pzr 24:00 yasak.',
+    tatilGunleri2026: [
+      { tarih: '01 Ocak', ad: 'Yılbaşı', yasak: 'Normal: serbest' },
+      { tarih: '03 Nis', ad: 'Good Friday', yasak: 'Normal: serbest' },
+      { tarih: '05-06 Nis', ad: 'Paskalya (Pzr-Pzt)', yasak: 'Normal: serbest' },
+      { tarih: '27 Nis', ad: 'Kral Günü (King\'s Day)', yasak: 'Şehir merkezi kapalı' },
+      { tarih: '05 May', ad: 'Kurtuluş Günü', yasak: 'Bazı işletmeler kapalı' },
+      { tarih: '14 May', ad: 'İsa\'nın Göğe Yükselişi', yasak: 'Normal: serbest' },
+      { tarih: '25 May', ad: 'Pentekost Pazartesi', yasak: 'Normal: serbest' },
+      { tarih: '25-26 Ara', ad: 'Noel (2 gün)', yasak: 'Çoğu işletme kapalı' }
+    ],
+    ekKisitlamalar: '⚠️ ÖZEL KISITLAMALAR:\n• Büyük taşıma (>4m genişlik veya >30m uzunluk): Sabah rush 07:00-10:00 + Akşam rush 16:00-18:00 (batı bölgesinde 06:00-20:00)\n• Kötü hava (görüş <200m): Cmt 09:00 - Pzr 24:00 yasak\n• Şehir merkezlerinde Low Emission Zone (LEZ): Eski araçlara giriş yasak\n• Amsterdam, Rotterdam, Den Haag, Utrecht\'te sıkı çevre kuralları',
+    resmiKaynak: [
+      { ad: 'Rijkswaterstaat - Yol İdaresi (NL)', url: 'https://www.rijkswaterstaat.nl/' },
+      { ad: 'RDW - Özel İzinler', url: 'https://www.rdw.nl/' },
+      { ad: 'IRU - Hollanda (EN)', url: 'https://www.iru.org/where-we-work/europe/netherlands' },
+      { ad: 'Milieuzones - Düşük Emisyon Bölgeleri', url: 'https://www.milieuzones.nl/' }
+    ]
+  },
+
+  'Belçika': {
+    flag: '🇧🇪',
+    ozet: 'Normal kamyonlar için GENEL HAFTA SONU YASAĞI YOK. Sadece BÜYÜK TAŞIMACILIK (>4m genişlik, >30m uzunluk) ve özel taşımacılık kısıtlı. Brüksel/Antwerp çevresinde rush hour yasakları. Kötü hava (görüş <200m) yasak.',
+    haftaSonu: 'Normal kamyon: yok. Büyük taşıma: Cmt 12:00 - Pzr 24:00.',
+    tatilGunleri2026: [
+      { tarih: '01 Ocak', ad: 'Yılbaşı', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '06 Nis', ad: 'Paskalya Pazartesi', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '01 May', ad: 'İşçi Bayramı', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '14 May', ad: 'İsa\'nın Göğe Yükselişi', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '25 May', ad: 'Pentekost Pazartesi', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '21 Tem', ad: 'Ulusal Gün', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '15 Ağu', ad: 'Meryem Ana Günü', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '01 Kas', ad: 'Azizler Günü', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '11 Kas', ad: 'Ateşkes Günü', yasak: 'Büyük taşıma: yasak' },
+      { tarih: '25 Ara', ad: 'Noel', yasak: 'Büyük taşıma: yasak' }
+    ],
+    ekKisitlamalar: '⚠️ RUSH HOUR YASAKLARI (Brüksel/Antwerp):\n• Antwerp R1 ring otoyolu: 06:00-09:00 ve 16:00-21:00\n• A10 (E40) Brüksel-Oostende: Sabah Brüksel\'e doğru, akşam ters yöne\n• Liège A604-A15 link: peak saatlerde kısıtlı\n\n⚠️ DİĞER:\n• Genişlik >4m veya uzunluk >30m: Her gün 06:00-21:00\n• Kötü hava (görüş <200m): Tüm kamyonlar yasak\n• Karlı/buzlu yolda büyük taşıma yasak\n• Liefkenshoek Tüneli: 3m+ yüksek araçlara ek ücret',
+    resmiKaynak: [
+      { ad: 'Mobilit Belgium - Bakanlık (NL/FR)', url: 'https://mobilit.belgium.be/' },
+      { ad: 'Vlaanderen - Trafik', url: 'https://www.vlaanderen.be/mobiliteit-en-openbare-werken' },
+      { ad: 'IRU - Belçika (EN)', url: 'https://www.iru.org/where-we-work/europe/belgium' },
+      { ad: 'TruckBan - Belçika Detaylı (EN)', url: 'https://truckban.eu/Belgium' }
+    ]
+  },
   
   'Belarus': { flag:'🇧🇾', ozet:'Detaylı bilgi için resmi kaynaklara bakın.', haftaSonu:'Bilinmiyor', resmiKaynak:[
     { ad: 'Belarus Roads', url: 'https://www.belavtodor.by/' }
@@ -5235,11 +5278,6 @@ const KAMYON_YASAK = {
   
   'Gürcistan': { flag:'🇬🇪', ozet:'Detaylı bilgi için resmi kaynaklara bakın.', haftaSonu:'Bilinmiyor', resmiKaynak:[
     { ad: 'Gürcistan Yol İdaresi', url: 'https://www.georoad.ge/' }
-  ]},
-  
-  'Hollanda': { flag:'🇳🇱', ozet:'AB ülkesi - genelde haftalık yasak yok. Detaylı bilgi için resmi kaynaklara bakın.', haftaSonu:'Genelde yok', resmiKaynak:[
-    { ad: 'Rijkswaterstaat (NL)', url: 'https://www.rijkswaterstaat.nl/' },
-    { ad: 'IRU - Hollanda (EN)', url: 'https://www.iru.org/where-we-work/europe/netherlands' }
   ]},
   
   'İngiltere': { flag:'🇬🇧', ozet:'Genelde haftalık yasak yok. Londra için özel ULEZ saatleri var. Detaylı bilgi için resmi kaynaklara bakın.', haftaSonu:'Genelde yok', resmiKaynak:[
@@ -5342,7 +5380,7 @@ const KAMYON_YASAK = {
 };
 
 /* DETAYLI BİLGİ olan ülkeler — listeleme sırası için */
-const DETAYLI_ULKELER = ['Türkiye','Bulgaristan','Sırbistan','Hırvatistan','Slovenya','Avusturya','Almanya','İtalya','Macaristan','Çekya','Slovakya','Polonya','Romanya','Yunanistan','Fransa'];
+const DETAYLI_ULKELER = ['Türkiye','Bulgaristan','Sırbistan','Hırvatistan','Slovenya','Avusturya','Almanya','İtalya','Macaristan','Çekya','Slovakya','Polonya','Romanya','Yunanistan','Fransa','Hollanda','Belçika'];
 
 const GUN_ADLARI = ['pazar','pazartesi','sali','carsamba','persembe','cuma','cumartesi'];
 
@@ -5535,6 +5573,18 @@ window.dYolBilgiUlkeAc = function(ulkeAd){
         '</div>';
     }
     
+    // Ek kısıtlamalar (Hollanda/Belçika gibi)
+    let ekKisitlamalarHTML = '';
+    if(u.ekKisitlamalar){
+      // \n karakterlerini <br>'a çevir
+      const formatlanmis = u.ekKisitlamalar.replace(/\n/g, '<br>');
+      ekKisitlamalarHTML = 
+        '<div style="background:#0a1a2a;border:1px solid #1c4a6a;padding:10px 12px;border-radius:6px;margin-bottom:12px;">'+
+          '<div style="font-size:.66rem;font-weight:900;color:#60a5fa;letter-spacing:1.5px;margin-bottom:6px;">⚙️ ÖZEL KISITLAMALAR</div>'+
+          '<div style="font-family:var(--sans);font-size:.76rem;color:#a0c4ff;line-height:1.7;">'+formatlanmis+'</div>'+
+        '</div>';
+    }
+    
     // İstanbul gibi şehir yasakları (Türkiye)
     let sehirYasakHTML = '';
     if(u.istanbulYasak){
@@ -5568,6 +5618,9 @@ window.dYolBilgiUlkeAc = function(ulkeAd){
       
       // Tatil günleri tablosu (YENİ)
       tatilHTML+
+      
+      // Ek kısıtlamalar (Hollanda/Belçika rush hour, LEZ vb.)
+      ekKisitlamalarHTML+
       
       // Bölgesel not (varsa)
       bolgeselNotHTML+
@@ -7028,8 +7081,11 @@ window.gpsBaslat = function(){
       {enableHighAccuracy:true, maximumAge:5000, timeout:30000}
     );
     
-    // UI güncelleme interval'i — saniye bazlı duruş süresi vs için
-    gpsInterval = setInterval(gpsUIGuncelle, 1000);
+    // ★ UI güncelleme + DURUŞ KONTROL interval'i (kritik: GPS sinyal vermese de mod değişimi olsun)
+    gpsInterval = setInterval(()=>{
+      gpsUIGuncelle();
+      gpsDurusKontrolEt(); // ★ Bağımsız mod kontrolü
+    }, 1000);
     
     if(typeof window.save === 'function') window.save();
   } catch(err){
@@ -7166,16 +7222,28 @@ function gpsGuncelle(pos){
     const sirali = [...gpsHizGecmisi].sort((a,b) => a - b);
     const medyan = sirali[Math.floor(sirali.length / 2)];
     
-    // ★ ANTI-SIÇRAMA: Mevcut hız ile medyan çok farklıysa medyanı kullan
+    // ★ ANTI-SIÇRAMA: Sadece KESİN SIÇRAMALARDA medyan kullan
+    // Gerçek hızlanma/yavaşlama kademelidir, sıçrama anlıktır
     const fark = Math.abs(hiz - medyan);
+    
+    // SADECE 0-5 km/h aralığında ani sıçrama (park halinde GPS gürültüsü)
     if(fark > 8 && medyan < 5){
-      // 0-5 km/h aralığında ani sıçrama → medyanı kullan (genelde duruyor)
-      hiz = medyan;
-    } else if(fark > 20){
-      // Çok aşırı sıçrama (>20 km/h fark) → medyanı kullan
-      hiz = medyan;
+      hiz = medyan; // Park halinde, ani 10+ km/h → sıçrama, sıfırla
     }
-    // Yoksa GPS'in dediğine güven
+    // Yüksek hızda kademeli hızlanma DOĞAL → filtreleme
+    // Sadece imkansız sıçramalarda (40+ km/h fark, 1 saniyede) filtrele
+    else if(fark > 40){
+      hiz = medyan; // Çok aşırı sıçrama (>40 km/h)
+    }
+    // Diğer durumda GPS değerine güven
+  }
+  
+  // ★ MUTLAK ÜST SINIR — Sadece KESİN HATA durumunda
+  // Kamyon yokuş aşağı 110-120'ye çıkabilir, ama 130+ asla
+  // Fiziksel limit: kamyon 130'u zorlanır
+  if(hiz > 130){
+    console.log('[GPS Hız Filtresi] 130+ mantıksız hız, filtrelendi: '+hiz.toFixed(1));
+    hiz = sonHiz > 0 ? sonHiz : 90;
   }
   
   // ★ DURUŞ KARARLI: Eğer önceki hız da 0, mevcut da düşükse, kalıcı duruşu pekiştir
@@ -7315,6 +7383,44 @@ function gpsGuncelle(pos){
 }
 
 /* ── UI Güncelle ── */
+/* ★ BAĞIMSIZ DURUŞ KONTROLÜ — Her 1 saniyede çalışır
+   GPS sinyali gelmese bile mod değişimini garanti eder
+   Sorun: GPS bazen 30+ sn sinyal göndermeyebilir, o zaman gpsGuncelle çağrılmaz
+   Çözüm: Bu interval bağımsız çalışır, sayaç ile mod değişimini yönetir */
+function gpsDurusKontrolEt(){
+  if(!gpsAktif) return;
+  if(!durusBaslangic) return; // Hareket halinde, kontrol yapma
+  
+  const S = getS();
+  if(!S || S.mode !== 'surus') return; // Zaten çalışma/dinlenme modundaysa kontrol yapma
+  
+  const simdi = Date.now();
+  const durusSn = Math.floor((simdi - durusBaslangic) / 1000);
+  const DURMA_ONAY_SN_INT = 45;
+  const MIN_MOD_DEGISIM_SN_INT = 20;
+  
+  // 45 sn dolduysa ve mod değişimi en az 20 sn önce olmuşsa çalışma moduna geç
+  if(durusSn >= DURMA_ONAY_SN_INT){
+    if(!sonModDegisikligi || (simdi - sonModDegisikligi) > MIN_MOD_DEGISIM_SN_INT * 1000){
+      if(typeof window.setMode === 'function'){
+        console.log('[GPS Duruş Kontrol] 45 sn doldu, çalışma moduna geçiliyor (durusSn='+durusSn+')');
+        window.setMode('calisma', 'gps');
+        sonModDegisikligi = simdi;
+        if(typeof window.toast === 'function') window.toast('⚙️ GPS: Çalışma moduna geçildi','ok',2500);
+      }
+    }
+  }
+  
+  // Bilgi mesajını da güncelle
+  const bilgi = document.getElementById('gps-bilgi');
+  if(bilgi){
+    const kalan = Math.max(0, DURMA_ONAY_SN_INT - durusSn);
+    if(durusSn < DURMA_ONAY_SN_INT){
+      bilgi.textContent = '🚦 Duruş — ' + (kalan>=60 ? Math.floor(kalan/60)+'dk':kalan+'sn') + ' içinde çalışmaya geç';
+    }
+  }
+}
+
 function gpsUIGuncelle(){
   const hizEl = document.getElementById('gps-ayar-hiz');
   const durusEl = document.getElementById('gps-ayar-durus');
