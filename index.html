@@ -6906,8 +6906,8 @@ function hizKartGuncelle(hiz){
     }
   }
   
-  // Max hız bugün
-  if(hiz > S.stats.maxHiz) S.stats.maxHiz = Math.round(hiz);
+  // Max hız bugün - sadece gerçek hareket için (5 km/h üstü, GPS gürültüsü hariç)
+  if(hiz >= 5 && hiz > S.stats.maxHiz) S.stats.maxHiz = Math.round(hiz);
   const maxEl = document.getElementById('hiz-max');
   if(maxEl){
     maxEl.textContent = S.stats.maxHiz;
@@ -7322,9 +7322,22 @@ function gpsGuncelle(pos){
 
   const S = getS();
   const simdi = Date.now();
-  const SURUS_ESIK = 3; // km/h
+  const SURUS_ESIK = 5; // km/h - GPS gürültüsünden korunmak için 5'e yükseltildi (önceden 3'tü)
   const DURMA_ONAY_SN = 45; // 45 saniye sürekli durma → çalışma modu (trafik ışığı toleransı korunur)
   const MIN_MOD_DEGISIM_SN = 20; // En az 20 sn mod değiştirmeden bekle (kararsızlık önler)
+  
+  // ★ GPS ISINMA SÜRESİ — İlk 30 saniyede sürüş moduna geçme
+  // GPS sinyali ilk açıldığında uydular tam kilitlenmediğinden hız sıçramaları olur
+  // Bu süre içinde 8 km/h altı tüm değerleri gürültü kabul et
+  const GPS_ISINMA_MS = 30000; // 30 saniye
+  const isinmaSuresi = simdi - gpsBaslangicMs;
+  
+  // İlk 30 sn'de ve hız < 8 km/h ise → gürültü, sayma
+  if(isinmaSuresi < GPS_ISINMA_MS && sonHiz < 8){
+    const bilgi = document.getElementById('gps-bilgi');
+    if(bilgi) bilgi.textContent = '⏳ GPS ısınıyor... ' + Math.ceil((GPS_ISINMA_MS - isinmaSuresi)/1000) + 'sn';
+    return; // Mod değişimi yapma, sayaç başlatma
+  }
 
   if(sonHiz >= SURUS_ESIK){
     // ===== HAREKET — sürüş =====
