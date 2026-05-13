@@ -7323,8 +7323,8 @@ function gpsGuncelle(pos){
   const S = getS();
   const simdi = Date.now();
   const SURUS_ESIK = 5; // km/h - GPS gürültüsünden korunmak için 5'e yükseltildi (önceden 3'tü)
-  const DURMA_ONAY_SN = 45; // 45 saniye sürekli durma → çalışma modu (trafik ışığı toleransı korunur)
-  const MIN_MOD_DEGISIM_SN = 20; // En az 20 sn mod değiştirmeden bekle (kararsızlık önler)
+  const DURMA_ONAY_SN = 25; // 25 saniye sürekli durma → çalışma modu (trafik ışığı toleransı korunur)
+  const MIN_MOD_DEGISIM_SN = 10; // En az 10 sn mod değiştirmeden bekle (kararsızlık önler)
   
   // ★ GPS ISINMA SÜRESİ — İlk 30 saniyede sürüş moduna geçme
   // GPS sinyali ilk açıldığında uydular tam kilitlenmediğinden hız sıçramaları olur
@@ -7409,8 +7409,8 @@ function gpsDurusKontrolEt(){
   
   const simdi = Date.now();
   const durusSn = Math.floor((simdi - durusBaslangic) / 1000);
-  const DURMA_ONAY_SN_INT = 45;
-  const MIN_MOD_DEGISIM_SN_INT = 20;
+  const DURMA_ONAY_SN_INT = 25;
+  const MIN_MOD_DEGISIM_SN_INT = 10;
   
   // 45 sn dolduysa ve mod değişimi en az 20 sn önce olmuşsa çalışma moduna geç
   if(durusSn >= DURMA_ONAY_SN_INT){
