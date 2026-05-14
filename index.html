@@ -144,12 +144,12 @@
 }
 
 :root{
-  --bg:#0a0a0f;
-  --panel:#111118;
+  --bg:#000000;
+  --panel:#0f0f17;
   --panel2:#16161f;
   --panel3:#1c1c28;
-  --border:#252535;
-  --border2:#2e2e42;
+  --border:#2a2a3a;
+  --border2:#3a3a4f;
   --gold:#f0b429;
   --gold2:#ffd166;
   --gold-dim:#4a3a0d;
@@ -164,9 +164,9 @@
   --purple:#a855f7;
   --purple-dim:#2a0d3a;
   --cyan:#06b6d4;
-  --text:#e8e8f0;
-  --text2:#b0b0c8;
-  --sub:#565670;
+  --text:#ffffff;
+  --text2:#d0d0e0;
+  --sub:#8a8aa8;
 
   --mono:'Share Tech Mono',monospace;
   --sans:'Barlow Condensed',sans-serif;
@@ -197,6 +197,265 @@ body.light-theme{
   --text:#1a1a2e;
   --text2:#2c3e50;
   --sub:#5a6580;
+}
+
+/* ★ AÇIK TEMA — HARDCODED RENK OVERRIDE'ları */
+/* Sistemdeki kalıcı koyu renkler için zorla açık renk ata */
+body.light-theme [style*="background:#0a0a14"],
+body.light-theme [style*="background:#0a0a0f"],
+body.light-theme [style*="background:#111118"],
+body.light-theme [style*="background:#16161f"],
+body.light-theme [style*="background:#1c1c28"],
+body.light-theme [style*="background:#1a2438"],
+body.light-theme [style*="background:#0c2618"],
+body.light-theme [style*="background:#1a0a0e"],
+body.light-theme [style*="background:#1a1408"],
+body.light-theme [style*="background:#0a1428"],
+body.light-theme [style*="background:#0a1a2a"],
+body.light-theme [style*="background:#1a2030"],
+body.light-theme [style*="background:#15151f"],
+body.light-theme [style*="background:#1f1f2e"],
+body.light-theme [style*="background:#181822"]{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+}
+
+/* Inline border override - koyu border'ları açık tema için yumuşat */
+body.light-theme [style*="border:1px solid #2a4060"],
+body.light-theme [style*="border:1px solid #1a3458"],
+body.light-theme [style*="border:1px solid #1c4a6a"],
+body.light-theme [style*="border:1px solid #2a3458"],
+body.light-theme [style*="border:1px solid #1a2438"],
+body.light-theme [style*="border:1px solid #2a4055"],
+body.light-theme [style*="border:1px solid #5c4a1a"],
+body.light-theme [style*="border:1px solid #5c1a1a"],
+body.light-theme [style*="border:2px solid #5c1a1a"],
+body.light-theme [style*="border:2px solid #1c4a6a"]{
+  border-color:#d1d5dc !important;
+}
+
+/* Inline text renkleri override */
+body.light-theme [style*="color:#a0b8d0"],
+body.light-theme [style*="color:#a0c4ff"],
+body.light-theme [style*="color:#b0b0c8"],
+body.light-theme [style*="color:#c0c0d0"],
+body.light-theme [style*="color:#d4c896"],
+body.light-theme [style*="color:#e8e8f0"]{
+  color:#2c3e50 !important;
+}
+
+body.light-theme [style*="color:#7a92b0"],
+body.light-theme [style*="color:#888"],
+body.light-theme [style*="color:#565670"]{
+  color:#5a6580 !important;
+}
+
+/* Açık tema için temel zemin */
+body.light-theme,
+body.light-theme html{
+  background:#f5f6fa !important;
+  color:#1a1a2e !important;
+}
+
+/* Tüm card ve panel elementleri */
+body.light-theme .d-card{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme input,
+body.light-theme select,
+body.light-theme textarea{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme input::placeholder{
+  color:#9aa0b0 !important;
+}
+
+/* Header ve diğer fixed öğeler */
+body.light-theme .app-hdr,
+body.light-theme header{
+  background:#ffffff !important;
+  border-bottom:1px solid #d1d5dc !important;
+}
+
+body.light-theme .hbrand,
+body.light-theme .hbrand small{
+  color:#1a1a2e !important;
+}
+
+/* Sayaç ve clock'lar */
+body.light-theme .hclock,
+body.light-theme #live-clock,
+body.light-theme #live-date{
+  color:#2c3e50 !important;
+}
+
+/* Mode butonları */
+body.light-theme .mode-btn{
+  background:#f0f2f7 !important;
+  color:#5a6580 !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme .mode-btn.active{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+}
+
+/* Tab'lar */
+body.light-theme .tab{
+  background:#f0f2f7 !important;
+  color:#5a6580 !important;
+}
+
+body.light-theme .tab.active{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+}
+
+/* DTCO menü */
+body.light-theme #dtco-sidebar,
+body.light-theme #dtco-menu{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme #dtco-menu-btn{
+  background:#f0f2f7 !important;
+  color:#1a1a2e !important;
+}
+
+/* Body ana zemin */
+body.light-theme{
+  background:#f5f6fa !important;
+  color:#1a1a2e !important;
+}
+
+/* Boot ekranı açık tema */
+body.light-theme #boot{
+  background:#f5f6fa !important;
+}
+body.light-theme .boot-logo{
+  color:#b8860b !important;
+}
+body.light-theme .boot-reg{
+  color:#5a6580 !important;
+}
+
+/* Açık tema için sayaç kartları */
+body.light-theme .stat-box{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .sb-lbl{
+  color:#5a6580 !important;
+}
+
+body.light-theme .sb-val{
+  color:#1a1a2e !important;
+}
+
+body.light-theme .sb-sub{
+  color:#5a6580 !important;
+}
+
+/* Hız kartı */
+body.light-theme #hiz-card,
+body.light-theme #hiz-anlik-card,
+body.light-theme #hiz-max-card,
+body.light-theme #hiz-ihlal-card{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+}
+
+/* Section header'lar */
+body.light-theme .sh{
+  background:#f0f2f7 !important;
+  color:#1a1a2e !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme .rcard{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme .rcard-title{
+  color:#1a1a2e !important;
+}
+
+/* Yol bilgisi - link kartlar açık tema */
+body.light-theme [style*="background:#0a1a2a"]{
+  background:#dbeafe !important;
+  border-color:#2563eb !important;
+  color:#1e3a8a !important;
+}
+
+body.light-theme a[style*="color:#60a5fa"]{
+  color:#2563eb !important;
+}
+
+body.light-theme [style*="color:#60a5fa"]{
+  color:#2563eb !important;
+}
+
+body.light-theme [style*="color:#fbbf24"]{
+  color:#d97706 !important;
+}
+
+body.light-theme [style*="color:#fca5a5"]{
+  color:#dc2626 !important;
+}
+
+body.light-theme [style*="color:#ef4444"]{
+  color:#dc2626 !important;
+}
+
+body.light-theme [style*="color:#10b981"]{
+  color:#16a34a !important;
+}
+
+/* d-btn açık tema */
+body.light-theme .d-btn{
+  background:#f0f2f7 !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .d-btn.d-btn-a{
+  background:#2563eb !important;
+  color:#ffffff !important;
+  border-color:#2563eb !important;
+}
+
+body.light-theme .d-btn.d-btn-s{
+  background:#f0f2f7 !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .d-btn.d-btn-d{
+  background:#dc2626 !important;
+  color:#ffffff !important;
+}
+
+/* GPS durum bar açık tema */
+body.light-theme #gps-durum-bar{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme #gps-durum-bar.aktif{
+  background:#dcfce7 !important;
+  border-color:#16a34a !important;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
