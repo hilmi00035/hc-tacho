@@ -7401,227 +7401,102 @@ window.gpsDurdur = function(){
 };
 
 /* ── Konum Güncelleme — AKILLI Takograf mantığı ── */
+/* ── GPS Konum Güncellemesi — BASİT ve SAĞLAM ── */
 function gpsGuncelle(pos){
   if(!gpsAktif) return;
   
-  // ★ Son başarılı güncelleme zamanını kaydet (watchdog için)
+  // Son başarılı güncelleme zamanı
   gpsSonGuncelleme = Date.now();
-  gpsYenidenBaslatmaSayisi = 0; // Başarılı güncelleme geldi, sayacı sıfırla
   
-  // GPS sinyali geri geldiyse kayıp flagini sıfırla
-  gpsSonyalKayipMs = 0;
-  
-  // ★ HIZ HESAPLAMA — Önce GPS'in verdiği hızı al
-  let hiz = pos.coords.speed !== null ? pos.coords.speed * 3.6 : null;
-  
-  // ★ HIZ NULL veya 0 ise → koordinat farkından hesapla
-  // (Bazı cihazlarda speed null gelebilir, bizim manuel hesabımız yedek olur)
-  // ⚠️ ÖNEMLİ: Sadece accuracy iyi (≤30m) ve mesafe yeterli (≥5m) ise güvenilir
-  if((hiz === null || hiz < 0.5) && sonKonum){
-    const sonKonumZamani = sonKonum.zaman || 0;
-    const gecenSn = (Date.now() - sonKonumZamani) / 1000;
-    const oncekiAccuracy = sonKonum.accuracy || 0;
-    const yeniAccuracy = pos.coords.accuracy || 0;
-    
+  // ── 1. HIZ HESAPLA ──
+  let hiz = 0;
+  if(pos.coords.speed !== null && pos.coords.speed >= 0){
+    hiz = pos.coords.speed * 3.6; // m/s → km/h
+  } else if(sonKonum && sonKonum.zaman){
+    // Speed null ise koordinat farkından hesapla
+    const gecenSn = (Date.now() - sonKonum.zaman) / 1000;
     if(gecenSn > 0 && gecenSn < 30){
       const d = hesaplaMesafe(sonKonum.lat, sonKonum.lng, pos.coords.latitude, pos.coords.longitude);
-      
-      // ★ GPS gürültü filtresi:
-      // - Hareket 5 metreden azsa → DURUYOR demektir
-      // - Önceki/yeni accuracy 30 metreden kötüyse → güvenilmez
-      // - Hareket toplam accuracy'den küçükse → GPS gürültüsü
-      const accuracyToplami = (oncekiAccuracy + yeniAccuracy) / 2;
-      
-      if(d < 5){
-        // 5 metreden az hareket → araç DURUYOR
-        hiz = 0;
-      } else if(d < accuracyToplami){
-        // Hareket, GPS doğruluğundan az → gürültü, GUVENILMEZ
-        hiz = 0;
-      } else if(yeniAccuracy > 30){
-        // Doğruluk kötü → güvenme
-        hiz = 0;
-      } else {
-        // Güvenilir hesap
-        const tahminHiz = (d / gecenSn) * 3.6;
-        if(tahminHiz >= 1 && tahminHiz < 200){
-          hiz = tahminHiz;
-        } else {
-          hiz = 0;
-        }
+      if(d >= 5){ // En az 5 metre hareket
+        hiz = (d / gecenSn) * 3.6;
       }
-    } else {
-      if(hiz === null) hiz = 0;
     }
   }
   
-  if(hiz === null) hiz = 0;
-  if(hiz < 0) hiz = 0;
+  // ── 2. HIZ FİLTRELERİ ──
+  // 2 km/h altı = duruyor
+  if(hiz < 2) hiz = 0;
   
-  // ★ DÜŞÜK HIZ FİLTRESİ — 1-2 km/h gibi minik hızlar GPS gürültüsü olabilir
-  // Bunları "duruyor" say
-  if(hiz < 2){
-    hiz = 0;
-  }
-  
-  // GPS doğruluğu kötüyse (accuracy çok yüksek = belirsiz konum) hızı düzelt
-  const accuracy = pos.coords.accuracy || 0;
-  if(accuracy > 100){
-    // 100 metreden daha az kesinlikte → hıza güvenme, sıfır say
-    if(hiz < 5){ hiz = sonHiz; } // Sapma yapmasın
-  }
-  
-  // ★ MEDYAN FİLTRE — Son 5 değerin medyanını al, sıçramaları yumuşat
-  // 0→4→0→7 gibi atlamaları engeller
-  gpsHizGecmisi.push(hiz);
-  if(gpsHizGecmisi.length > 5) gpsHizGecmisi.shift();
-  
-  // Eğer en az 3 değer varsa medyan al
-  if(gpsHizGecmisi.length >= 3){
-    const sirali = [...gpsHizGecmisi].sort((a,b) => a - b);
-    const medyan = sirali[Math.floor(sirali.length / 2)];
-    
-    // ★ ANTI-SIÇRAMA: Sadece KESİN SIÇRAMALARDA medyan kullan
-    // Gerçek hızlanma/yavaşlama kademelidir, sıçrama anlıktır
-    const fark = Math.abs(hiz - medyan);
-    
-    // SADECE 0-5 km/h aralığında ani sıçrama (park halinde GPS gürültüsü)
-    if(fark > 8 && medyan < 5){
-      hiz = medyan; // Park halinde, ani 10+ km/h → sıçrama, sıfırla
-    }
-    // Yüksek hızda kademeli hızlanma DOĞAL → filtreleme
-    // Sadece imkansız sıçramalarda (40+ km/h fark, 1 saniyede) filtrele
-    else if(fark > 40){
-      hiz = medyan; // Çok aşırı sıçrama (>40 km/h)
-    }
-    // Diğer durumda GPS değerine güven
-  }
-  
-  // ★ MUTLAK ÜST SINIR — Sadece KESİN HATA durumunda
-  // Kamyon yokuş aşağı 110-120'ye çıkabilir, ama 130+ asla
-  // Fiziksel limit: kamyon 130'u zorlanır
+  // 130+ km/h = imkansız, GPS hatası (kamyon)
   if(hiz > 130){
-    console.log('[GPS Hız Filtresi] 130+ mantıksız hız, filtrelendi: '+hiz.toFixed(1));
-    hiz = sonHiz > 0 ? sonHiz : 90;
-  }
-  
-  // ★ DURUŞ KARARLI: Eğer önceki hız da 0, mevcut da düşükse, kalıcı duruşu pekiştir
-  // Hız geçmişinde 3+ kez 0 varsa → duruyor say
-  const sifirSayisi = gpsHizGecmisi.filter(v => v === 0).length;
-  if(sifirSayisi >= 3 && hiz < 5){
-    hiz = 0;
+    hiz = sonHiz > 0 ? sonHiz : 0;
   }
   
   sonHiz = Math.round(hiz * 10) / 10;
-
-  if(sonKonum){
+  
+  // ── 3. MESAFE TOPLA (sadece gerçek hareket) ──
+  const accuracy = pos.coords.accuracy || 0;
+  if(sonKonum && sonHiz >= 5 && accuracy < 50){
     const d = hesaplaMesafe(sonKonum.lat, sonKonum.lng, pos.coords.latitude, pos.coords.longitude);
-    
-    // ★ ARAÇ DURUYOR FİLTRESİ — GPS sıçramalarını ENGELLEMEK için sıkı kurallar
-    let kabulEt = false;
-    
-    // Kural 1: Hız 3 km/h'nin altındaysa (duruyor sayılır) → MESAFE EKLEME
-    // Bu en önemli kural: araç durduğunda GPS rastgele kaysa bile sayılmaz
-    if(sonHiz < 3){
-      kabulEt = false;
-    }
-    // Kural 2: Hareket 5 metreden azsa → GPS gürültüsü, sayma
-    else if(d < 5){
-      kabulEt = false;
-    }
-    // Kural 3: Doğruluk 30 metreden kötüyse → güvenilmez, sayma
-    else if(accuracy > 30){
-      kabulEt = false;
-    }
-    // Kural 4: Beklenmeyen sıçrama (5 km'den uzun) → GPS atlaması
-    else if(d > 5000){
-      kabulEt = false;
-    }
-    // Kural 5: Önceki konumun zamanı çok yakınsa beklenmedik hızlı atlama
-    else if(sonKonum.zaman){
-      const gecenSn = (Date.now() - sonKonum.zaman) / 1000;
-      // Mantıksız hız (>200 km/h) atlamasını engelle
-      if(gecenSn > 0 && gecenSn < 30){
-        const tahminHiz = (d / gecenSn) * 3.6;
-        if(tahminHiz > 200){
-          kabulEt = false; // Mantıksız sıçrama
-        } else {
-          kabulEt = true;
-        }
-      } else {
-        kabulEt = true;
-      }
-    } else {
-      kabulEt = true;
-    }
-    
-    if(kabulEt){
+    if(d >= 5 && d < 5000){
       toplamMesafe += d;
-      // Her güncellemede localStorage'a kaydet (sürüş kaybolmasın)
       gpsKayitYap();
-      
-      // ★ Akıllı depo güncelleme — sadece sürüş modundayken
-      if(sonHiz >= 3 && typeof window.depoYakitGuncelle === 'function'){
+      if(typeof window.depoYakitGuncelle === 'function'){
         try { window.depoYakitGuncelle(); } catch(e){}
       }
     }
   }
+  
+  // Son konumu kaydet
   sonKonum = {
     lat: pos.coords.latitude,
     lng: pos.coords.longitude,
     zaman: Date.now(),
     accuracy: accuracy
   };
-
+  
+  // ── 4. UI GÜNCELLE ──
   const hizEl = document.getElementById('gps-hiz');
   if(hizEl) hizEl.textContent = Math.round(sonHiz) + ' km/h';
-
-  // ★ HIZ BİLGİ KARTI GÜNCELLEME
   hizKartGuncelle(sonHiz);
-
+  
+  // ── 5. MOD DEĞİŞİMİ — BASİT KURALLAR ──
   const S = getS();
+  if(!S) { gpsUIGuncelle(); return; }
+  
   const simdi = Date.now();
-  const SURUS_ESIK = 5; // km/h - GPS gürültüsünden korunmak için 5'e yükseltildi (önceden 3'tü)
-  const DURMA_ONAY_SN = 25; // 25 saniye sürekli durma → çalışma modu (trafik ışığı toleransı korunur)
-  const MIN_MOD_DEGISIM_SN = 10; // En az 10 sn mod değiştirmeden bekle (kararsızlık önler)
+  const SURUS_ESIK = 5; // km/h - bunun üstüyse sürüş
+  const SURUS_ONAY_SN = 3; // 3 saniye sürekli hareket → sürüş başlar
+  const DURUS_ONAY_SN = 25; // 25 saniye sürekli duruş → çalışma başlar
   
-  // ★ GPS ISINMA SÜRESİ — İlk 30 saniyede sürüş moduna geçme
-  // GPS sinyali ilk açıldığında uydular tam kilitlenmediğinden hız sıçramaları olur
-  // Bu süre içinde 8 km/h altı tüm değerleri gürültü kabul et
-  const GPS_ISINMA_MS = 30000; // 30 saniye
-  const isinmaSuresi = simdi - gpsBaslangicMs;
-  
-  // İlk 30 sn'de ve hız < 8 km/h ise → gürültü, sayma
-  if(isinmaSuresi < GPS_ISINMA_MS && sonHiz < 8){
-    const bilgi = document.getElementById('gps-bilgi');
-    if(bilgi) bilgi.textContent = '⏳ GPS ısınıyor... ' + Math.ceil((GPS_ISINMA_MS - isinmaSuresi)/1000) + 'sn';
-    return; // Mod değişimi yapma, sayaç başlatma
-  }
-
   if(sonHiz >= SURUS_ESIK){
-    // ===== HAREKET — sürüş =====
-    durusBaslangic = null;
-    durusOnayMs = 0;
-    durusSoruldu = false;
+    // ===== HAREKET VAR =====
+    durusBaslangic = null; // Duruş sayacını sıfırla
+    
+    // Sürüş başlangıç zamanı (kararlılık için)
+    if(!window._hareketBaslangic) window._hareketBaslangic = simdi;
+    const hareketSn = Math.floor((simdi - window._hareketBaslangic) / 1000);
     
     const bilgi = document.getElementById('gps-bilgi');
-    if(bilgi) bilgi.textContent = '🚛 Sürüş — ' + Math.round(sonHiz) + ' km/h';
+    if(bilgi){
+      if(S.mode !== 'surus' && hareketSn < SURUS_ONAY_SN){
+        bilgi.textContent = '🚛 Hareket — ' + (SURUS_ONAY_SN - hareketSn) + 'sn içinde sürüş başlar';
+      } else {
+        bilgi.textContent = '🚛 Sürüş — ' + Math.round(sonHiz) + ' km/h';
+      }
+    }
     
-    // Sürüş moduna geç (eğer değilse) — kararsızlık önleyici
-    if(S && S.mode !== 'surus'){
-      // ★ Mod NULL ise (GPS yeni açıldı) hemen başlat, kararsızlık beklemesi yok
-      // Mod başka modsa (çalışma'dan dönüyor) MIN_MOD_DEGISIM_SN bekle
-      const beklesin = S.mode && S.mode !== 'surus';
-      if(!beklesin || !sonModDegisikligi || (simdi - sonModDegisikligi) > MIN_MOD_DEGISIM_SN * 1000){
-        if(typeof window.setMode === 'function'){
-          window.setMode('surus', 'gps');
-          sonModDegisikligi = simdi;
-          if(typeof window.toast === 'function') window.toast('🚛 GPS: Sürüş başladı','ok',2500);
-        }
+    // 3 saniye sürekli hareket varsa sürüş moduna geç
+    if(hareketSn >= SURUS_ONAY_SN && S.mode !== 'surus'){
+      if(typeof window.setMode === 'function'){
+        window.setMode('surus', 'gps');
+        if(typeof window.toast === 'function') window.toast('🚛 GPS: Sürüş başladı','ok',2500);
       }
     }
   } else {
-    // ===== DURMA — bekle (trafik ışığı vs.) =====
+    // ===== HAREKET YOK (0-5 km/h) =====
+    window._hareketBaslangic = null; // Hareket sayacını sıfırla
+    
     if(durusBaslangic === null){
       durusBaslangic = simdi;
     }
@@ -7629,28 +7504,25 @@ function gpsGuncelle(pos){
     
     const bilgi = document.getElementById('gps-bilgi');
     if(bilgi){
-      if(durusSn < DURMA_ONAY_SN && S && S.mode === 'surus'){
-        // Kısa duruş — hâlâ sürüş modunda
-        const kalan = DURMA_ONAY_SN - durusSn;
-        bilgi.textContent = '🚦 Duruş — ' + (kalan>=60 ? Math.floor(kalan/60)+'dk':kalan+'sn') + ' içinde çalışmaya geç';
-      } else {
-        // Onaylı duruş — çalışma
+      if(S.mode === 'surus' && durusSn < DURUS_ONAY_SN){
+        const kalan = DURUS_ONAY_SN - durusSn;
+        bilgi.textContent = '🚦 Duruş — ' + kalan + 'sn içinde çalışmaya geç';
+      } else if(S.mode === 'calisma'){
         bilgi.textContent = '⚙ Çalışma — ' + (durusSn>=60 ? Math.floor(durusSn/60)+'dk' : durusSn+'sn');
+      } else {
+        bilgi.textContent = '⏸ Bekleniyor — hareket yok';
       }
     }
     
-    // ★ Sadece DURMA_ONAY_SN sn sürekli durduktan sonra mod değiştir (trafik ışığı affedilir)
-    if(durusSn >= DURMA_ONAY_SN && S && S.mode === 'surus'){
-      // Mod değişimi için kontrol
-      if(!sonModDegisikligi || (simdi - sonModDegisikligi) > MIN_MOD_DEGISIM_SN * 1000){
-        if(typeof window.setMode === 'function'){
-          window.setMode('calisma', 'gps');
-          sonModDegisikligi = simdi;
-          if(typeof window.toast === 'function') window.toast('⚙️ GPS: Çalışma moduna geçildi','ok',2500);
-        }
+    // 25 saniye sürekli durduysa çalışma moduna geç
+    if(durusSn >= DURUS_ONAY_SN && S.mode === 'surus'){
+      if(typeof window.setMode === 'function'){
+        window.setMode('calisma', 'gps');
+        if(typeof window.toast === 'function') window.toast('⚙️ GPS: Çalışma moduna geçildi','ok',2500);
       }
     }
   }
+  
   gpsUIGuncelle();
 }
 
