@@ -7494,7 +7494,7 @@ function gpsGuncelle(pos){
       }
     }
   } else {
-    // ===== HAREKET YOK (0-5 km/h) =====
+    // ===== HAREKET YOK (0-5 km/h) — ARAÇ DURDU =====
     window._hareketBaslangic = null; // Hareket sayacını sıfırla
     
     if(durusBaslangic === null){
@@ -7502,23 +7502,29 @@ function gpsGuncelle(pos){
     }
     const durusSn = Math.floor((simdi - durusBaslangic) / 1000);
     
+    // ★ KRİTİK: 5 saniyede çalışmaya geç (önceden 25 sn'di - çok uzundu)
+    // Araç durdu = sürüş bloğu DURMALI hemen
+    const HIZLI_CALISMA_SN = 5; // 5 saniye yeterli (trafik ışığı için)
+    
     const bilgi = document.getElementById('gps-bilgi');
     if(bilgi){
-      if(S.mode === 'surus' && durusSn < DURUS_ONAY_SN){
-        const kalan = DURUS_ONAY_SN - durusSn;
-        bilgi.textContent = '🚦 Duruş — ' + kalan + 'sn içinde çalışmaya geç';
+      if(S.mode === 'surus' && durusSn < HIZLI_CALISMA_SN){
+        const kalan = HIZLI_CALISMA_SN - durusSn;
+        bilgi.textContent = '🚦 Durdu — ' + kalan + 'sn içinde çalışmaya geç';
       } else if(S.mode === 'calisma'){
         bilgi.textContent = '⚙ Çalışma — ' + (durusSn>=60 ? Math.floor(durusSn/60)+'dk' : durusSn+'sn');
+      } else if(S.mode === 'dinlenme'){
+        bilgi.textContent = '🛌 Mola — ' + (durusSn>=60 ? Math.floor(durusSn/60)+'dk' : durusSn+'sn');
       } else {
         bilgi.textContent = '⏸ Bekleniyor — hareket yok';
       }
     }
     
-    // 25 saniye sürekli durduysa çalışma moduna geç
-    if(durusSn >= DURUS_ONAY_SN && S.mode === 'surus'){
+    // ★ 5 saniye durduysa ÇALIŞMA moduna geç (sürüş bloğu hemen durur)
+    if(durusSn >= HIZLI_CALISMA_SN && S.mode === 'surus'){
       if(typeof window.setMode === 'function'){
         window.setMode('calisma', 'gps');
-        if(typeof window.toast === 'function') window.toast('⚙️ GPS: Çalışma moduna geçildi','ok',2500);
+        if(typeof window.toast === 'function') window.toast('⚙️ Araç durdu - Çalışma moduna geçildi','ok',2500);
       }
     }
   }
@@ -7540,18 +7546,15 @@ function gpsDurusKontrolEt(){
   
   const simdi = Date.now();
   const durusSn = Math.floor((simdi - durusBaslangic) / 1000);
-  const DURMA_ONAY_SN_INT = 25;
-  const MIN_MOD_DEGISIM_SN_INT = 10;
+  const DURMA_ONAY_SN_INT = 5; // ★ 5 saniye - araç durur durmaz çalışmaya geçsin
   
-  // 45 sn dolduysa ve mod değişimi en az 20 sn önce olmuşsa çalışma moduna geç
+  // 5 sn dolduysa çalışma moduna geç
   if(durusSn >= DURMA_ONAY_SN_INT){
-    if(!sonModDegisikligi || (simdi - sonModDegisikligi) > MIN_MOD_DEGISIM_SN_INT * 1000){
-      if(typeof window.setMode === 'function'){
-        console.log('[GPS Duruş Kontrol] 45 sn doldu, çalışma moduna geçiliyor (durusSn='+durusSn+')');
-        window.setMode('calisma', 'gps');
-        sonModDegisikligi = simdi;
-        if(typeof window.toast === 'function') window.toast('⚙️ GPS: Çalışma moduna geçildi','ok',2500);
-      }
+    if(typeof window.setMode === 'function'){
+      console.log('[GPS Duruş Kontrol] '+durusSn+' sn durdu, çalışma moduna geçiliyor');
+      window.setMode('calisma', 'gps');
+      sonModDegisikligi = simdi;
+      if(typeof window.toast === 'function') window.toast('⚙️ Araç durdu - Çalışma moduna geçildi','ok',2500);
     }
   }
   
@@ -7560,7 +7563,7 @@ function gpsDurusKontrolEt(){
   if(bilgi){
     const kalan = Math.max(0, DURMA_ONAY_SN_INT - durusSn);
     if(durusSn < DURMA_ONAY_SN_INT){
-      bilgi.textContent = '🚦 Duruş — ' + (kalan>=60 ? Math.floor(kalan/60)+'dk':kalan+'sn') + ' içinde çalışmaya geç';
+      bilgi.textContent = '🚦 Durdu — ' + kalan + 'sn içinde çalışmaya geç';
     }
   }
 }
