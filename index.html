@@ -297,14 +297,45 @@ body.light-theme #live-date{
 
 /* Mode butonları */
 body.light-theme .mode-btn{
-  background:#f0f2f7 !important;
+  background:#ffffff !important;
   color:#5a6580 !important;
   border-color:#d1d5dc !important;
 }
 
-body.light-theme .mode-btn.active{
+body.light-theme .mode-btn:not(.active){
   background:#ffffff !important;
-  color:#1a1a2e !important;
+  color:#5a6580 !important;
+  border-color:#d1d5dc !important;
+}
+
+/* ★ Aktif mod butonları - HEPSİ AÇIK GRİ ZEMİN, sadece yazı/kenar renkli */
+body.light-theme .mode-btn.active{
+  background:#e6e9f0 !important; /* açık gri - tüm modlarda aynı */
+  border-width:2px !important;
+}
+
+body.light-theme .mode-btn.mode-surus.active{
+  color:#16a34a !important;
+  border-color:#16a34a !important;
+  background:#e6e9f0 !important; /* açık gri */
+}
+
+body.light-theme .mode-btn.mode-dinlenme.active{
+  color:#2563eb !important;
+  border-color:#2563eb !important;
+  background:#e6e9f0 !important; /* açık gri */
+}
+
+body.light-theme .mode-btn.mode-calisma.active{
+  color:#d97706 !important;
+  border-color:#d97706 !important;
+  background:#e6e9f0 !important; /* açık gri */
+}
+
+body.light-theme .mode-btn.mode-hazir.active{
+  color:#7c3aed !important;
+  border-color:#7c3aed !important;
+  background:#e6e9f0 !important; /* açık gri - PEMBE/MOR DEĞİL */
 }
 
 /* Tab'lar */
@@ -447,6 +478,445 @@ body.light-theme .d-btn.d-btn-d{
 }
 
 /* GPS durum bar açık tema */
+/* ★ AÇIK TEMA — TAKOĞRAf ÇİZELGESİ override */
+body.light-theme #tacho-chart-wrap{
+  background:#f5f6fa !important;
+}
+
+body.light-theme #tacho-chart-inner{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme #tc-bar{
+  background:#e6e9f0 !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme #tc-axis,
+body.light-theme #tc-axis *,
+body.light-theme #tacho-chart-inner #tc-info-row span{
+  color:#5a6580 !important;
+}
+
+body.light-theme #tc-info-row span[style*="color:var(--gold)"],
+body.light-theme #tc-ulke-row{
+  color:#b8860b !important;
+}
+
+/* Çizelge içindeki text */
+body.light-theme #tc-info-row,
+body.light-theme #tc-info-row span{
+  color:#5a6580 !important;
+}
+
+/* ★ AÇIK TEMA — DTCO MENU & KARTLAR override */
+body.light-theme .d-card{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .d-card-hd{
+  color:#1a1a2e !important;
+}
+
+/* DTCO Kontrol Paneli üst şerit - GRİ ZEMİN */
+body.light-theme .d-status-bar{
+  background:#e6e9f0 !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .d-s-act,
+body.light-theme #d-sact{
+  color:#1a1a2e !important;
+}
+
+body.light-theme #d-smode,
+body.light-theme #d-stimer{
+  color:#5a6580 !important;
+}
+
+body.light-theme .d-s-timer{
+  color:#2563eb !important; /* mavi sayaç tonu */
+}
+
+body.light-theme .dfg label{
+  color:#5a6580 !important;
+  font-weight:800 !important;
+}
+
+body.light-theme .dfg input,
+body.light-theme .dfg select,
+body.light-theme .dfg textarea{
+  background:#f5f6fa !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .dfg input:focus,
+body.light-theme .dfg select:focus,
+body.light-theme .dfg textarea:focus{
+  border-color:#2563eb !important;
+}
+
+body.light-theme .dfg select option{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+}
+
+/* DTCO butonlar */
+body.light-theme .d-btn-a{
+  background:#2563eb !important;
+  color:#ffffff !important;
+}
+
+body.light-theme .d-btn-s{
+  background:#f5f6fa !important;
+  color:#1a1a2e !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme .d-btn-d{
+  background:#fee2e2 !important;
+  color:#dc2626 !important;
+  border-color:#fecaca !important;
+}
+
+body.light-theme .d-btn-g{
+  background:#dcfce7 !important;
+  color:#16a34a !important;
+  border-color:#bbf7d0 !important;
+}
+
+/* DTCO tablo */
+body.light-theme .d-tbl th{
+  color:#5a6580 !important;
+  border-bottom-color:#d1d5dc !important;
+}
+
+body.light-theme .d-tbl td{
+  color:#1a1a2e !important;
+  border-bottom-color:#e6e9f0 !important;
+}
+
+body.light-theme .d-tbl tr:hover td{
+  background:#f5f6fa !important;
+}
+
+/* DTCO stat kutuları */
+body.light-theme .d-stat-box{
+  background:#f5f6fa !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .d-s-lbl{
+  color:#5a6580 !important;
+  font-weight:800 !important;
+}
+
+body.light-theme .d-s-val{
+  color:#2563eb !important; /* canlı mavi */
+}
+
+/* DTCO gauge'lar */
+body.light-theme .d-gauge{
+  background:#f5f6fa !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .d-g-lbl{
+  color:#5a6580 !important;
+  font-weight:800 !important;
+}
+
+body.light-theme .d-g-val{
+  color:#2563eb !important; /* canlı mavi - karanlık temadaki cyan'a uyumlu */
+}
+
+body.light-theme .d-g-sub{
+  color:#5a6580 !important;
+}
+
+body.light-theme .d-g-bar{
+  background:rgba(0,0,0,.08) !important;
+}
+
+/* DTCO badge */
+body.light-theme .d-badge.db-drive{
+  background:#dcfce7 !important;
+  color:#16a34a !important;
+}
+
+body.light-theme .d-badge.db-rest{
+  background:#dbeafe !important;
+  color:#2563eb !important;
+}
+
+body.light-theme .d-badge.db-work{
+  background:#fef3c7 !important;
+  color:#d97706 !important;
+}
+
+body.light-theme .d-badge.db-wait{
+  background:#e6e9f0 !important;
+  color:#5a6580 !important;
+}
+
+/* DTCO sidebar / menu */
+body.light-theme #dtco-sidebar,
+body.light-theme #dtco-overlay-content,
+body.light-theme #dtco-menu{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+  border-color:#d1d5dc !important;
+}
+
+/* DTCO sidebar / menu */
+body.light-theme #dtco-sidebar,
+body.light-theme #dtco-overlay-content,
+body.light-theme #dtco-menu{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+  border-color:#d1d5dc !important;
+}
+
+/* DTCO sidebar başlık (logo bölümü) */
+body.light-theme .dtco-sb-hdr{
+  background:#f5f6fa !important;
+  border-bottom-color:#d1d5dc !important;
+}
+
+body.light-theme .dtco-sb-logo{
+  color:#2563eb !important;
+}
+
+body.light-theme .dtco-sb-logo span{
+  color:#5a6580 !important;
+}
+
+body.light-theme .dtco-sb-close{
+  color:#5a6580 !important;
+}
+
+body.light-theme .dtco-sb-close:hover{
+  background:#e6e9f0 !important;
+  color:#1a1a2e !important;
+}
+
+/* DTCO sidebar footer */
+body.light-theme .dtco-sb-footer{
+  background:#f5f6fa !important;
+  border-top:1px solid #d1d5dc !important;
+}
+
+body.light-theme .dtco-sb-badge{
+  background:#ffffff !important;
+  border:1px solid #d1d5dc !important;
+}
+
+body.light-theme .dtco-sb-badge .dsb-name{
+  color:#1a1a2e !important;
+}
+
+body.light-theme .dtco-sb-badge .dsb-plate{
+  color:#5a6580 !important;
+}
+
+/* DTCO sidebar nav item'ları */
+body.light-theme #dtco-sidebar a,
+body.light-theme #dtco-sidebar button,
+body.light-theme .dtco-sb-item,
+body.light-theme .dtco-sb-nav > *{
+  color:#1a1a2e !important;
+}
+
+body.light-theme .dtco-sb-item:hover,
+body.light-theme .dtco-sb-item:active,
+body.light-theme .dtco-sb-item.active{
+  background:#e6e9f0 !important;
+  color:#2563eb !important;
+}
+
+/* DTCO sidebar nav grup başlıkları */
+body.light-theme .dtco-sb-cat,
+body.light-theme .dtco-sb-group-title{
+  color:#5a6580 !important;
+  background:#f5f6fa !important;
+}
+
+/* Page bar - üst başlık */
+body.light-theme #dtco-page-bar{
+  background:#ffffff !important;
+  border-bottom-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme #dtco-page-bar .dpb-title{
+  color:#1a1a2e !important;
+}
+
+body.light-theme #dtco-page-bar .dpb-back{
+  color:#2563eb !important;
+  background:#e6e9f0 !important;
+}
+
+body.light-theme #dtco-page-bar .dpb-logo{
+  color:#5a6580 !important;
+}
+
+/* DTCO page background */
+body.light-theme #dtco-page,
+body.light-theme .dtco-page{
+  background:#f5f6fa !important;
+  color:#1a1a2e !important;
+}
+
+/* DTCO içindeki tüm panel/box'lar */
+body.light-theme .d-week-cells > .d-wc,
+body.light-theme .d-wc{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .d-wc.today{
+  border-color:#2563eb !important;
+  background:#eff6ff !important;
+}
+
+body.light-theme .d-wc-day{
+  color:#5a6580 !important;
+}
+
+/* d-stats text color override */
+body.light-theme .d-tbl tr{
+  background:#ffffff !important;
+}
+
+/* DTCO modal */
+body.light-theme .d-modal,
+body.light-theme .d-modal-content{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+  border-color:#d1d5dc !important;
+}
+
+/* Toast'lar açık tema */
+body.light-theme #toast,
+body.light-theme .toast{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+  border:1px solid #d1d5dc !important;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+/* Dashboard butonları */
+body.light-theme .dtco-dashboard,
+body.light-theme #dtco-dashboard,
+body.light-theme [id*="dashboard"]{
+  background:#f5f6fa !important;
+  color:#1a1a2e !important;
+}
+
+/* DTCO bottom action buttons */
+body.light-theme .dp-btn,
+body.light-theme #dtco-live-panel .dp-btn{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+  border:1px solid #d1d5dc !important;
+}
+
+body.light-theme #dtco-live-panel .dp-btn:hover{
+  border-color:#2563eb !important;
+  color:#2563eb !important;
+}
+
+/* Live panel */
+body.light-theme #dtco-live-panel{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+/* "Kayıt yok" gibi alanlar */
+body.light-theme [style*="background:#0a0a10"]{
+  background:#f5f6fa !important;
+  color:#5a6580 !important;
+}
+
+body.light-theme #dtco-page-bar{
+  background:#ffffff !important;
+  border-bottom-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme #dtco-page-bar .dpb-title{
+  color:#1a1a2e !important;
+}
+
+body.light-theme #dtco-page-bar .dpb-back{
+  color:#2563eb !important;
+}
+
+body.light-theme #dtco-page-bar .dpb-logo{
+  color:#5a6580 !important;
+}
+
+/* DTCO menü öğeleri */
+body.light-theme .dtco-menu-item{
+  background:#f5f6fa !important;
+  color:#1a1a2e !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme .dtco-menu-item:hover,
+body.light-theme .dtco-menu-item:active{
+  background:#e6e9f0 !important;
+}
+
+body.light-theme .dtco-menu-cat{
+  color:#5a6580 !important;
+}
+
+/* Genel paragraf/notlar */
+body.light-theme p,
+body.light-theme small{
+  color:#2c3e50 !important;
+}
+
+body.light-theme [style*="color:#7a92b0"],
+body.light-theme [style*="color:#a0b8d0"],
+body.light-theme [style*="color:#3d5a7a"]{
+  color:#5a6580 !important;
+}
+
+body.light-theme [style*="color:#e8f4ff"],
+body.light-theme [style*="color:#b0c8e0"]{
+  color:#1a1a2e !important;
+}
+
+body.light-theme [style*="background:#0e1520"],
+body.light-theme [style*="background:#141e2e"]{
+  background:#ffffff !important;
+}
+
+/* Açıklama/notlar paneli */
+body.light-theme #d-yol-bilgi-bugun,
+body.light-theme #d-yol-bilgi-detay > div{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+}
+
+/* ★ ÖNEMLİ: Karanlık tema için takograf çizelgesi rengini düzelt
+   (siyah çok koyu, yumuşatalım) */
+:root #tacho-chart-inner{
+  background:#1a1a14;
+}
+
 body.light-theme #gps-durum-bar{
   background:#ffffff !important;
   border-color:#d1d5dc !important;
@@ -456,6 +926,158 @@ body.light-theme #gps-durum-bar{
 body.light-theme #gps-durum-bar.aktif{
   background:#dcfce7 !important;
   border-color:#16a34a !important;
+}
+
+/* ★ AÇIK TEMA — SAYAÇ SATIRLARI (.grow) override */
+body.light-theme .grow{
+  background:#ffffff !important;
+  border-bottom-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .grow.g-active{
+  background:#dcfce7 !important; /* açık yeşil - aktif sayaç */
+}
+
+body.light-theme .grow.g-alert{
+  background:#e6e9f0 !important; /* açık gri - pembe değil */
+}
+
+body.light-theme .grow.g-done{
+  background:#dbeafe !important; /* açık mavi - tamamlandı */
+}
+
+body.light-theme .grow.g-warn{
+  background:#fef3c7 !important; /* açık sarı - uyarı */
+}
+
+/* ★ AÇIK TEMA — Sayaç saat rakamları MAVI TONUNDA (DTCO ile uyumlu) */
+body.light-theme .gtime{
+  color:#2563eb !important; /* canlı mavi - DTCO sayılarıyla aynı */
+  font-weight:700 !important;
+}
+
+body.light-theme .gtime .ss{
+  color:#2563eb !important; /* saniye de mavi (saatten biraz soluk olsun) */
+  font-weight:700 !important;
+  opacity:.7;
+}
+
+body.light-theme .glabel{
+  color:#5a6580 !important; /* etiket koyu gri */
+  font-weight:800 !important;
+}
+
+body.light-theme .gll{
+  color:#5a6580 !important; /* Limit etiketi */
+  font-weight:800 !important;
+}
+
+body.light-theme .grem{
+  color:#2563eb !important; /* kalan süre - normal mavi */
+}
+
+body.light-theme .grem.wo{
+  color:#d97706 !important; /* turuncu uyarı */
+}
+
+body.light-theme .grem.wr,
+body.light-theme .grem.wl{
+  color:#dc2626 !important; /* kırmızı kritik */
+}
+
+/* Progress bar - açık tema */
+body.light-theme .gbw{
+  background:rgba(0,0,0,.08) !important;
+}
+
+/* Section header (sh) */
+body.light-theme .sh{
+  background:#e6e9f0 !important;
+  color:#1a1a2e !important;
+  border-bottom:1px solid #d1d5dc !important;
+}
+
+body.light-theme .sh span{
+  color:#1a1a2e !important;
+}
+
+/* Mola/dinlenme sayacı (id row-rest gibi) */
+body.light-theme [id^="row-"]{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+}
+
+/* Genel timeline ve kayıt alanı */
+body.light-theme .timeline,
+body.light-theme #today-timeline,
+body.light-theme [class*="timeline"]{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+}
+
+/* GÜNLÜK ÖZET kartı arka plan */
+body.light-theme .rcard,
+body.light-theme [class*="rcard"]{
+  background:#ffffff !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .rcard-title{
+  color:#1a1a2e !important;
+}
+
+body.light-theme .stat-box{
+  background:#f5f6fa !important;
+  border-color:#d1d5dc !important;
+  color:#1a1a2e !important;
+}
+
+body.light-theme .stat-box .sb-lbl{
+  color:#5a6580 !important;
+}
+
+body.light-theme .stat-box .sb-val{
+  color:#1a1a2e !important;
+}
+
+body.light-theme .stat-box .sb-sub{
+  color:#5a6580 !important;
+}
+
+/* Tab'lar - günlük/genel bakış/dtco */
+body.light-theme .tab,
+body.light-theme [class*="tab"]:not([class*="table"]){
+  background:#e6e9f0 !important;
+  color:#5a6580 !important;
+}
+
+body.light-theme .tab.active,
+body.light-theme [class*="tab"].active{
+  background:#ffffff !important;
+  color:#1a1a2e !important;
+  border-bottom-color:#2563eb !important;
+}
+
+/* Hız bilgi kartları */
+body.light-theme #hiz-bilgi-kart > div{
+  background:#f5f6fa !important;
+  border-color:#d1d5dc !important;
+}
+
+body.light-theme #hiz-bilgi-kart > div > div:first-child{
+  color:#5a6580 !important; /* başlık */
+}
+
+body.light-theme #hiz-anlik,
+body.light-theme #hiz-max,
+body.light-theme #hiz-ihlal-sayisi{
+  color:#1a1a2e !important;
+}
+
+body.light-theme #hiz-bilgi-kart > div > div:last-child{
+  color:#5a6580 !important; /* km/h yazısı */
 }
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -638,19 +1260,19 @@ select{font:inherit}
 .grow.g-ok    {background:var(--panel2)}
 .grow.g-active{background:#081a10}
 .grow.g-warn  {background:transparent}
-.grow.g-alert {background:#1a0808}
+.grow.g-alert {background:#1c1c28}
 .grow.g-done  {background:#081020}
 
 .gico{font-size:1.4rem;line-height:1}
 .gbody{}
 .glabel{
-  font-family:var(--sans);font-size:.78rem;font-weight:700;
-  letter-spacing:1.2px;text-transform:uppercase;color:#a0a8b8;margin-bottom:3px;
+  font-family:var(--sans);font-size:.78rem;font-weight:800;
+  letter-spacing:1.2px;text-transform:uppercase;color:var(--text2);margin-bottom:3px;
 }
 .gtime{
-  font-family:var(--mono);font-size:1.85rem;font-weight:500;line-height:1;color:var(--text);
+  font-family:var(--mono);font-size:1.85rem;font-weight:700;line-height:1;color:#00c8ff;
 }
-.gtime .ss{font-size:1.2rem;color:#a0a8b8;font-weight:600}
+.gtime .ss{font-size:1.2rem;color:#00c8ff;font-weight:700;opacity:.7}
 .gbw{height:5px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:6px;overflow:hidden}
 .gbar{height:100%;width:0%;border-radius:2px;transition:width .4s linear,background .4s}
 
@@ -1002,16 +1624,16 @@ select{font:inherit}
 .d-al-g{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);color:#22c55e}
 .d-al-i{background:rgba(0,200,255,.07);border-color:rgba(0,200,255,.3);color:#00c8ff}
 .d-gauge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px}
-.d-gauge{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:12px}
+.d-gauge{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:12px}
 .d-g-lbl{font-size:.78rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7a92b0;margin-bottom:6px}
-.d-g-val{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1}
+.d-g-val{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1;color:#00c8ff}
 .d-g-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:8px;overflow:hidden}
 .d-g-fill{height:100%;border-radius:2px;transition:width .5s}
 .d-g-sub{font-size:.78rem;color:#7a92b0;margin-top:5px;font-weight:600}
 .d-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.d-stat-box{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:10px}
+.d-stat-box{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:10px}
 .d-s-lbl{font-size:.74rem;letter-spacing:1px;text-transform:uppercase;color:#7a92b0;font-family:var(--sans);font-weight:700}
-.d-s-val{font-family:var(--mono);font-size:1.2rem;margin-top:4px;font-weight:700}
+.d-s-val{font-family:var(--mono);font-size:1.2rem;margin-top:4px;font-weight:700;color:#00c8ff}
 .d-week-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:12px}
 .d-wc{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:8px 3px;text-align:center}
 .d-wc.today{border-color:#00c8ff}
@@ -1051,7 +1673,7 @@ select{font:inherit}
 .d-act-btn.d-sel-train{border-color:#a855f7;background:rgba(168,85,247,.08);color:#a855f7}
 .d-act-btn.d-sel-border{border-color:#f0b429;background:rgba(240,180,41,.08);color:#f0b429}
 .d-act-btn.d-sel-load{border-color:#f43f5e;background:rgba(244,63,94,.08);color:#f43f5e}
-.d-status-bar{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.d-status-bar{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .d-s-act{font-family:var(--sans);font-size:1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase}
 .d-s-timer{font-family:var(--mono);font-size:1.6rem;font-weight:700;letter-spacing:3px;color:#00c8ff}
 .d-pulse{animation:dPulse 1.5s ease-in-out infinite}
@@ -1186,16 +1808,16 @@ select{font:inherit}
 .d-al-g{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);color:#22c55e}
 .d-al-i{background:rgba(0,200,255,.07);border-color:rgba(0,200,255,.3);color:#00c8ff}
 .d-gauge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px}
-.d-gauge{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:12px}
+.d-gauge{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:12px}
 .d-g-lbl{font-size:.78rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7a92b0;margin-bottom:6px}
-.d-g-val{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1}
+.d-g-val{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1;color:#00c8ff}
 .d-g-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:8px;overflow:hidden}
 .d-g-fill{height:100%;border-radius:2px;transition:width .5s}
 .d-g-sub{font-size:.78rem;color:#7a92b0;margin-top:5px;font-weight:600}
 .d-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.d-stat-box{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:10px}
+.d-stat-box{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:10px}
 .d-s-lbl{font-size:.74rem;letter-spacing:1px;text-transform:uppercase;color:#7a92b0;font-family:var(--sans);font-weight:700}
-.d-s-val{font-family:var(--mono);font-size:1.2rem;margin-top:4px;font-weight:700}
+.d-s-val{font-family:var(--mono);font-size:1.2rem;margin-top:4px;font-weight:700;color:#00c8ff}
 .d-week-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:12px}
 .d-wc{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:8px 3px;text-align:center}
 .d-wc.today{border-color:#00c8ff}
@@ -1235,7 +1857,7 @@ select{font:inherit}
 .d-act-btn.d-sel-train{border-color:#a855f7;background:rgba(168,85,247,.08);color:#a855f7}
 .d-act-btn.d-sel-border{border-color:#f0b429;background:rgba(240,180,41,.08);color:#f0b429}
 .d-act-btn.d-sel-load{border-color:#f43f5e;background:rgba(244,63,94,.08);color:#f43f5e}
-.d-status-bar{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.d-status-bar{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 .d-s-act{font-family:var(--sans);font-size:1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase}
 .d-s-timer{font-family:var(--mono);font-size:1.6rem;font-weight:700;letter-spacing:3px;color:#00c8ff}
 .d-pulse{animation:dPulse 1.5s ease-in-out infinite}
@@ -1467,15 +2089,15 @@ select{font:inherit}
   <div class="sh" style="margin-top:6px"><span>GÜNLÜK ÖZET</span><span id="viol-count-day">İhlal: —</span></div>
   <div class="rcard">
     <div class="r4" id="daily-stats-grid">
-      <div class="stat-box">
-        <span class="sb-lbl">10s HAK</span>
-        <span class="sb-val orange" id="ds-10h">0/2</span>
-        <span class="sb-sub">haftada 2 kez</span>
+      <div class="stat-box" style="border:2px solid var(--orange);background:rgba(217,119,6,.08);">
+        <span class="sb-lbl" style="color:var(--orange);font-weight:900;">⏱ 10 SAAT</span>
+        <span class="sb-val orange" id="ds-10h" style="font-size:1.8rem;">0/2</span>
+        <span class="sb-sub" style="color:var(--orange);font-weight:700;">UZUN SÜRÜŞ HAKKI</span>
       </div>
-      <div class="stat-box">
-        <span class="sb-lbl">KISA İST.</span>
-        <span class="sb-val blue" id="ds-9h">0/3</span>
-        <span class="sb-sub">haftada 3 kez</span>
+      <div class="stat-box" style="border:2px solid var(--blue);background:rgba(37,99,235,.08);">
+        <span class="sb-lbl" style="color:var(--blue);font-weight:900;">🛌 KISA İST.</span>
+        <span class="sb-val blue" id="ds-9h" style="font-size:1.8rem;">0/3</span>
+        <span class="sb-sub" style="color:var(--blue);font-weight:700;">9 SAAT İSTİRAHAT</span>
       </div>
       <div class="stat-box">
         <span class="sb-lbl">SÜRÜŞ GÜN</span>
@@ -1495,20 +2117,20 @@ select{font:inherit}
   
   <!-- ★ HIZ BİLGİ KARTI -->
   <div id="hiz-bilgi-kart" style="display:flex;gap:6px;padding:0 8px 8px;">
-    <div style="flex:1;background:#0e1a0e;border:1px solid #1c4a2c;border-radius:6px;padding:9px 6px;text-align:center;">
-      <div style="font-size:.74rem;color:#a8c8a8;letter-spacing:1px;font-family:var(--sans);font-weight:700;">ANLIK HIZ</div>
-      <div id="hiz-anlik" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:4px;">0</div>
-      <div style="font-size:.74rem;color:#a8c8a8;font-family:var(--sans);font-weight:600;">km/h</div>
+    <div style="flex:1;background:#0e1a0e;border:1px solid #1c4a2c;border-radius:6px;padding:12px 6px;text-align:center;">
+      <div style="font-size:.78rem;color:#a8c8a8;letter-spacing:1px;font-family:var(--sans);font-weight:700;">ANLIK HIZ</div>
+      <div id="hiz-anlik" style="font-family:var(--mono);font-size:2.6rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:6px;">0</div>
+      <div style="font-size:.8rem;color:#a8c8a8;font-family:var(--sans);font-weight:700;margin-top:2px;">km/h</div>
     </div>
-    <div style="flex:1;background:#0e1322;border:1px solid #1c2e4a;border-radius:6px;padding:9px 6px;text-align:center;">
-      <div style="font-size:.74rem;color:#a8b8d0;letter-spacing:1px;font-family:var(--sans);font-weight:700;">MAX HIZ</div>
-      <div id="hiz-max" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#3b82f6;line-height:1.1;margin-top:4px;">0</div>
-      <div style="font-size:.74rem;color:#a8b8d0;font-family:var(--sans);font-weight:600;">km/h</div>
+    <div style="flex:1;background:#0e1322;border:1px solid #1c2e4a;border-radius:6px;padding:12px 6px;text-align:center;">
+      <div style="font-size:.78rem;color:#a8b8d0;letter-spacing:1px;font-family:var(--sans);font-weight:700;">MAX HIZ</div>
+      <div id="hiz-max" style="font-family:var(--mono);font-size:2.6rem;font-weight:900;color:#3b82f6;line-height:1.1;margin-top:6px;">0</div>
+      <div style="font-size:.8rem;color:#a8b8d0;font-family:var(--sans);font-weight:700;margin-top:2px;">km/h</div>
     </div>
-    <div id="hiz-ihlal-kutu" style="flex:1;background:#0e1a0e;border:1px solid #1c4a2c;border-radius:6px;padding:9px 6px;text-align:center;">
-      <div style="font-size:.74rem;color:#a8c8a8;letter-spacing:1px;font-family:var(--sans);font-weight:700;">HIZ İHLALİ</div>
-      <div id="hiz-ihlal-sayisi" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:4px;">0</div>
-      <div style="font-size:.74rem;color:#a8c8a8;font-family:var(--sans);font-weight:600;">90+ km/h</div>
+    <div id="hiz-ihlal-kutu" style="flex:1;background:#0e1a0e;border:1px solid #1c4a2c;border-radius:6px;padding:12px 6px;text-align:center;">
+      <div style="font-size:.78rem;color:#a8c8a8;letter-spacing:1px;font-family:var(--sans);font-weight:700;">HIZ İHLALİ</div>
+      <div id="hiz-ihlal-sayisi" style="font-family:var(--mono);font-size:2.6rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:6px;">0</div>
+      <div style="font-size:.8rem;color:#a8c8a8;font-family:var(--sans);font-weight:700;margin-top:2px;">90+ km/h</div>
     </div>
   </div>
   
@@ -1521,7 +2143,7 @@ select{font:inherit}
   <!-- ══ TachoAPI Tarzı Günlük Çizelge ══ -->
   <div class="sh" style="margin-top:4px"><span>TAKOĞRAf ÇİZELGESİ</span><span id="tacho-chart-lbl" style="color:var(--gold);font-size:.7rem"></span></div>
   <div id="tacho-chart-wrap" style="padding:0 8px 10px">
-    <div id="tacho-chart-inner" style="background:#1a1a10;border:1px solid var(--border2);border-radius:6px;padding:6px 8px;overflow:hidden;">
+    <div id="tacho-chart-inner" style="background:var(--panel);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;overflow:hidden;">
       <!-- Üst bilgi satırı -->
       <div id="tc-info-row" style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap;">
         <span id="tc-ulke-row" style="font-family:var(--sans);font-size:.75rem;color:var(--gold);letter-spacing:1px;"></span>
@@ -1536,7 +2158,7 @@ select{font:inherit}
       <!-- Saat ekseni -->
       <div id="tc-axis" style="display:flex;height:12px;margin-bottom:2px;"></div>
       <!-- Ana çizelge barı -->
-      <div id="tc-bar" style="height:28px;background:#0a0a0f;border-radius:3px;position:relative;display:flex;overflow:hidden;border:1px solid var(--border);"></div>
+      <div id="tc-bar" style="height:28px;background:var(--panel3);border-radius:3px;position:relative;display:flex;overflow:hidden;border:1px solid var(--border);"></div>
       <!-- Alt simgeler barı -->
       <div id="tc-sym-bar" style="height:14px;display:flex;margin-top:1px;position:relative;"></div>
       <!-- Mavi dinlenme çizgisi -->
@@ -4618,6 +5240,20 @@ function bindEvents(){
   });
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){
+      // ★ KRİTİK: Arka plana geçerken GPS aktif + sürüş modunda ise → ÇALIŞMA'ya çevir
+      // Sebep: Arka planda GPS donduğu için hareket algılayamayız
+      // Sürüş modu kalırsa "ben sürüyorum" sayar → YANLIŞ
+      // Çalışma modu = en güvenli varsayım (mesai sayılır ama sürüş bloğu DURMAZ)
+      if(window.gpsAktif && S.mode === 'surus'){
+        try {
+          localStorage.setItem('arkapan_oncesi_mode', 'surus'); // Geri dönünce hatırla
+          if(typeof window.setMode === 'function'){
+            window.setMode('calisma', 'gps-background');
+            console.log('[Visibility] Arka plana geçildi - sürüş bloğu donduruldu, çalışma\'ya geçildi');
+          }
+        } catch(e){}
+      }
+      
       // Arka plana geçince: sayaçları hesapla ve kaydet
       sync(); save();
       // Son zamanı işaretle ki dönünce ne kadar süre arkada kaldığımızı bilelim
@@ -4637,6 +5273,18 @@ function bindEvents(){
       // Önce sync (kapanma süresini ekle), sonra lastTickMs güncelle
       sync();
       S.lastTickMs = Date.now();
+      
+      // ★ Ön plana dönünce: arka plan öncesi sürüş modundaysak → DURUŞ KONTROLÜ
+      // GPS sinyali geldiğinde hareket varsa otomatik sürüşe geçer (gpsGuncelle'de)
+      // Yoksa çalışma'da kalır - doğru davranış
+      try {
+        const oncekiMode = localStorage.getItem('arkapan_oncesi_mode');
+        if(oncekiMode === 'surus' && window.gpsAktif){
+          console.log('[Visibility] Ön plana döndü - hareket varsa otomatik sürüşe dönülecek');
+          // gpsGuncelle çağrılınca otomatik geçer, biz hiçbir şey yapmıyoruz
+          localStorage.removeItem('arkapan_oncesi_mode');
+        }
+      } catch(e){}
       
       // Eğer 5 dk'dan uzun arka planda kaldıysak ve GPS aktifse → kullanıcıyı bilgilendir
       if(arkadaKalanSn > 300 && window.gpsAktif){
@@ -7177,16 +7825,43 @@ function hizKartGuncelle(hiz){
     }
   }
   
-  // İhlal sayısı — 90 km/h aşıldığı her ANI bir kez sayar
-  // Hız 90'ın üstüne çıktığında sayaç +1, 90'ın altına inene kadar tekrar saymaz
-  if(hiz > HIZ_LIMIT && !S.stats.hizIhlalAktif){
-    S.stats.hizIhlalAktif = true;
-    S.stats.hizIhlalSayisi = (S.stats.hizIhlalSayisi||0) + 1;
-    // 'warn' tipi gizliydi, 'info' kullan ki görünsün
-    if(typeof window.toast === 'function') window.toast('🚨 Hız ihlali: '+Math.round(hiz)+' km/h','info',2500);
-    if(typeof window.save === 'function') window.save();
-  } else if(hiz <= HIZ_LIMIT - 2 && S.stats.hizIhlalAktif){
-    // 88 km/h altına düşünce ihlal aktifliği kapanır (histeresiz - tekrar tekrar sayma)
+  // ★ HIZ İHLALİ — 15 SANİYE TOLERANS MANTIĞI
+  // 90 km/h aşıldığında: HEMEN uyarı toast (ihlal değil)
+  // 15 saniye sürekli 90 üstüyse: İHLAL kaydı (+1 ihlal sayısı)
+  // 90 altına düşerse: sayaç sıfırlanır, yeniden başlar
+  
+  if(hiz > HIZ_LIMIT){
+    // Hız 90 üstünde
+    if(!S.stats._asimBaslangic){
+      // YENİ aşım başladı - HEMEN uyarı ver (ihlal değil)
+      S.stats._asimBaslangic = Date.now();
+      S.stats._uyariVerildi = true;
+      if(typeof window.toast === 'function') window.toast('⚠️ Hız sınırı aşıldı: '+Math.round(hiz)+' km/h','warn',3000);
+      if(typeof window.speak === 'function') window.speak('Dikkat hız sınırı aşıldı.','normal');
+    } else {
+      // Aşım devam ediyor - 15 saniye doldu mu?
+      const asimSn = Math.floor((Date.now() - S.stats._asimBaslangic) / 1000);
+      
+      if(asimSn >= 15 && !S.stats.hizIhlalAktif){
+        // 15 saniye doldu → İHLAL kaydet
+        S.stats.hizIhlalAktif = true;
+        S.stats.hizIhlalSayisi = (S.stats.hizIhlalSayisi||0) + 1;
+        if(typeof window.toast === 'function') window.toast('🚨 HIZ İHLALİ KAYDEDİLDİ: '+Math.round(hiz)+' km/h (15sn aşım)','warn',4000);
+        if(typeof window.speak === 'function') window.speak('Hız ihlali kaydedildi.','urgent');
+        if(typeof window.save === 'function') window.save();
+      }
+    }
+  } else if(hiz <= HIZ_LIMIT - 2){
+    // 88 km/h altına düştü → aşım resetlenir, ihlal aktifliği biter
+    if(S.stats._asimBaslangic){
+      const asimSn = Math.floor((Date.now() - S.stats._asimBaslangic) / 1000);
+      if(asimSn < 15){
+        // 15 saniye dolmadan yavaşladı - ihlal sayılmadı, sadece uyarı verildi
+        if(typeof window.toast === 'function') window.toast('✅ Hız normale döndü ('+asimSn+'sn aşım)','ok',2000);
+      }
+    }
+    S.stats._asimBaslangic = null;
+    S.stats._uyariVerildi = false;
     S.stats.hizIhlalAktif = false;
   }
   
@@ -7194,6 +7869,26 @@ function hizKartGuncelle(hiz){
   const ihlalKutu = document.getElementById('hiz-ihlal-kutu');
   if(ihlalEl){
     ihlalEl.textContent = S.stats.hizIhlalSayisi || 0;
+    
+    // ★ ŞU AN AŞIM VARSA - geri sayım göster
+    if(S.stats._asimBaslangic){
+      const asimSn = Math.floor((Date.now() - S.stats._asimBaslangic) / 1000);
+      const kalan = Math.max(0, 15 - asimSn);
+      
+      if(kalan > 0){
+        // Aşım var ama 15 sn dolmadı → sarı uyarı (henüz ihlal değil)
+        ihlalEl.textContent = (S.stats.hizIhlalSayisi || 0) + ' ⚠️' + kalan + 'sn';
+        ihlalEl.style.color = '#fbbf24';
+        if(ihlalKutu){
+          ihlalKutu.style.background = '#2a1f0a';
+          ihlalKutu.style.borderColor = '#7a5f1f';
+          ihlalKutu.style.boxShadow = '0 0 6px rgba(251,191,36,.4)';
+        }
+        return; // Erken çık
+      }
+    }
+    
+    // Normal görünüm (aşım yok veya 15 sn doldu, ihlal kaydedildi)
     if((S.stats.hizIhlalSayisi||0) > 0){
       ihlalEl.style.color = '#ef4444';
       if(ihlalKutu){
@@ -7490,7 +8185,21 @@ function gpsGuncelle(pos){
     if(hareketSn >= SURUS_ONAY_SN && S.mode !== 'surus'){
       if(typeof window.setMode === 'function'){
         window.setMode('surus', 'gps');
-        if(typeof window.toast === 'function') window.toast('🚛 GPS: Sürüş başladı','ok',2500);
+        
+        // ★ Kalan hakları kullanıcıya göster
+        const kalan10s = (window.K?.TEN_MAX || 2) - (S.stats?.tenHourUsed || 0);
+        const kalan9s = (window.K?.SHORT_MAX || 3) - (S.stats?.shortRestUsed || 0);
+        
+        if(typeof window.toast === 'function'){
+          window.toast('🚛 Sürüş başladı','ok',2500);
+        }
+        
+        // Bilgilendirici 2. toast (1 sn sonra)
+        setTimeout(()=>{
+          if(typeof window.toast === 'function'){
+            window.toast('⏱ 10s hak: '+kalan10s+' kaldı | 🛌 Kısa istirahat: '+kalan9s+' kaldı','info',4000);
+          }
+        }, 1500);
       }
     }
   } else {
