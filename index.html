@@ -1928,6 +1928,7 @@ select{font:inherit}
   <div class="dtco-nav-item" id="dnav-fuel" onclick="dtcoNavTo('fuel')"><span class="dni">⛽</span>Yakıt / KM</div>
   <div class="dtco-nav-sec">Çalışma Süreleri</div>
   <div class="dtco-nav-item" id="dnav-weekly" onclick="dtcoNavTo('weekly')"><span class="dni">📅</span>Haftalık Görünüm</div>
+  <div class="dtco-nav-item" id="dnav-mesai-gecmisi" onclick="dtcoNavTo('mesai-gecmisi')"><span class="dni">📋</span>Mesai Geçmişi</div>
   <div class="dtco-nav-item" id="dnav-debt" onclick="dtcoNavTo('debt')"><span class="dni">⚖️</span>Dinlenme Borcu</div>
   <div class="dtco-nav-item" id="dnav-crew" onclick="dtcoNavTo('crew')"><span class="dni">👥</span>Ekip Sürüşü</div>
   <div class="dtco-nav-sec">Bilgi</div>
@@ -2686,6 +2687,53 @@ select{font:inherit}
   </div>
 </div>
 
+<!-- ▸ MESAİ GEÇMİŞİ (Günlük Özetler) -->
+<div class="dtco-subpage" id="dpage-mesai-gecmisi" style="padding:10px">
+  <div class="d-card">
+    <div class="d-card-hd">📋 Mesai Geçmişi (Son 60 Gün)</div>
+    <div class="d-al-i d-alert">ℹ️ Her yatış molasında otomatik kaydedilir. Tarih, sürüş süresi ve mesafe.</div>
+    <div id="mesai-gecmisi-toplam" style="margin-bottom:14px;padding:10px;background:var(--panel3);border-radius:6px;display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;">
+      <div style="text-align:center;">
+        <div style="font-size:.72rem;color:var(--sub);letter-spacing:1px;font-weight:700;">TOPLAM GÜN</div>
+        <div id="mg-toplam-gun" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#2563eb;">0</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:.72rem;color:var(--sub);letter-spacing:1px;font-weight:700;">TOPLAM SÜRÜŞ</div>
+        <div id="mg-toplam-surus" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#2563eb;">0:00</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:.72rem;color:var(--sub);letter-spacing:1px;font-weight:700;">TOPLAM KM</div>
+        <div id="mg-toplam-km" style="font-family:var(--mono);font-size:1.6rem;font-weight:900;color:#2563eb;">0 km</div>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="d-tbl" style="width:100%;">
+        <thead>
+          <tr>
+            <th>Tarih</th>
+            <th>Sürüş</th>
+            <th>Mesai</th>
+            <th>Mola</th>
+            <th>Mesafe</th>
+            <th>Rota</th>
+            <th>İstirahat</th>
+          </tr>
+        </thead>
+        <tbody id="mesai-gecmisi-tbody"></tbody>
+      </table>
+    </div>
+    <div id="mesai-gecmisi-bos" style="display:none;text-align:center;padding:30px 10px;color:var(--sub);">
+      <div style="font-size:2rem;margin-bottom:8px;">📋</div>
+      <div>Henüz mesai geçmişi yok</div>
+      <div style="font-size:.78rem;margin-top:6px;">Yatış molası verdiğiniz zaman buraya kaydedilecek</div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="d-btn d-btn-s" onclick="mesaiGecmisiCSVIndir()">📥 CSV İndir</button>
+      <button class="d-btn d-btn-d" onclick="mesaiGecmisiTemizle()">🗑 Tümünü Sil</button>
+    </div>
+  </div>
+</div>
+
 <!-- ▸ DİNLENME BORCU -->
 <div class="dtco-subpage" id="dpage-debt" style="padding:10px">
   <div class="d-debt-grid">
@@ -3131,6 +3179,7 @@ function freshS(){
     selections:{startCountry:'',endCountry:''},
     log:[],
     violations:[],
+    gunlukOzetler:[], // ★ Mesai geçmişi - her yatış molasında eklenir
   };
 }
 
@@ -3266,6 +3315,8 @@ function load(){
     };
     if(Array.isArray(p.log))S.log=p.log.slice(-300).filter(l=>l&&typeof l==='object');
     if(Array.isArray(p.violations))S.violations=p.violations.slice(-100).filter(v=>v&&typeof v==='object');
+    // ★ Mesai geçmişi (gunlukOzetler) yükle
+    if(Array.isArray(p.gunlukOzetler))S.gunlukOzetler=p.gunlukOzetler.slice(0,60).filter(o=>o&&typeof o==='object');
   }catch(e){console.warn('load err',e);S=freshS();}
 }
 
@@ -3885,11 +3936,36 @@ function handleEndOfDay(){
   commitLog(Date.now());
   const today=new Date().getDay();
   S.stats.daysDriven++;
+  
+  // ★★★ MESAİ ÖZETİ KAYDET — Tarih, sürüş süresi, mesafe ★★★
+  if(!S.gunlukOzetler) S.gunlukOzetler = [];
+  const bugun = new Date();
+  const ozet = {
+    tarih: bugun.getFullYear() + '-' + String(bugun.getMonth()+1).padStart(2,'0') + '-' + String(bugun.getDate()).padStart(2,'0'),
+    tarihGosterim: bugun.toLocaleDateString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric',weekday:'short'}),
+    surusSuresi: S.stats.drive || 0,       // saniye
+    mesaiSuresi: S.stats.workday || 0,     // saniye
+    mola: S.stats.pause || 0,              // saniye
+    mesafeKm: Math.round((typeof toplamMesafe === 'number' ? toplamMesafe : 0) / 1000), // km
+    baslangic: S.selections.startCountry || '',
+    bitis: S.selections.endCountry || esel.value || '',
+    istirahatTipi: shortRest ? '9 saat (kısa)' : '11 saat (tam)',
+    timestamp: Date.now()
+  };
+  S.gunlukOzetler.unshift(ozet); // En yeni başa
+  if(S.gunlukOzetler.length > 60) S.gunlukOzetler.length = 60; // Max 60 gün sakla
+  
   speak('Mesai bitti. İyi istirahatler.','normal');
-  toast('🌙 Mesai kapatıldı','info');
+  toast('🌙 Mesai kapatıldı — '+ozet.mesafeKm+' km / '+formatHM(ozet.surusSuresi)+' sürüş','info',4500);
+  
   // ★ 1) Varış molası — tüm günlük sayaçları sıfırla, ihlal VERME
   S.stats.drive=0;S.stats.shift=0;S.stats.workday=0;S.stats.pause=0;
   S.extendedDriveApplied=false;
+  
+  // ★ Mesafe sayacını da sıfırla
+  if(typeof toplamMesafe === 'number') toplamMesafe = 0;
+  try { localStorage.setItem('gps_mesafe', '0'); } catch(e){}
+  
   S.alerts={
     shiftWarned:false,shiftDone:false,
     driveWarned:false,driveDone:false,
@@ -3904,6 +3980,14 @@ function handleEndOfDay(){
   updateRestOptsUI();renderAll();
   if(typeof dUpdateDashboard==='function') dUpdateDashboard();
   save();_edLock=false;
+}
+
+// ★ formatHM yardımcı (HH:MM)
+function formatHM(sn){
+  if(!sn || sn < 0) return '0:00';
+  const h = Math.floor(sn / 3600);
+  const m = Math.floor((sn % 3600) / 60);
+  return h + ':' + String(m).padStart(2,'0');
 }
 
 /* ══ HAFTALIK SIFIR (manuel) ══ */
@@ -5240,23 +5324,15 @@ function bindEvents(){
   });
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){
-      // ★ KRİTİK: Arka plana geçerken GPS aktif + sürüş modunda ise → ÇALIŞMA'ya çevir
-      // Sebep: Arka planda GPS donduğu için hareket algılayamayız
-      // Sürüş modu kalırsa "ben sürüyorum" sayar → YANLIŞ
-      // Çalışma modu = en güvenli varsayım (mesai sayılır ama sürüş bloğu DURMAZ)
-      if(window.gpsAktif && S.mode === 'surus'){
-        try {
-          localStorage.setItem('arkapan_oncesi_mode', 'surus'); // Geri dönünce hatırla
-          if(typeof window.setMode === 'function'){
-            window.setMode('calisma', 'gps-background');
-            console.log('[Visibility] Arka plana geçildi - sürüş bloğu donduruldu, çalışma\'ya geçildi');
-          }
-        } catch(e){}
-      }
+      // ★ DEĞİŞTİ: Sürüş modunu KORUYORUZ artık (çalışma'ya çevirmiyoruz)
+      // SEBEP: Araç GPS açıkken sürüş yapıyorsa sürüş sayılmalı
+      // GPS arka planda donsa bile zaten kullanıcı sürüş yaptığı için 
+      // ön plana döndüğünde gerçek sürüş süresi sayaçta görünür
       
-      // Arka plana geçince: sayaçları hesapla ve kaydet
+      // Arka plana geçince: sayaçları hesapla ve kaydet (mod KORUNUR)
       sync(); save();
-      // Son zamanı işaretle ki dönünce ne kadar süre arkada kaldığımızı bilelim
+      
+      // Son zamanı işaretle
       try {
         localStorage.setItem('arkapan_zamani', String(Date.now()));
         localStorage.setItem('arkapan_mode', S.mode || '');
@@ -5270,28 +5346,17 @@ function bindEvents(){
         if(t) arkadaKalanSn = Math.floor((Date.now() - t) / 1000);
       } catch(e){}
       
-      // Önce sync (kapanma süresini ekle), sonra lastTickMs güncelle
+      // sync ile arka planda geçen süre mevcut moda eklenir (sürüş ise sürüşe, çalışma ise çalışmaya)
       sync();
       S.lastTickMs = Date.now();
       
-      // ★ Ön plana dönünce: arka plan öncesi sürüş modundaysak → DURUŞ KONTROLÜ
-      // GPS sinyali geldiğinde hareket varsa otomatik sürüşe geçer (gpsGuncelle'de)
-      // Yoksa çalışma'da kalır - doğru davranış
-      try {
-        const oncekiMode = localStorage.getItem('arkapan_oncesi_mode');
-        if(oncekiMode === 'surus' && window.gpsAktif){
-          console.log('[Visibility] Ön plana döndü - hareket varsa otomatik sürüşe dönülecek');
-          // gpsGuncelle çağrılınca otomatik geçer, biz hiçbir şey yapmıyoruz
-          localStorage.removeItem('arkapan_oncesi_mode');
-        }
-      } catch(e){}
-      
-      // Eğer 5 dk'dan uzun arka planda kaldıysak ve GPS aktifse → kullanıcıyı bilgilendir
+      // Bilgilendirme (5 dk üzeri)
       if(arkadaKalanSn > 300 && window.gpsAktif){
         const dkk = Math.floor(arkadaKalanSn/60);
         setTimeout(()=>{
           if(typeof toast === 'function'){
-            toast('📱 ' + dkk + ' dk arka planda kalındı — sayaçlar güncellendi','info',4000);
+            const modAdi = S.mode === 'surus' ? '🚛 Sürüş' : (S.mode === 'calisma' ? '⚙ Çalışma' : (S.mode === 'dinlenme' ? '🛌 Mola' : ''));
+            toast('📱 ' + dkk + ' dk arka plan — '+modAdi+' moduna eklendi','info',4000);
           }
         }, 800);
         // GPS'i yenile (eğer kapatıldıysa tekrar başlat)
@@ -5463,7 +5528,7 @@ window.dtcoNavTo=function(page){
   const titles={dashboard:'Kontrol Paneli',activity:'Aktivite Kaydı',trip:'Sefer Yönetimi',
     border:'Sınır Geçişleri',transport:'Feribot / Tren',cabotage:'Kabotar Takibi',
     fuel:'Yakıt / KM Takibi',
-    weekly:'Haftalık Görünüm',debt:'Dinlenme Borcu',crew:'Ekip Sürüşü',
+    weekly:'Haftalık Görünüm','mesai-gecmisi':'Mesai Geçmişi',debt:'Dinlenme Borcu',crew:'Ekip Sürüşü',
     rules:'Yasal Kurallar',report:'Rapor / Çıktı',settings:'Ayarlar'};
   const pt=g('dtco-page-title');if(pt)pt.textContent=titles[page]||page;
   // Sidebar'ı kapat (mobil)
@@ -5472,6 +5537,7 @@ window.dtcoNavTo=function(page){
   // Sayfa özel render
   if(page==='dashboard')dUpdateDashboard();
   if(page==='weekly')dRenderWeekly();
+  if(page==='mesai-gecmisi')mesaiGecmisiRender();
   if(page==='debt'){dRenderDebtList();dUpdateDebtSummary();}
   if(page==='trip')dRenderTrips();
   if(page==='border')dRenderBorders();
@@ -5495,6 +5561,102 @@ window.dtcoNavTo=function(page){
   }
   if(page==='report'){const now=new Date();const rf=new Date(now);rf.setDate(rf.getDate()-28);const df=g('d-rpt-from');const dt=g('d-rpt-to');if(df)df.value=rf.toISOString().slice(0,10);if(dt)dt.value=todayStr();}
 };
+
+/* ════════════════════════════════════════════
+   MESAİ GEÇMİŞİ — Günlük Özet Listesi
+   ════════════════════════════════════════════ */
+
+window.mesaiGecmisiRender = function(){
+  const tbody = document.getElementById('mesai-gecmisi-tbody');
+  const bos = document.getElementById('mesai-gecmisi-bos');
+  if(!tbody) return;
+  
+  const ozetler = S.gunlukOzetler || [];
+  
+  // Boş ise
+  if(ozetler.length === 0){
+    tbody.innerHTML = '';
+    if(bos) bos.style.display = 'block';
+    document.getElementById('mg-toplam-gun').textContent = '0';
+    document.getElementById('mg-toplam-surus').textContent = '0:00';
+    document.getElementById('mg-toplam-km').textContent = '0 km';
+    return;
+  }
+  
+  if(bos) bos.style.display = 'none';
+  
+  // Toplam hesapla
+  let toplamSurus = 0;
+  let toplamKm = 0;
+  ozetler.forEach(o => {
+    toplamSurus += (o.surusSuresi || 0);
+    toplamKm += (o.mesafeKm || 0);
+  });
+  
+  document.getElementById('mg-toplam-gun').textContent = ozetler.length;
+  document.getElementById('mg-toplam-surus').textContent = formatHM(toplamSurus);
+  document.getElementById('mg-toplam-km').textContent = toplamKm.toLocaleString('tr-TR') + ' km';
+  
+  // Tablo doldur
+  tbody.innerHTML = ozetler.map((o,i) => {
+    const rota = (o.baslangic || '?') + ' → ' + (o.bitis || '?');
+    return '<tr>'+
+      '<td style="white-space:nowrap;font-family:var(--mono);font-size:.78rem;">'+(o.tarihGosterim || o.tarih)+'</td>'+
+      '<td style="color:#2563eb;font-weight:700;font-family:var(--mono);">'+formatHM(o.surusSuresi)+'</td>'+
+      '<td style="font-family:var(--mono);">'+formatHM(o.mesaiSuresi)+'</td>'+
+      '<td style="font-family:var(--mono);color:var(--sub);">'+formatHM(o.mola)+'</td>'+
+      '<td style="color:#2563eb;font-weight:700;font-family:var(--mono);">'+(o.mesafeKm || 0).toLocaleString('tr-TR')+' km</td>'+
+      '<td style="font-size:.78rem;">'+rota+'</td>'+
+      '<td style="font-size:.74rem;color:var(--sub);">'+(o.istirahatTipi || '—')+'</td>'+
+    '</tr>';
+  }).join('');
+};
+
+window.mesaiGecmisiCSVIndir = function(){
+  const ozetler = S.gunlukOzetler || [];
+  if(!ozetler.length){
+    if(typeof toast === 'function') toast('Kayıt yok','warn');
+    return;
+  }
+  
+  let csv = 'Tarih;Sürüş;Mesai;Mola;Mesafe (km);Başlangıç;Bitiş;İstirahat\n';
+  ozetler.forEach(o => {
+    csv += [
+      o.tarih || '',
+      formatHM(o.surusSuresi),
+      formatHM(o.mesaiSuresi),
+      formatHM(o.mola),
+      (o.mesafeKm || 0),
+      o.baslangic || '',
+      o.bitis || '',
+      o.istirahatTipi || ''
+    ].join(';') + '\n';
+  });
+  
+  try {
+    const blob = new Blob(['\uFEFF' + csv], {type:'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mesai-gecmisi-' + (new Date()).toISOString().slice(0,10) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    if(typeof toast === 'function') toast('📥 CSV indirildi','ok');
+  } catch(e){
+    if(typeof toast === 'function') toast('İndirme hatası','warn');
+  }
+};
+
+window.mesaiGecmisiTemizle = function(){
+  if(!window.confirm('TÜM mesai geçmişi silinecek! Emin misiniz?\n\nBu işlem geri alınamaz.')) return;
+  S.gunlukOzetler = [];
+  save();
+  mesaiGecmisiRender();
+  if(typeof toast === 'function') toast('🗑 Tüm geçmiş silindi','info');
+};
+
 
 /* ────────────────── SEFER ────────────────── */
 function dStartTrip(fromCountry){
@@ -7830,8 +7992,16 @@ function hizKartGuncelle(hiz){
   // 15 saniye sürekli 90 üstüyse: İHLAL kaydı (+1 ihlal sayısı)
   // 90 altına düşerse: sayaç sıfırlanır, yeniden başlar
   
-  if(hiz > HIZ_LIMIT){
-    // Hız 90 üstünde
+  // ★ HIZ İHLALİ — 15 SANİYE TOLERANS + HİSTERİZ MANTIĞI
+  // 92 km/h üstünde: uyarı başlar (90-91 arası TOLERANS - GPS hata payı)
+  // 15 saniye sürekli 92+ km/h ise: İHLAL kaydı
+  // 88 km/h altına düşerse: sayaç sıfırlanır
+  
+  const ASIM_BASLANGIC_LIMIT = HIZ_LIMIT + 2; // 92 km/h - uyarı başlangıç
+  const ASIM_BITIS_LIMIT = HIZ_LIMIT - 2;     // 88 km/h - uyarı bitiş (histeriz)
+  
+  if(hiz >= ASIM_BASLANGIC_LIMIT){
+    // Hız 92 üstünde - GERÇEK aşım
     if(!S.stats._asimBaslangic){
       // YENİ aşım başladı - HEMEN uyarı ver (ihlal değil)
       S.stats._asimBaslangic = Date.now();
@@ -7851,12 +8021,11 @@ function hizKartGuncelle(hiz){
         if(typeof window.save === 'function') window.save();
       }
     }
-  } else if(hiz <= HIZ_LIMIT - 2){
-    // 88 km/h altına düştü → aşım resetlenir, ihlal aktifliği biter
+  } else if(hiz <= ASIM_BITIS_LIMIT){
+    // 88 km/h altına düştü → aşım resetlenir
     if(S.stats._asimBaslangic){
       const asimSn = Math.floor((Date.now() - S.stats._asimBaslangic) / 1000);
       if(asimSn < 15){
-        // 15 saniye dolmadan yavaşladı - ihlal sayılmadı, sadece uyarı verildi
         if(typeof window.toast === 'function') window.toast('✅ Hız normale döndü ('+asimSn+'sn aşım)','ok',2000);
       }
     }
@@ -7864,6 +8033,7 @@ function hizKartGuncelle(hiz){
     S.stats._uyariVerildi = false;
     S.stats.hizIhlalAktif = false;
   }
+  // 88-92 arası ZONA → "histeriz bölgesi" - mevcut durum korunur (uyarı yok/var devam eder)
   
   const ihlalEl = document.getElementById('hiz-ihlal-sayisi');
   const ihlalKutu = document.getElementById('hiz-ihlal-kutu');
@@ -8127,7 +8297,52 @@ function gpsGuncelle(pos){
     hiz = sonHiz > 0 ? sonHiz : 0;
   }
   
-  sonHiz = Math.round(hiz * 10) / 10;
+  // ★★★ TOMTOM BENZERİ YUMUŞATMA (SMOOTHING) ★★★
+  // Sorun: GPS her saniyede 90↔91↔92 sıçraması yapabilir
+  // Çözüm: Son 5 değerin ortalaması + sıçrama filtreleme
+  
+  if(!window._hizGecmisi) window._hizGecmisi = [];
+  if(!window._hizSonZaman) window._hizSonZaman = 0;
+  
+  const simdiMs = Date.now();
+  const gecenMs = simdiMs - window._hizSonZaman;
+  window._hizSonZaman = simdiMs;
+  
+  // ★ ANI SIÇRAMA TESPİTİ
+  // Eğer son okuma ile şu anki arasında 1 saniyede 5+ km/h fark varsa → şüpheli
+  // Kamyon 1 saniyede 5 km/h ivmelenmez/yavaşlamaz (sert fren hariç)
+  if(sonHiz > 0 && hiz > 0 && gecenMs < 2000){
+    const fark = Math.abs(hiz - sonHiz);
+    if(fark >= 5){
+      // 1 saniyede 5+ km/h değişim = GPS sıçraması
+      // Önceki değere yakın bir orta nokta al (yumuşat)
+      hiz = sonHiz + (hiz > sonHiz ? 1 : -1) * 1.5;
+    }
+  }
+  
+  // ★ HAREKETLİ ORTALAMA (Son 5 değer)
+  // Sadece 5+ km/h ve normal sürüş aralığında uygula (park halinde yumuşatma yapma)
+  if(hiz >= 5){
+    window._hizGecmisi.push(hiz);
+    if(window._hizGecmisi.length > 5) window._hizGecmisi.shift();
+    
+    if(window._hizGecmisi.length >= 3){
+      // Aritmetik ortalama
+      const ortalama = window._hizGecmisi.reduce((a,b) => a+b, 0) / window._hizGecmisi.length;
+      hiz = ortalama;
+    }
+  } else {
+    // Düşük hızlarda geçmişi temizle (kalkışta yumuşatma yok = hızlı tepki)
+    window._hizGecmisi = [];
+  }
+  
+  // ★ HİSTERİZ (91'de takılma çözümü)
+  // Hız 90+ olduğunda 88'in altına düşene kadar uyarı devam ediyordu
+  // GPS rounded değer gönderirse 91↔90 arası sürekli sallanabilir
+  // Çözüm: 0.5 km/h hassasiyetle yuvarla
+  hiz = Math.round(hiz * 2) / 2; // 0.5 km/h hassasiyet
+  
+  sonHiz = hiz;
   
   // ── 3. MESAFE TOPLA (sadece gerçek hareket) ──
   const accuracy = pos.coords.accuracy || 0;
