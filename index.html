@@ -2537,6 +2537,36 @@ select{font:inherit}
       </div>
     </div>
     
+    <!-- ★ ARAÇ KİLOMETRESİ GÖSTERGESİ (Başlangıç + Güncel + Sefer) -->
+    <div id="arac-km-kart" style="margin:0 0 14px;padding:14px;background:linear-gradient(135deg,#0e1828,#1a2840);border:2px solid #2a4060;border-radius:8px;display:none;">
+      <div style="font-family:var(--sans);font-size:.78rem;color:#a0b8d0;letter-spacing:1.5px;font-weight:700;margin-bottom:12px;">🚛 ARAÇ KİLOMETRESİ</div>
+      
+      <!-- 3'lü göstergeli grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;">
+        <!-- Başlangıç -->
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:8px;text-align:center;">
+          <div style="font-size:.62rem;color:#7a92b0;font-weight:700;letter-spacing:1px;margin-bottom:4px;">BAŞLANGIÇ</div>
+          <div id="arac-km-baslangic" style="font-family:var(--mono);font-size:1.1rem;font-weight:900;color:#a0b8d0;line-height:1;">— km</div>
+        </div>
+        <!-- Şu An -->
+        <div style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.3);border-radius:6px;padding:8px;text-align:center;">
+          <div style="font-size:.62rem;color:#60a5fa;font-weight:700;letter-spacing:1px;margin-bottom:4px;">ŞU AN</div>
+          <div id="arac-km-suanki" style="font-family:var(--mono);font-size:1.1rem;font-weight:900;color:#60a5fa;line-height:1;">— km</div>
+        </div>
+        <!-- Sefer Farkı -->
+        <div style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:8px;text-align:center;">
+          <div style="font-size:.62rem;color:#22c55e;font-weight:700;letter-spacing:1px;margin-bottom:4px;">SEFER</div>
+          <div id="arac-km-sefer" style="font-family:var(--mono);font-size:1.1rem;font-weight:900;color:#22c55e;line-height:1;">0 km</div>
+        </div>
+      </div>
+      
+      <!-- Butonlar -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <button onclick="aracBaslangicGuncelle()" style="padding:10px 8px;background:rgba(255,255,255,.05);color:#a0b8d0;border:1px solid rgba(255,255,255,.15);border-radius:4px;font-size:.78rem;font-weight:700;cursor:pointer;">📍 Başlangıç</button>
+        <button onclick="aracKmHizliGuncelle()" style="padding:10px 8px;background:#2563eb;color:#fff;border:0;border-radius:4px;font-size:.78rem;font-weight:700;cursor:pointer;">✏️ Güncel KM</button>
+      </div>
+    </div>
+    
     <!-- Görsel depo göstergesi -->
     <div style="margin:14px 0;padding:14px;background:var(--panel3);border:1px solid var(--border);border-radius:8px;">
       <div style="font-family:var(--sans);font-size:.85rem;color:var(--text2);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
@@ -2610,6 +2640,16 @@ select{font:inherit}
       <div class="d-form-row">
         <div class="dfg"><label>Tüketim Ortalama (L/100km)</label><input type="number" id="depo-tuketim-input" placeholder="32" step="0.1"></div>
         <div class="dfg"><label>Düşük Yakıt Uyarısı (%)</label><input type="number" id="depo-uyari-yuzde" placeholder="20" step="1" max="50"></div>
+      </div>
+      <!-- ★ ARAÇ KİLOMETRESİ -->
+      <div class="d-form-row">
+        <div class="dfg" style="flex:1;grid-column:1/-1;">
+          <label>🚛 Aracın Güncel Kilometresi (örn: 234567)</label>
+          <input type="number" id="depo-arac-km" placeholder="234567" step="1" style="font-family:var(--mono);font-size:1.1rem;font-weight:700;">
+        </div>
+      </div>
+      <div style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.3);border-radius:4px;padding:8px 10px;margin-bottom:10px;font-size:.74rem;color:#a0c4ff;line-height:1.5;">
+        💡 <b>Aracın kilometresini girersen:</b> sefer boyunca manuel olarak güncelleyebilirsin. Sistem geçen km'ye göre yakıtı düşürür. GPS de paralel çalışır.
       </div>
       <div class="d-btn-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <button class="d-btn d-btn-a" onclick="depoAyarKaydet()">💾 Kaydet</button>
@@ -7374,6 +7414,11 @@ function depoYakitGuncelle(){
   D.depo.sonGpsKm = guncelKm;
   D.depo.sonGuncelleme = Date.now();
   
+  // ★ Araç km'yi de senkron olarak artır (eğer manuel girilmişse)
+  if(D.depo.aracKm && D.depo.aracKm > 0){
+    D.depo.aracKm = D.depo.aracKm + farkKm;
+  }
+  
   // Düşük yakıt uyarısı (sadece bir kez)
   const yuzde = (D.depo.mevcut / D.depo.kapasite) * 100;
   if(yuzde <= D.depo.uyariYuzde && yuzde > 0 && !D.depo._uyariVerildi){
@@ -7413,6 +7458,40 @@ function depoRender(){
   
   // Kalan menzil = (mevcut yakıt / tüketim) × 100
   const menzil = tuketim > 0 ? (mevcut / tuketim) * 100 : 0;
+  
+  // ★ ARAÇ KİLOMETRESİ KARTI (Başlangıç + Şu An + Sefer)
+  const aracKmKart = e('arac-km-kart');
+  
+  if(D.depo.aracKm && D.depo.aracKm > 0){
+    if(aracKmKart) aracKmKart.style.display = 'block';
+    
+    // BAŞLANGIÇ
+    const baslangicEl = e('arac-km-baslangic');
+    if(baslangicEl){
+      if(D.depo.aracKmBaslangic && D.depo.aracKmBaslangic > 0){
+        baslangicEl.textContent = D.depo.aracKmBaslangic.toLocaleString('tr-TR') + ' km';
+      } else {
+        baslangicEl.textContent = '— km';
+      }
+    }
+    
+    // ŞU AN (güncel)
+    const suankiEl = e('arac-km-suanki');
+    if(suankiEl) suankiEl.textContent = D.depo.aracKm.toLocaleString('tr-TR') + ' km';
+    
+    // SEFER (fark)
+    const seferEl = e('arac-km-sefer');
+    if(seferEl){
+      if(D.depo.aracKmBaslangic && D.depo.aracKmBaslangic > 0){
+        const seferKm = D.depo.aracKm - D.depo.aracKmBaslangic;
+        seferEl.textContent = (seferKm >= 0 ? seferKm : 0).toLocaleString('tr-TR') + ' km';
+      } else {
+        seferEl.textContent = '0 km';
+      }
+    }
+  } else {
+    if(aracKmKart) aracKmKart.style.display = 'none';
+  }
   
   // Stat boxes
   if(e('depo-mevcut')) e('depo-mevcut').textContent = mevcut.toFixed(1) + ' L';
@@ -7599,6 +7678,7 @@ window.depoAyarlaAc = function(){
       const m = g('depo-mevcut-input'); if(m) m.value = (D.depo.mevcut || 0).toFixed(1);
       const t = g('depo-tuketim-input'); if(t) t.value = (D.depo.tuketim || 32).toFixed(1);
       const u = g('depo-uyari-yuzde'); if(u) u.value = D.depo.uyariYuzde || 20;
+      const ak = g('depo-arac-km'); if(ak) ak.value = D.depo.aracKm || '';
     }
   }
 };
@@ -7611,6 +7691,7 @@ window.depoAyarKaydet = function(){
   const m = parseFloat((g('depo-mevcut-input')||{}).value) || 0;
   const t = parseFloat((g('depo-tuketim-input')||{}).value) || 32;
   const u = parseInt((g('depo-uyari-yuzde')||{}).value) || 20;
+  const aracKm = parseFloat((g('depo-arac-km')||{}).value) || 0;
   
   if(!D.depo) D.depo = {olaylar:[]};
   D.depo.kapasite = k;
@@ -7621,10 +7702,104 @@ window.depoAyarKaydet = function(){
   D.depo.sonGuncelleme = Date.now();
   D.depo._uyariVerildi = false;
   
+  // ★ Araç kilometresi - ilk kez gir veya güncelle
+  if(aracKm > 0){
+    D.depo.aracKm = aracKm;
+    // Başlangıç YOKSA, bunu başlangıç olarak da kaydet
+    if(!D.depo.aracKmBaslangic || D.depo.aracKmBaslangic === 0){
+      D.depo.aracKmBaslangic = aracKm;
+    }
+  }
+  
   dSave();
   depoRender();
   depoAyarKapat();
   if(typeof dToast === 'function') dToast('💾 Depo ayarları kaydedildi','ok',2500);
+};
+
+/* ★ ARAÇ BAŞLANGIÇ KİLOMETRESİ GÜNCELLE
+   Yeni sefer başlarken kullanılır */
+window.aracBaslangicGuncelle = function(){
+  if(!D.depo){
+    alert('⚠️ Önce Depo Ayarları yapın');
+    return;
+  }
+  
+  const eskiBaslangic = D.depo.aracKmBaslangic || 0;
+  const suanki = D.depo.aracKm || 0;
+  
+  const yeniBaslangic = prompt(
+    '📍 SEFER BAŞLANGIÇ KİLOMETRESİ\n\n' +
+    'Yeni sefer başlangıcı için aracın o anki km\'sini girin.\n' +
+    'Bu değer sabit kalır, sefer farkı buradan hesaplanır.\n\n' +
+    (eskiBaslangic > 0 ? 'Eski başlangıç: ' + eskiBaslangic + ' km\n' : '') +
+    'Şu anki km: ' + suanki + ' km',
+    suanki || ''
+  );
+  
+  if(!yeniBaslangic) return; // İptal
+  
+  const km = parseFloat(yeniBaslangic);
+  if(isNaN(km) || km <= 0){
+    alert('⚠️ Geçersiz kilometre değeri');
+    return;
+  }
+  
+  D.depo.aracKmBaslangic = km;
+  // Eğer şu anki km küçükse, onu da güncelle (yeni başlangıç noktası)
+  if(!D.depo.aracKm || D.depo.aracKm < km){
+    D.depo.aracKm = km;
+  }
+  D.depo.sonGuncelleme = Date.now();
+  
+  dSave();
+  depoRender();
+  
+  if(typeof dToast === 'function'){
+    dToast('📍 Sefer başlangıcı: ' + km.toLocaleString('tr-TR') + ' km','ok',3000);
+  }
+};
+
+/* ★ ARAÇ KİLOMETRESİ HIZLI GÜNCELLE
+   Kullanıcı sürüş esnasında manuel olarak yeni km girer
+   Sistem farkı hesaplar, yakıtı düşürür */
+window.aracKmHizliGuncelle = function(){
+  if(!D.depo || !D.depo.aracKm){
+    alert('⚠️ Önce Depo Ayarları\'ndan aracın kilometresini girin');
+    return;
+  }
+  
+  const eskiKm = D.depo.aracKm;
+  const yeniKmStr = prompt('🚛 Aracın güncel kilometresi nedir?\n\nEski: ' + eskiKm + ' km', eskiKm);
+  
+  if(!yeniKmStr) return; // İptal
+  
+  const yeniKm = parseFloat(yeniKmStr);
+  if(isNaN(yeniKm) || yeniKm <= 0){
+    alert('⚠️ Geçersiz kilometre değeri');
+    return;
+  }
+  
+  if(yeniKm < eskiKm){
+    if(!confirm('⚠️ Yeni km eskiden DAHA AZ ('+yeniKm+' < '+eskiKm+'). Yine de güncellensin mi?')) return;
+  }
+  
+  // Fark km'yi hesapla ve yakıtı düşür
+  const farkKm = yeniKm - eskiKm;
+  if(farkKm > 0 && D.depo.tuketim > 0){
+    const tuketilen = (farkKm * D.depo.tuketim) / 100;
+    D.depo.mevcut = Math.max(0, (D.depo.mevcut || 0) - tuketilen);
+    
+    if(typeof dToast === 'function'){
+      dToast('🚛 '+farkKm+' km eklendi — '+tuketilen.toFixed(1)+' L tüketildi','ok',3500);
+    }
+  }
+  
+  D.depo.aracKm = yeniKm;
+  D.depo.sonGuncelleme = Date.now();
+  
+  dSave();
+  depoRender();
 };
 
 /* ────────────────── DİNLENME BORCU ────────────────── */
