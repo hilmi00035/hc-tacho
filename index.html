@@ -3258,6 +3258,7 @@ function freshS(){
     violations:[],
     gunlukOzetler:[], // ★ Mesai geçmişi - her yatış molasında eklenir
     haftalikRaporlar:[], // ★ Haftalık arşiv - 7 gün dolunca otomatik
+    borderCrossings:[], // ★ Otomatik sınır geçişleri (GPS algılaması)
   };
 }
 
@@ -3397,6 +3398,8 @@ function load(){
     if(Array.isArray(p.gunlukOzetler))S.gunlukOzetler=p.gunlukOzetler.slice(0,60).filter(o=>o&&typeof o==='object');
     // ★ Haftalık arşiv yükle
     if(Array.isArray(p.haftalikRaporlar))S.haftalikRaporlar=p.haftalikRaporlar.slice(0,52).filter(o=>o&&typeof o==='object');
+    // ★ Otomatik sınır geçişleri yükle
+    if(Array.isArray(p.borderCrossings))S.borderCrossings=p.borderCrossings.slice(0,100).filter(o=>o&&typeof o==='object');
   }catch(e){console.warn('load err',e);S=freshS();}
 }
 
@@ -4028,7 +4031,7 @@ function handleEndOfDay(){
     mola: S.stats.pause || 0,              // saniye
     mesafeKm: Math.round((typeof toplamMesafe === 'number' ? toplamMesafe : 0) / 1000), // km
     baslangic: S.selections.startCountry || '',
-    bitis: S.selections.endCountry || esel.value || '',
+    bitis: S.selections.endCountry || esel.value || window.sonAlgilananUlke || '',
     istirahatTipi: shortRest ? '9 saat (kısa)' : '11 saat (tam)',
     timestamp: Date.now()
   };
@@ -6956,15 +6959,47 @@ window.dAddBorder=function(){
 window.dDelBorder=function(id){D.borders=D.borders.filter(b=>b.id!==id);dSave();dRenderBorders();};
 function dRenderBorders(){
   const t=g('d-border-log');if(!t)return;
-  if(!D.borders.length){t.innerHTML='<tr><td colspan="6"><div class="d-empty">Kayıt yok</div></td></tr>';return;}
-  const tL={road:'🚗',ferry:'🚢',train:'🚆',tunnel:'🚇'};
-  t.innerHTML=[...D.borders].reverse().map(b=>'<tr>'+
-    '<td style="font-family:var(--mono);font-size:.72rem">'+b.dt+'</td>'+
-    '<td>'+cName(b.from)+'</td><td>'+cName(b.to)+'</td>'+
-    '<td>'+(b.gate||'—')+'</td>'+
-    '<td style="font-size:.7rem;color:#3d5a7a">'+(b.tripId?D.trips.find(t=>String(t.id)===String(b.tripId))?.name||'—':'—')+'</td>'+
-    '<td><button onclick="dDelBorder('+b.id+')" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:.8rem">🗑</button></td></tr>'
-  ).join('');
+  
+  // Manuel + Otomatik geçişleri birleştir
+  const manuel = (D.borders || []).map(b => ({
+    id: b.id,
+    timestamp: new Date(b.dt).getTime(),
+    dt: b.dt,
+    from: b.from,
+    to: b.to,
+    gate: b.gate,
+    tripId: b.tripId,
+    type: 'manuel'
+  }));
+  
+  const otomatik = (S.borderCrossings || []).map(b => ({
+    id: b.timestamp,
+    timestamp: b.timestamp,
+    dt: new Date(b.timestamp).toLocaleString('tr-TR'),
+    from: b.from,
+    to: b.to,
+    gate: 'GPS Otomatik',
+    tripId: null,
+    type: 'auto'
+  }));
+  
+  const tumGecisler = [...manuel, ...otomatik].sort((a,b) => b.timestamp - a.timestamp);
+  
+  if(!tumGecisler.length){
+    t.innerHTML='<tr><td colspan="6"><div class="d-empty">Kayıt yok</div></td></tr>';
+    return;
+  }
+  
+  t.innerHTML = tumGecisler.map(b => {
+    const bayrak = b.type === 'auto' ? '🛰️' : '📝';
+    const renk = b.type === 'auto' ? 'color:#60a5fa;' : '';
+    return '<tr>'+
+      '<td style="font-family:var(--mono);font-size:.72rem;'+renk+'">'+bayrak+' '+b.dt+'</td>'+
+      '<td>'+cName(b.from)+'</td><td>'+cName(b.to)+'</td>'+
+      '<td>'+(b.gate||'—')+'</td>'+
+      '<td style="font-size:.7rem;color:#3d5a7a">'+(b.tripId?D.trips.find(t=>String(t.id)===String(b.tripId))?.name||'—':'—')+'</td>'+
+      '<td>'+(b.type==='manuel'?'<button onclick="dDelBorder('+b.id+')" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:.8rem">🗑</button>':'<span style="font-size:.62rem;color:#60a5fa;">AUTO</span>')+'</td></tr>';
+  }).join('');
 }
 
 /* ────────────────── FERİBOT / TREN ────────────────── */
@@ -8819,6 +8854,165 @@ window.gpsDurdur = function(){
 };
 
 /* ── Konum Güncelleme — AKILLI Takograf mantığı ── */
+/* ════════════════════════════════════════════
+   🌍 ÜLKE ALGILAMA — GPS koordinatından ülke tespiti
+   Hollanda → Almanya geçişini otomatik algılar
+   Sınır kutusu (bounding box) yöntemi - offline çalışır
+   ════════════════════════════════════════════ */
+
+// Ülke sınır kutuları (lat min, lat max, lng min, lng max)
+// Avrupa'nın TIR rotaları üzerindeki ülkeler
+const ULKE_SINIRLAR = {
+  'Türkiye':      {latMin:35.8, latMax:42.1, lngMin:25.5, lngMax:44.9},
+  'Yunanistan':   {latMin:34.8, latMax:41.7, lngMin:19.3, lngMax:28.5},
+  'Bulgaristan':  {latMin:41.2, latMax:44.2, lngMin:22.3, lngMax:28.7},
+  'Romanya':      {latMin:43.6, latMax:48.3, lngMin:20.2, lngMax:29.7},
+  'Sırbistan':    {latMin:42.2, latMax:46.2, lngMin:18.8, lngMax:23.0},
+  'Macaristan':   {latMin:45.7, latMax:48.6, lngMin:16.1, lngMax:22.9},
+  'Hırvatistan':  {latMin:42.4, latMax:46.6, lngMin:13.5, lngMax:19.5},
+  'Slovenya':     {latMin:45.4, latMax:46.9, lngMin:13.4, lngMax:16.6},
+  'Avusturya':    {latMin:46.4, latMax:49.0, lngMin:9.5,  lngMax:17.2},
+  'İtalya':       {latMin:36.6, latMax:47.1, lngMin:6.6,  lngMax:18.6},
+  'Slovakya':     {latMin:47.7, latMax:49.6, lngMin:16.8, lngMax:22.6},
+  'Çekya':        {latMin:48.5, latMax:51.1, lngMin:12.1, lngMax:18.9},
+  'Polonya':      {latMin:49.0, latMax:54.9, lngMin:14.1, lngMax:24.2},
+  'Almanya':      {latMin:47.3, latMax:55.0, lngMin:5.9,  lngMax:15.0},
+  'Hollanda':     {latMin:50.7, latMax:53.6, lngMin:3.3,  lngMax:7.2},
+  'Belçika':      {latMin:49.5, latMax:51.5, lngMin:2.5,  lngMax:6.4},
+  'Fransa':       {latMin:42.3, latMax:51.1, lngMin:-5.1, lngMax:8.2},
+  'İsviçre':      {latMin:45.8, latMax:47.8, lngMin:5.9,  lngMax:10.5},
+  'Lüksemburg':   {latMin:49.4, latMax:50.2, lngMin:5.7,  lngMax:6.5},
+  'Danimarka':    {latMin:54.5, latMax:57.8, lngMin:8.0,  lngMax:12.7},
+  'İspanya':      {latMin:36.0, latMax:43.8, lngMin:-9.4, lngMax:3.3},
+  'Portekiz':     {latMin:36.9, latMax:42.2, lngMin:-9.5, lngMax:-6.2},
+  'İngiltere':    {latMin:49.9, latMax:60.9, lngMin:-8.6, lngMax:1.8},
+  'İrlanda':      {latMin:51.4, latMax:55.4, lngMin:-10.5,lngMax:-5.9},
+  'Norveç':       {latMin:57.9, latMax:71.2, lngMin:4.6,  lngMax:31.1},
+  'İsveç':        {latMin:55.3, latMax:69.1, lngMin:11.1, lngMax:24.2},
+  'Finlandiya':   {latMin:59.8, latMax:70.1, lngMin:20.5, lngMax:31.6},
+  'Estonya':      {latMin:57.5, latMax:59.7, lngMin:21.8, lngMax:28.2},
+  'Letonya':      {latMin:55.7, latMax:58.1, lngMin:20.9, lngMax:28.2},
+  'Litvanya':     {latMin:53.9, latMax:56.5, lngMin:20.9, lngMax:26.8},
+  'Belarus':      {latMin:51.3, latMax:56.2, lngMin:23.2, lngMax:32.8},
+  'Ukrayna':      {latMin:44.4, latMax:52.4, lngMin:22.1, lngMax:40.2},
+  'Moldova':      {latMin:45.5, latMax:48.5, lngMin:26.6, lngMax:30.2},
+  'Karadağ':      {latMin:41.9, latMax:43.6, lngMin:18.4, lngMax:20.4},
+  'Arnavutluk':   {latMin:39.6, latMax:42.7, lngMin:19.3, lngMax:21.1},
+  'Makedonya':    {latMin:40.9, latMax:42.4, lngMin:20.5, lngMax:23.0},
+  'Kosova':       {latMin:41.9, latMax:43.3, lngMin:20.0, lngMax:21.8},
+  'Bosna Hersek': {latMin:42.6, latMax:45.3, lngMin:15.7, lngMax:19.6}
+};
+
+// Mevcut ülke tespiti - koordinattan ülke bul
+window.koordinattanUlkeBul = function(lat, lng){
+  // Önce kesin eşleşme ara
+  for(const [ulke, s] of Object.entries(ULKE_SINIRLAR)){
+    if(lat >= s.latMin && lat <= s.latMax && lng >= s.lngMin && lng <= s.lngMax){
+      return ulke;
+    }
+  }
+  return null;
+};
+
+// Ülke algılama - değişim olursa otomatik geçiş bildir
+window.sonAlgilananUlke = null;
+window.sonUlkeKontrolMs = 0;
+
+window.ulkeAlgila = function(lat, lng){
+  const simdi = Date.now();
+  // Her 30 saniyede bir kontrol et (CPU tasarrufu)
+  if(simdi - window.sonUlkeKontrolMs < 30000) return;
+  window.sonUlkeKontrolMs = simdi;
+  
+  const ulke = window.koordinattanUlkeBul(lat, lng);
+  if(!ulke) return; // Bilinmeyen bölge
+  
+  // İlk kez algılama
+  if(window.sonAlgilananUlke === null){
+    window.sonAlgilananUlke = ulke;
+    
+    // ★ Eğer henüz başlangıç ülkesi seçilmemişse otomatik ata
+    if(S && S.selections && !S.selections.startCountry){
+      S.selections.startCountry = ulke;
+      if(typeof window.save === 'function') window.save();
+      
+      // Başlangıç ülkesi dropdown'ını da güncelle
+      const startSel = document.getElementById('sel-start');
+      if(startSel){
+        // Önce option ekle (yoksa)
+        let exists = false;
+        for(let i=0; i<startSel.options.length; i++){
+          if(startSel.options[i].value === ulke){
+            startSel.selectedIndex = i;
+            exists = true;
+            break;
+          }
+        }
+      }
+      
+      if(typeof window.toast === 'function'){
+        window.toast('📍 Başlangıç ülkesi otomatik: ' + ulke,'ok',3500);
+      }
+    } else {
+      // Sadece bilgi olarak göster
+      if(typeof window.toast === 'function'){
+        window.toast('📍 Şu an: ' + ulke,'info',2500);
+      }
+    }
+    return;
+  }
+  
+  // ★ ÜLKE DEĞİŞİMİ ALGILANDI
+  if(ulke !== window.sonAlgilananUlke){
+    const oncekiUlke = window.sonAlgilananUlke;
+    window.sonAlgilananUlke = ulke;
+    
+    // Bildirim
+    if(typeof window.toast === 'function'){
+      window.toast('🌍 SINIR GEÇİŞİ: ' + oncekiUlke + ' → ' + ulke,'warn',5000);
+    }
+    if(typeof window.speak === 'function'){
+      window.speak(ulke + 'a girdiniz.','normal');
+    }
+    
+    // ★ Geçiş kaydı oluştur (DTCO sınır geçişleri için)
+    if(!S.borderCrossings) S.borderCrossings = [];
+    S.borderCrossings.unshift({
+      timestamp: Date.now(),
+      tarih: new Date().toISOString(),
+      from: oncekiUlke,
+      to: ulke,
+      lat: lat,
+      lng: lng,
+      type: 'auto' // Otomatik algılandı
+    });
+    // Max 100 kayıt
+    if(S.borderCrossings.length > 100) S.borderCrossings.length = 100;
+    
+    // ★ Otomatik VARIŞ ülkesi olarak güncelle (varış henüz girilmemişse veya farklıysa)
+    if(S.selections && (!S.selections.endCountry || S.selections.endCountry !== ulke)){
+      S.selections.endCountry = ulke;
+      
+      const endSel = document.getElementById('sel-end');
+      if(endSel){
+        for(let i=0; i<endSel.options.length; i++){
+          if(endSel.options[i].value === ulke){
+            endSel.selectedIndex = i;
+            break;
+          }
+        }
+      }
+    }
+    
+    if(typeof window.save === 'function') window.save();
+    
+    // Push notification (opsiyonel)
+    if(typeof window.pushBildirim === 'function'){
+      window.pushBildirim('🌍 Sınır Geçişi', oncekiUlke + ' → ' + ulke);
+    }
+  }
+};
+
 /* ── GPS Konum Güncellemesi — BASİT ve SAĞLAM ── */
 function gpsGuncelle(pos){
   if(!gpsAktif) return;
@@ -8917,6 +9111,11 @@ function gpsGuncelle(pos){
     zaman: Date.now(),
     accuracy: accuracy
   };
+  
+  // ★ ÜLKE ALGILAMA — Otomatik sınır geçiş
+  if(typeof window.ulkeAlgila === 'function'){
+    window.ulkeAlgila(pos.coords.latitude, pos.coords.longitude);
+  }
   
   // ── 4. UI GÜNCELLE ──
   const hizEl = document.getElementById('gps-hiz');
