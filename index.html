@@ -1635,7 +1635,8 @@ select{font:inherit}
 .d-s-lbl{font-size:.74rem;letter-spacing:1px;text-transform:uppercase;color:#7a92b0;font-family:var(--sans);font-weight:700}
 .d-s-val{font-family:var(--mono);font-size:1.2rem;margin-top:4px;font-weight:700;color:#00c8ff}
 .d-week-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:12px}
-.d-wc{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:8px 3px;text-align:center}
+.d-wc{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:8px 3px;text-align:center;transition:all .15s}
+.d-wc[onclick]:hover,.d-wc[onclick]:active{background:#1c2840;border-color:#2563eb;transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,.3)}
 .d-wc.today{border-color:#00c8ff}
 .d-wc-day{font-size:.7rem;color:#7a92b0;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
 .d-wc-h{font-family:var(--mono);font-size:1.05rem;font-weight:700;margin-top:3px}
@@ -1819,7 +1820,8 @@ select{font:inherit}
 .d-s-lbl{font-size:.74rem;letter-spacing:1px;text-transform:uppercase;color:#7a92b0;font-family:var(--sans);font-weight:700}
 .d-s-val{font-family:var(--mono);font-size:1.2rem;margin-top:4px;font-weight:700;color:#00c8ff}
 .d-week-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:12px}
-.d-wc{background:#0e1520;border:1px solid #1f2e45;border-radius:6px;padding:8px 3px;text-align:center}
+.d-wc{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:8px 3px;text-align:center;transition:all .15s}
+.d-wc[onclick]:hover,.d-wc[onclick]:active{background:#1c2840;border-color:#2563eb;transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,.3)}
 .d-wc.today{border-color:#00c8ff}
 .d-wc-day{font-size:.7rem;color:#7a92b0;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
 .d-wc-h{font-family:var(--mono);font-size:1.05rem;font-weight:700;margin-top:3px}
@@ -2536,17 +2538,34 @@ select{font:inherit}
     </div>
     
     <!-- Görsel depo göstergesi -->
-    <div style="margin:14px 0;padding:14px;background:#0a1422;border:1px solid #1a2840;border-radius:8px;">
-      <div style="font-family:var(--sans);font-size:.78rem;color:#a0b8d0;margin-bottom:6px;display:flex;justify-content:space-between;">
-        <span>DEPO DOLULUĞU</span>
-        <span id="depo-yuzde" style="color:var(--gold);font-weight:700;">—%</span>
+    <div style="margin:14px 0;padding:14px;background:var(--panel3);border:1px solid var(--border);border-radius:8px;">
+      <div style="font-family:var(--sans);font-size:.85rem;color:var(--text2);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-weight:700;letter-spacing:1px;">🛢️ DEPO DOLULUĞU</span>
+        <span id="depo-yuzde" style="color:var(--gold);font-weight:900;font-size:1.4rem;font-family:var(--mono);">—%</span>
       </div>
-      <div style="height:24px;background:#1a2540;border-radius:12px;overflow:hidden;position:relative;">
-        <div id="depo-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:12px;transition:width .5s,background .5s;"></div>
+      <!-- BÜYÜK Doluluk Barı -->
+      <div style="height:36px;background:#1a2540;border-radius:8px;overflow:hidden;position:relative;border:1px solid var(--border);">
+        <div id="depo-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:8px;transition:width .5s,background .5s;position:relative;">
+          <!-- İç işaretler -->
+          <div style="position:absolute;top:0;bottom:0;left:25%;width:1px;background:rgba(255,255,255,0.2);"></div>
+          <div style="position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(255,255,255,0.3);"></div>
+          <div style="position:absolute;top:0;bottom:0;left:75%;width:1px;background:rgba(255,255,255,0.2);"></div>
+        </div>
       </div>
-      <div style="margin-top:6px;font-family:var(--mono);font-size:.78rem;color:#7a92b0;display:flex;justify-content:space-between;">
+      <div style="margin-top:6px;font-family:var(--mono);font-size:.8rem;color:var(--sub);display:flex;justify-content:space-between;">
         <span>0 L</span>
+        <span>25%</span>
+        <span>50%</span>
+        <span>75%</span>
         <span id="depo-kapasite-lbl">/ — L</span>
+      </div>
+    </div>
+    
+    <!-- ★ TAHMİNİ KALAN YOL / TÜKENME HİSAPLAYICI -->
+    <div id="depo-tahmin-kart" style="margin:14px 0;padding:12px;background:#0e1828;border:1px solid #2a4060;border-radius:8px;display:none;">
+      <div style="font-family:var(--sans);font-size:.78rem;color:#a0b8d0;letter-spacing:1px;font-weight:700;margin-bottom:8px;">📊 TAHMİNİ HESAPLAMA</div>
+      <div style="font-family:var(--sans);font-size:.85rem;color:var(--text);line-height:1.7;" id="depo-tahmin-yazi">
+        —
       </div>
     </div>
     
@@ -2673,17 +2692,35 @@ select{font:inherit}
 
 <!-- ▸ HAFTALIK GÖRÜNÜM -->
 <div class="dtco-subpage" id="dpage-weekly" style="padding:10px">
-  <div class="d-card"><div class="d-card-hd">Bu Hafta</div><div class="d-week-cells" id="d-week-cells"></div></div>
+  <!-- BU HAFTA HÜCRELERİ -->
+  <div class="d-card">
+    <div class="d-card-hd">Bu Hafta — Güne Tıkla Detayı Gör</div>
+    <div class="d-week-cells" id="d-week-cells"></div>
+  </div>
+  
+  <!-- ★ GÜN DETAY PANELİ (gün tıklanınca açılır) -->
+  <div id="d-gun-detay-panel" class="d-card" style="display:none;">
+    <div class="d-card-hd" id="d-gun-detay-baslik">📋 Gün Detayı</div>
+    <div id="d-gun-detay-icerik"></div>
+    <button class="d-btn d-btn-s" onclick="document.getElementById('d-gun-detay-panel').style.display='none'" style="margin-top:10px;">✕ Kapat</button>
+  </div>
+  
+  <!-- HAFTALIK SAYAÇLAR -->
   <div class="d-gauge-grid">
     <div class="d-gauge"><div class="d-g-lbl">Haftalık Sürüş</div><div class="d-g-val" id="dwg1">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dwgf1" style="width:0%"></div></div><div class="d-g-sub">Limit 56:00</div></div>
     <div class="d-gauge"><div class="d-g-lbl">2 Hafta Toplam</div><div class="d-g-val" id="dwg2">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dwgf2" style="width:0%"></div></div><div class="d-g-sub">Limit 90:00</div></div>
     <div class="d-gauge"><div class="d-g-lbl">Haftalık Dinlenme</div><div class="d-g-val" id="dwg3">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dwgf3" style="width:0%"></div></div><div class="d-g-sub">Gerekli 45:00</div></div>
   </div>
-  <div class="d-card"><div class="d-card-hd">Hafta Ayarı</div>
-    <div class="d-form-row">
-      <div class="dfg"><label>Haftanın İlk Günü</label><input type="date" id="d-week-from" onchange="dRenderWeekly()"></div>
-      <div class="dfg"><label>Önceki Hafta Sürüşü (saat)</label><input type="number" id="d-prev-week" value="0" min="0" max="90" onchange="dRenderWeekly()"></div>
+  
+  <!-- ★ ARŞIV - GEÇMİŞ HAFTA RAPORLARI -->
+  <div class="d-card">
+    <div class="d-card-hd">📦 Arşiv — Geçmiş Hafta Raporları</div>
+    <div id="haftalik-arsiv-bos" style="display:none;text-align:center;padding:20px;color:var(--sub);">
+      <div style="font-size:1.8rem;margin-bottom:6px;">📦</div>
+      <div>Henüz arşivlenmiş hafta yok</div>
+      <div style="font-size:.78rem;margin-top:6px;">Bir hafta tamamlandığında (7 gün) burada listelenir</div>
     </div>
+    <div id="haftalik-arsiv-liste"></div>
   </div>
 </div>
 
@@ -3180,6 +3217,7 @@ function freshS(){
     log:[],
     violations:[],
     gunlukOzetler:[], // ★ Mesai geçmişi - her yatış molasında eklenir
+    haftalikRaporlar:[], // ★ Haftalık arşiv - 7 gün dolunca otomatik
   };
 }
 
@@ -3317,6 +3355,8 @@ function load(){
     if(Array.isArray(p.violations))S.violations=p.violations.slice(-100).filter(v=>v&&typeof v==='object');
     // ★ Mesai geçmişi (gunlukOzetler) yükle
     if(Array.isArray(p.gunlukOzetler))S.gunlukOzetler=p.gunlukOzetler.slice(0,60).filter(o=>o&&typeof o==='object');
+    // ★ Haftalık arşiv yükle
+    if(Array.isArray(p.haftalikRaporlar))S.haftalikRaporlar=p.haftalikRaporlar.slice(0,52).filter(o=>o&&typeof o==='object');
   }catch(e){console.warn('load err',e);S=freshS();}
 }
 
@@ -3955,6 +3995,13 @@ function handleEndOfDay(){
   S.gunlukOzetler.unshift(ozet); // En yeni başa
   if(S.gunlukOzetler.length > 60) S.gunlukOzetler.length = 60; // Max 60 gün sakla
   
+  // ★★★ HAFTA TAMAMLANDI MI? Pazar günü ise arşivle ★★★
+  const haftaninGunu = bugun.getDay(); // 0=Pazar, 1=Pzt...6=Cmt
+  if(haftaninGunu === 0){
+    // Pazar - hafta tamamlandı, arşivle
+    haftalikArsiveAtla();
+  }
+  
   speak('Mesai bitti. İyi istirahatler.','normal');
   toast('🌙 Mesai kapatıldı — '+ozet.mesafeKm+' km / '+formatHM(ozet.surusSuresi)+' sürüş','info',4500);
   
@@ -3988,6 +4035,62 @@ function formatHM(sn){
   const h = Math.floor(sn / 3600);
   const m = Math.floor((sn % 3600) / 60);
   return h + ':' + String(m).padStart(2,'0');
+}
+
+/* ★★★ HAFTALIK ARŞİVLEME — Pazar mesai bitiminde otomatik ★★★ */
+function haftalikArsiveAtla(){
+  if(!S.gunlukOzetler || !S.gunlukOzetler.length) return;
+  if(!S.haftalikRaporlar) S.haftalikRaporlar = [];
+  
+  // Bu haftanın başlangıç/bitiş tarihlerini hesapla
+  const bugun = new Date();
+  const haftaninGunu = bugun.getDay(); // 0=Pazar
+  const haftaBaslangic = new Date(bugun);
+  // Pazara göre Pazartesi'yi bul
+  haftaBaslangic.setDate(bugun.getDate() - 6);
+  const haftaBitis = new Date(bugun);
+  
+  const baslangicStr = haftaBaslangic.toLocaleDateString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric'});
+  const bitisStr = haftaBitis.toLocaleDateString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric'});
+  
+  // Bu haftanın günlük özetlerini topla
+  const buHaftaGunler = S.gunlukOzetler.filter(o => {
+    const t = new Date(o.tarih).getTime();
+    return t >= haftaBaslangic.setHours(0,0,0,0) && t <= bugun.getTime();
+  });
+  
+  // Bu haftadan zaten arşiv var mı kontrol et (çift kayıt önle)
+  const zatenVar = S.haftalikRaporlar.find(r => r.baslangic === baslangicStr && r.bitis === bitisStr);
+  if(zatenVar){
+    console.log('[Haftalık Arşiv] Bu hafta zaten arşivlendi');
+    return;
+  }
+  
+  const toplamSurus = buHaftaGunler.reduce((s,o) => s + (o.surusSuresi || 0), 0);
+  const toplamMesai = buHaftaGunler.reduce((s,o) => s + (o.mesaiSuresi || 0), 0);
+  const toplamMola = buHaftaGunler.reduce((s,o) => s + (o.mola || 0), 0);
+  const toplamKm = buHaftaGunler.reduce((s,o) => s + (o.mesafeKm || 0), 0);
+  
+  const rapor = {
+    baslangic: baslangicStr,
+    bitis: bitisStr,
+    timestamp: Date.now(),
+    gunler: buHaftaGunler,
+    toplamSurus: toplamSurus,
+    toplamMesai: toplamMesai,
+    toplamMola: toplamMola,
+    toplamKm: toplamKm
+  };
+  
+  S.haftalikRaporlar.unshift(rapor); // En yeni başa
+  if(S.haftalikRaporlar.length > 52) S.haftalikRaporlar.length = 52; // Max 1 yıl (52 hafta) sakla
+  
+  // Kullanıcıya bilgi
+  setTimeout(()=>{
+    if(typeof toast === 'function'){
+      toast('📦 Hafta arşivlendi: '+baslangicStr+' - '+bitisStr+' ('+toplamKm+' km)','ok',5000);
+    }
+  }, 2500);
 }
 
 /* ══ HAFTALIK SIFIR (manuel) ══ */
@@ -5552,6 +5655,16 @@ window.dtcoNavTo=function(page){
       const now = new Date();
       fd.value = now.toISOString().slice(0,16);
     }
+    // ★ Yakıt sayfası açıkken her 10 saniyede otomatik yenile
+    if(window._depoRenderInterval) clearInterval(window._depoRenderInterval);
+    window._depoRenderInterval = setInterval(()=>{
+      if(document.querySelector('#dpage-fuel.active')){
+        if(typeof depoRender === 'function') depoRender();
+      } else {
+        clearInterval(window._depoRenderInterval);
+        window._depoRenderInterval = null;
+      }
+    }, 10000);
   }
   if(page==='activity')dRenderLog();
   if(page==='settings'){
@@ -6877,30 +6990,251 @@ function dRenderCabotages(){
 
 /* ────────────────── HAFTALIK ────────────────── */
 window.dRenderWeekly=function(){
-  const wf=(g('d-week-from')||{}).value;
-  const weekStart=wf?new Date(wf):dGetWeekStart(new Date());
+  const weekStart=dGetWeekStart(new Date());
   const days=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'],today=todayStr();
   const cells=g('d-week-cells');if(!cells)return;
+  
+  // ★ Mesai geçmişinden bu hafta verileri çek
+  const ozetler = S.gunlukOzetler || [];
+  
   cells.innerHTML=days.map((d,i)=>{
     const day=new Date(weekStart);day.setDate(day.getDate()+i);
     const ds=day.toISOString().slice(0,10);
-    const h=D.entries.filter(e=>e.date===ds&&e.type==='drive').reduce((s,e)=>s+e.dur,0)/3600;
+    
+    // O güne ait mesai özeti var mı?
+    const gunOzeti = ozetler.find(o => o.tarih === ds);
+    
+    let h = 0; // sürüş saat
+    let km = 0;
+    if(gunOzeti){
+      h = (gunOzeti.surusSuresi || 0) / 3600;
+      km = gunOzeti.mesafeKm || 0;
+    }
+    
     const col=h>=9?'#ef4444':h>=7?'#f0b429':h>0?'#22c55e':'#3d5a7a';
-    return '<div class="d-wc'+(ds===today?' today':'')+'">'+
+    const tarihStr = day.getDate() + '.' + String(day.getMonth()+1).padStart(2,'0');
+    
+    // ★ TÜM GÜNLER TIKLANABİLİR (veri olsun olmasın)
+    return '<div class="d-wc'+(ds===today?' today':'')+'" '+
+      'onclick="window.dGunDetayAc(\''+ds+'\')" style="cursor:pointer;" '+
+      'title="Detay için tıkla">'+
       '<div class="d-wc-day">'+d+'</div>'+
-      '<div class="d-wc-h" style="color:'+col+'">'+( h>0?h.toFixed(1):'—')+'</div>'+
+      '<div style="font-size:.62rem;color:#7a92b0;margin-top:-2px;">'+tarihStr+'</div>'+
+      '<div class="d-wc-h" style="color:'+col+';font-size:1.1rem;font-weight:900;">'+( h>0?h.toFixed(1)+'h':'—')+'</div>'+
+      (km>0?'<div style="font-size:.62rem;color:#60a5fa;font-weight:700;">'+km+' km</div>':'')+
       '<div class="d-wc-dot" style="background:'+col+'"></div></div>';
   }).join('');
-  // Haftalık gauge
-  const ws=dGetWeekStart(wf?new Date(wf):new Date()).getTime();
-  const weekE=D.entries.filter(e=>e.start>=ws);
-  const wDrive=weekE.filter(e=>e.type==='drive').reduce((s,e)=>s+e.dur,0);
-  const wRest=weekE.filter(e=>e.type==='rest').reduce((s,e)=>s+e.dur,0);
-  const pw=((g('d-prev-week')||{}).value||0)*3600;
-  dSetGauge('dwg1','dwgf1',wDrive,D.settings.warnW*3600,50*3600,56*3600);
-  dSetGauge('dwg2','dwgf2',wDrive+pw,80*3600,82*3600,90*3600);
-  dSetRestG('dwg3','dwgf3',wRest,1440*60,2700*60);
+  
+  // ★ Haftalık sayaçlar - mesai geçmişinden hesapla
+  const ws=dGetWeekStart(new Date()).getTime();
+  const haftaSonu = new Date(weekStart); haftaSonu.setDate(haftaSonu.getDate()+7);
+  const haftaSonuMs = haftaSonu.getTime();
+  
+  // Bu haftanın özetleri
+  const buHaftaOzetler = ozetler.filter(o => {
+    const t = new Date(o.tarih).getTime();
+    return t >= ws && t < haftaSonuMs;
+  });
+  
+  const wDrive = buHaftaOzetler.reduce((s,o) => s + (o.surusSuresi || 0), 0);
+  const wRest = buHaftaOzetler.reduce((s,o) => s + (o.mola || 0), 0);
+  
+  // Önceki hafta verilerini al
+  const oncekiHaftaStart = new Date(weekStart); oncekiHaftaStart.setDate(oncekiHaftaStart.getDate()-7);
+  const oncekiHaftaOzetler = ozetler.filter(o => {
+    const t = new Date(o.tarih).getTime();
+    return t >= oncekiHaftaStart.getTime() && t < ws;
+  });
+  const pw = oncekiHaftaOzetler.reduce((s,o) => s + (o.surusSuresi || 0), 0);
+  
+  dSetGauge('dwg1','dwgf1',wDrive,50*3600,55*3600,56*3600);
+  dSetGauge('dwg2','dwgf2',wDrive+pw,80*3600,85*3600,90*3600);
+  dSetRestG('dwg3','dwgf3',wRest,45*3600,90*3600);
+  
+  // ★ Arşiv listesini de yenile
+  if(typeof window.haftalikArsivRender === 'function') window.haftalikArsivRender();
 };
+
+/* ★ GÜN DETAY AÇMA — Bir güne tıklandığında detayını alt panelde göster */
+window.dGunDetayAc = function(tarih){
+  const ozetler = S.gunlukOzetler || [];
+  const gun = ozetler.find(o => o.tarih === tarih);
+  
+  const panel = document.getElementById('d-gun-detay-panel');
+  const baslik = document.getElementById('d-gun-detay-baslik');
+  const icerik = document.getElementById('d-gun-detay-icerik');
+  
+  if(!panel) return;
+  
+  // ★ Tarihten gün adı çıkar
+  const tarihObj = new Date(tarih);
+  const gunAdlari = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  const gunAdi = gunAdlari[tarihObj.getDay()];
+  const tarihGosterim = tarihObj.toLocaleDateString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric'});
+  
+  baslik.textContent = '📋 ' + gunAdi + ' ' + tarihGosterim;
+  
+  // ★ VERİ YOKSA — Boş gün şablonu
+  if(!gun){
+    icerik.innerHTML = 
+      '<div style="text-align:center;padding:24px 12px;">'+
+        '<div style="font-size:3rem;margin-bottom:10px;opacity:0.5;">📭</div>'+
+        '<div style="font-size:1rem;color:var(--text);font-weight:700;margin-bottom:4px;">Bu gün için kayıt yok</div>'+
+        '<div style="font-size:.82rem;color:var(--sub);line-height:1.5;">Mesai bittiğinde otomatik kaydedilir<br><span style="opacity:0.7;">Henüz çalışılmamış veya yatış molası verilmemiş</span></div>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;opacity:0.5;">'+
+        '<div class="d-stat-box">'+
+          '<div class="d-s-lbl">🚛 SÜRÜŞ</div>'+
+          '<div class="d-s-val">0:00</div>'+
+        '</div>'+
+        '<div class="d-stat-box">'+
+          '<div class="d-s-lbl">📅 MESAİ</div>'+
+          '<div class="d-s-val">0:00</div>'+
+        '</div>'+
+        '<div class="d-stat-box">'+
+          '<div class="d-s-lbl">☕ MOLA</div>'+
+          '<div class="d-s-val">0:00</div>'+
+        '</div>'+
+        '<div class="d-stat-box">'+
+          '<div class="d-s-lbl">📏 MESAFE</div>'+
+          '<div class="d-s-val">0 km</div>'+
+        '</div>'+
+      '</div>';
+    panel.style.display = 'block';
+    setTimeout(()=>{ panel.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 100);
+    return;
+  }
+  
+  // ★ VERİ VAR — Normal detay göster
+  const rota = (gun.baslangic || '?') + ' → ' + (gun.bitis || '?');
+  
+  icerik.innerHTML = 
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">'+
+      '<div class="d-stat-box">'+
+        '<div class="d-s-lbl">🚛 SÜRÜŞ</div>'+
+        '<div class="d-s-val">'+formatHM(gun.surusSuresi)+'</div>'+
+      '</div>'+
+      '<div class="d-stat-box">'+
+        '<div class="d-s-lbl">📅 MESAİ</div>'+
+        '<div class="d-s-val">'+formatHM(gun.mesaiSuresi)+'</div>'+
+      '</div>'+
+      '<div class="d-stat-box">'+
+        '<div class="d-s-lbl">☕ MOLA</div>'+
+        '<div class="d-s-val">'+formatHM(gun.mola)+'</div>'+
+      '</div>'+
+      '<div class="d-stat-box">'+
+        '<div class="d-s-lbl">📏 MESAFE</div>'+
+        '<div class="d-s-val">'+(gun.mesafeKm || 0).toLocaleString('tr-TR')+' km</div>'+
+      '</div>'+
+    '</div>'+
+    '<div style="background:var(--panel3);padding:10px 12px;border-radius:6px;margin-bottom:8px;">'+
+      '<div style="font-size:.7rem;color:var(--sub);letter-spacing:1px;font-weight:700;margin-bottom:4px;">🌍 ROTA</div>'+
+      '<div style="font-family:var(--mono);font-size:1rem;">'+rota+'</div>'+
+    '</div>'+
+    '<div style="background:var(--panel3);padding:10px 12px;border-radius:6px;">'+
+      '<div style="font-size:.7rem;color:var(--sub);letter-spacing:1px;font-weight:700;margin-bottom:4px;">💤 İSTİRAHAT TİPİ</div>'+
+      '<div style="font-family:var(--mono);font-size:1rem;">'+(gun.istirahatTipi || '—')+'</div>'+
+    '</div>';
+  
+  panel.style.display = 'block';
+  
+  // Panele kaydır
+  setTimeout(()=>{
+    panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }, 100);
+};
+
+/* ★ HAFTALIK ARŞİV RENDER — Geçmiş haftaların listesi */
+window.haftalikArsivRender = function(){
+  const arsivler = S.haftalikRaporlar || [];
+  const liste = document.getElementById('haftalik-arsiv-liste');
+  const bos = document.getElementById('haftalik-arsiv-bos');
+  if(!liste) return;
+  
+  if(arsivler.length === 0){
+    liste.innerHTML = '';
+    if(bos) bos.style.display = 'block';
+    return;
+  }
+  
+  if(bos) bos.style.display = 'none';
+  
+  liste.innerHTML = arsivler.map((r,i) => {
+    const tarihAraligi = r.baslangic + ' - ' + r.bitis;
+    const gun = r.gunler ? r.gunler.length : 0;
+    return '<div style="background:var(--panel3);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">'+
+      '<div style="flex:1;min-width:200px;">'+
+        '<div style="font-family:var(--mono);font-size:.95rem;font-weight:700;color:#2563eb;">📅 '+tarihAraligi+'</div>'+
+        '<div style="font-size:.78rem;color:var(--sub);margin-top:4px;">'+
+          gun+' gün / '+formatHM(r.toplamSurus)+' sürüş / '+(r.toplamKm||0).toLocaleString('tr-TR')+' km'+
+        '</div>'+
+      '</div>'+
+      '<div style="display:flex;gap:6px;">'+
+        '<button class="d-btn d-btn-s" onclick="window.haftalikArsivCSVIndir('+i+')" style="font-size:.8rem;padding:6px 10px;">📥 CSV</button>'+
+        '<button class="d-btn d-btn-d" onclick="window.haftalikArsivSil('+i+')" style="font-size:.8rem;padding:6px 10px;">🗑</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+};
+
+/* ★ ARŞİVDEN CSV İNDİR */
+window.haftalikArsivCSVIndir = function(idx){
+  const arsivler = S.haftalikRaporlar || [];
+  const rapor = arsivler[idx];
+  if(!rapor){
+    if(typeof toast === 'function') toast('Rapor bulunamadı','warn');
+    return;
+  }
+  
+  let csv = 'HAFTALIK RAPOR\n';
+  csv += 'Hafta;'+rapor.baslangic+' - '+rapor.bitis+'\n';
+  csv += 'Toplam Sürüş;'+formatHM(rapor.toplamSurus)+'\n';
+  csv += 'Toplam Mesai;'+formatHM(rapor.toplamMesai)+'\n';
+  csv += 'Toplam Mola;'+formatHM(rapor.toplamMola)+'\n';
+  csv += 'Toplam Mesafe;'+(rapor.toplamKm||0)+' km\n';
+  csv += '\n';
+  csv += 'GÜNLÜK DETAY\n';
+  csv += 'Tarih;Sürüş;Mesai;Mola;Mesafe (km);Başlangıç;Bitiş;İstirahat\n';
+  
+  (rapor.gunler || []).forEach(g => {
+    csv += [
+      g.tarih || '',
+      formatHM(g.surusSuresi),
+      formatHM(g.mesaiSuresi),
+      formatHM(g.mola),
+      (g.mesafeKm || 0),
+      g.baslangic || '',
+      g.bitis || '',
+      g.istirahatTipi || ''
+    ].join(';') + '\n';
+  });
+  
+  try {
+    const blob = new Blob(['\uFEFF' + csv], {type:'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'haftalik-rapor-'+rapor.baslangic+'_'+rapor.bitis+'.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    if(typeof toast === 'function') toast('📥 Haftalık CSV indirildi','ok');
+  } catch(e){
+    if(typeof toast === 'function') toast('İndirme hatası','warn');
+  }
+};
+
+/* ★ ARŞİVDEN SİL */
+window.haftalikArsivSil = function(idx){
+  if(!window.confirm('Bu haftalık rapor silinsin mi?\nBu işlem geri alınamaz.')) return;
+  if(!S.haftalikRaporlar) return;
+  S.haftalikRaporlar.splice(idx, 1);
+  save();
+  haftalikArsivRender();
+  if(typeof toast === 'function') toast('🗑 Rapor silindi','info');
+};
+
 function dGetWeekStart(d){const dt=new Date(d),day=dt.getDay();dt.setDate(dt.getDate()+(day===0?-6:1-day));dt.setHours(0,0,0,0);return dt;}
 
 /* ═══════════════════════════════════════════════════
@@ -7110,6 +7444,50 @@ function depoRender(){
     } else {
       bar.style.background = 'linear-gradient(90deg,#16a34a,#22c55e)';
     }
+  }
+  
+  // ★ TAHMİNİ HESAPLAMA KARTI
+  const tahminKart = e('depo-tahmin-kart');
+  const tahminYazi = e('depo-tahmin-yazi');
+  if(tahminKart && tahminYazi && mevcut > 0 && tuketim > 0){
+    tahminKart.style.display = 'block';
+    
+    // 100 km'de ne kadar tüketir
+    const yuz100Tuketim = tuketim;
+    
+    // %50'ye düşene kadar kaç km
+    const yuz50Yakit = kapasite * 0.5;
+    const yuz50KadarKm = mevcut > yuz50Yakit ? ((mevcut - yuz50Yakit) / tuketim) * 100 : 0;
+    
+    // %25'e düşene kadar kaç km
+    const yuz25Yakit = kapasite * 0.25;
+    const yuz25KadarKm = mevcut > yuz25Yakit ? ((mevcut - yuz25Yakit) / tuketim) * 100 : 0;
+    
+    // Bitene kadar kaç km
+    const biteneKm = (mevcut / tuketim) * 100;
+    
+    let yaziHTML = '';
+    yaziHTML += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+    yaziHTML += '<div style="padding:6px;background:rgba(255,255,255,.03);border-radius:4px;"><span style="color:var(--sub);font-size:.78rem;">100 km\'de:</span><br><b style="color:var(--orange);font-family:var(--mono);">'+yuz100Tuketim.toFixed(1)+' L tüketir</b></div>';
+    if(yuz50KadarKm > 0){
+      yaziHTML += '<div style="padding:6px;background:rgba(255,255,255,.03);border-radius:4px;"><span style="color:var(--sub);font-size:.78rem;">%50\'ye düşene kadar:</span><br><b style="color:var(--green);font-family:var(--mono);">'+Math.floor(yuz50KadarKm)+' km</b></div>';
+    }
+    if(yuz25KadarKm > 0){
+      yaziHTML += '<div style="padding:6px;background:rgba(255,255,255,.03);border-radius:4px;"><span style="color:var(--sub);font-size:.78rem;">%25\'e düşene kadar:</span><br><b style="color:var(--gold);font-family:var(--mono);">'+Math.floor(yuz25KadarKm)+' km</b></div>';
+    }
+    yaziHTML += '<div style="padding:6px;background:rgba(239,68,68,.08);border-radius:4px;border:1px solid rgba(239,68,68,.3);"><span style="color:var(--sub);font-size:.78rem;">Bitene kadar:</span><br><b style="color:var(--red);font-family:var(--mono);">'+Math.floor(biteneKm)+' km</b></div>';
+    yaziHTML += '</div>';
+    
+    // İhtar mesajı
+    if(yuzde < D.depo.uyariYuzde){
+      yaziHTML += '<div style="margin-top:8px;padding:8px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);border-radius:4px;color:var(--red);font-weight:700;font-size:.85rem;">⚠️ Yakıt seviyesi düşük! Bir an önce dolum yapın.</div>';
+    } else if(yuzde < 35){
+      yaziHTML += '<div style="margin-top:8px;padding:8px;background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.4);border-radius:4px;color:var(--orange);font-weight:700;font-size:.85rem;">⚠️ Yakıt seviyesi azalıyor — rotanızda dolum noktası planlamayı düşünün.</div>';
+    }
+    
+    tahminYazi.innerHTML = yaziHTML;
+  } else if(tahminKart) {
+    tahminKart.style.display = 'none';
   }
 }
 window.depoRender = depoRender;
