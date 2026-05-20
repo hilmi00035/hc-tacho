@@ -8729,9 +8729,12 @@ window.gpsBaslat = function(){
         if(S.log.length > 300) S.log.shift();
       }
     }
-    S.mode = null;
-    S.modeStartMs = null;
-    console.log('[GPS] Önceki aktif mod durduruldu, hareket beklenecek');
+    // ★ DEĞİŞTİ: NULL yerine ÇALIŞMA moduna geç (sayaçlar hep çalışsın)
+    // GPS hareket görünce SÜRÜŞ'e otomatik geçecek
+    S.mode = 'calisma';
+    S.modeStartMs = Date.now();
+    S.lastTickMs = Date.now();
+    console.log('[GPS] GPS açıldı - Çalışma moduna geçildi, hareket halinde sürüşe geçecek');
   }
   
   if(typeof window.startTicker === 'function') window.startTicker();
