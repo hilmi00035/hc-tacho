@@ -2135,6 +2135,11 @@ select{font:inherit}
       <div id="hiz-ihlal-sayisi" style="font-family:var(--mono);font-size:2.6rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:6px;">0</div>
       <div style="font-size:.8rem;color:#a8c8a8;font-family:var(--sans);font-weight:700;margin-top:2px;">90+ km/h</div>
     </div>
+    <div style="flex:1;background:#0e1622;border:1px solid #1c3a5a;border-radius:6px;padding:12px 6px;text-align:center;">
+      <div style="font-size:.78rem;color:#a8c0e0;letter-spacing:1px;font-family:var(--sans);font-weight:700;">TOPLAM KM</div>
+      <div id="hiz-toplam-km" style="font-family:var(--mono);font-size:2.6rem;font-weight:900;color:#38bdf8;line-height:1.1;margin-top:6px;">0</div>
+      <div style="font-size:.8rem;color:#a8c0e0;font-family:var(--sans);font-weight:700;margin-top:2px;">km</div>
+    </div>
   </div>
   
   <div style="padding:0 8px 8px">
@@ -8715,6 +8720,18 @@ function hizKartGuncelle(hiz){
         ihlalKutu.style.boxShadow = 'none';
       }
     }
+  }
+
+  // ★ TOPLAM KM — anlık güncelleme
+  const kmEl = document.getElementById('hiz-toplam-km');
+  if(kmEl){
+    const kmDeger = typeof toplamMesafe === 'number' ? (toplamMesafe / 1000) : 0;
+    if(kmDeger >= 10){
+      kmEl.textContent = Math.round(kmDeger);
+    } else {
+      kmEl.textContent = kmDeger.toFixed(1);
+    }
+    kmEl.style.color = kmDeger > 0 ? '#38bdf8' : 'var(--sub)';
   }
 }
 window.hizKartGuncelle = hizKartGuncelle;
