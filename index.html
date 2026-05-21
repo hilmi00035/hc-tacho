@@ -2769,6 +2769,29 @@ select{font:inherit}
   <div class="d-card">
     <div class="d-card-hd">📋 Mesai Geçmişi (Son 60 Gün)</div>
     <div class="d-al-i d-alert">ℹ️ Her yatış molasında otomatik kaydedilir. Tarih, sürüş süresi ve mesafe.</div>
+    
+    <!-- ★ AKTİF GÜN KARTI - Henüz mesai bitmediyse bugünkü canlı veri -->
+    <div id="mesai-aktif-kart" style="display:none;margin-bottom:14px;padding:12px;background:linear-gradient(135deg,#0e1828,#1a2840);border:2px solid #2563eb;border-radius:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-family:var(--sans);font-size:.78rem;color:#60a5fa;letter-spacing:1.5px;font-weight:900;">🔴 BUGÜN — AKTİF SÜRÜŞ (Mesai bitmedi)</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div style="text-align:center;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.3);border-radius:6px;padding:10px;">
+          <div style="font-size:.62rem;color:#a0b8d0;font-weight:700;letter-spacing:1px;margin-bottom:4px;">🚛 SÜRÜŞ</div>
+          <div id="mg-aktif-surus" style="font-family:var(--mono);font-size:1.4rem;font-weight:900;color:#60a5fa;">0:00</div>
+        </div>
+        <div style="text-align:center;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.3);border-radius:6px;padding:10px;">
+          <div style="font-size:.62rem;color:#a0b8d0;font-weight:700;letter-spacing:1px;margin-bottom:4px;">📅 MESAİ</div>
+          <div id="mg-aktif-mesai" style="font-family:var(--mono);font-size:1.4rem;font-weight:900;color:#60a5fa;">0:00</div>
+        </div>
+        <div style="text-align:center;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:10px;">
+          <div style="font-size:.62rem;color:#a0b8d0;font-weight:700;letter-spacing:1px;margin-bottom:4px;">📏 MESAFE</div>
+          <div id="mg-aktif-km" style="font-family:var(--mono);font-size:1.4rem;font-weight:900;color:#22c55e;">0 km</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:.72rem;color:var(--sub);text-align:center;">💡 Mesai bitirince geçmişe kaydedilecek</div>
+    </div>
+    
     <div id="mesai-gecmisi-toplam" style="margin-bottom:14px;padding:10px;background:var(--panel3);border-radius:6px;display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;">
       <div style="text-align:center;">
         <div style="font-size:.72rem;color:var(--sub);letter-spacing:1px;font-weight:700;">TOPLAM GÜN</div>
@@ -5729,6 +5752,26 @@ window.mesaiGecmisiRender = function(){
   
   const ozetler = S.gunlukOzetler || [];
   
+  // ★ AKTİF GÜN BİLGİSİ — Eğer henüz mesai bitmediyse bugünkü canlı veriyi göster
+  const aktifKart = document.getElementById('mesai-aktif-kart');
+  if(aktifKart && S.stats){
+    const aktifSurus = S.stats.drive || 0;
+    const aktifMesai = S.stats.workday || 0;
+    const aktifKm = typeof toplamMesafe === 'number' ? Math.round(toplamMesafe / 1000) : 0;
+    
+    if(aktifSurus > 0 || aktifKm > 0){
+      aktifKart.style.display = 'block';
+      const aktifSurusEl = document.getElementById('mg-aktif-surus');
+      const aktifMesaiEl = document.getElementById('mg-aktif-mesai');
+      const aktifKmEl = document.getElementById('mg-aktif-km');
+      if(aktifSurusEl) aktifSurusEl.textContent = formatHM(aktifSurus);
+      if(aktifMesaiEl) aktifMesaiEl.textContent = formatHM(aktifMesai);
+      if(aktifKmEl) aktifKmEl.textContent = aktifKm + ' km';
+    } else {
+      aktifKart.style.display = 'none';
+    }
+  }
+  
   // Boş ise
   if(ozetler.length === 0){
     tbody.innerHTML = '';
@@ -7081,13 +7124,22 @@ window.dRenderWeekly=function(){
     
     let h = 0; // sürüş saat
     let km = 0;
+    let aktif = false;
+    
     if(gunOzeti){
+      // Geçmiş veri var (mesai bitmiş)
       h = (gunOzeti.surusSuresi || 0) / 3600;
       km = gunOzeti.mesafeKm || 0;
+    } else if(ds === today && S.stats){
+      // ★ BUGÜN ve henüz mesai bitmemiş → AKTİF veriden çek
+      h = (S.stats.drive || 0) / 3600;
+      km = typeof toplamMesafe === 'number' ? Math.round(toplamMesafe / 1000) : 0;
+      if(h > 0 || km > 0) aktif = true;
     }
     
     const col=h>=9?'#ef4444':h>=7?'#f0b429':h>0?'#22c55e':'#3d5a7a';
     const tarihStr = day.getDate() + '.' + String(day.getMonth()+1).padStart(2,'0');
+    const aktifEtiket = aktif ? '<div style="font-size:.58rem;color:#60a5fa;font-weight:900;margin-top:1px;">🔴 AKTİF</div>' : '';
     
     // ★ TÜM GÜNLER TIKLANABİLİR (veri olsun olmasın)
     return '<div class="d-wc'+(ds===today?' today':'')+'" '+
@@ -7097,6 +7149,7 @@ window.dRenderWeekly=function(){
       '<div style="font-size:.62rem;color:#7a92b0;margin-top:-2px;">'+tarihStr+'</div>'+
       '<div class="d-wc-h" style="color:'+col+';font-size:1.1rem;font-weight:900;">'+( h>0?h.toFixed(1)+'h':'—')+'</div>'+
       (km>0?'<div style="font-size:.62rem;color:#60a5fa;font-weight:700;">'+km+' km</div>':'')+
+      aktifEtiket+
       '<div class="d-wc-dot" style="background:'+col+'"></div></div>';
   }).join('');
   
@@ -9047,50 +9100,60 @@ function gpsGuncelle(pos){
     hiz = sonHiz > 0 ? sonHiz : 0;
   }
   
-  // ★★★ TOMTOM BENZERİ YUMUŞATMA (SMOOTHING) ★★★
-  // Sorun: GPS her saniyede 90↔91↔92 sıçraması yapabilir
-  // Çözüm: Son 5 değerin ortalaması + sıçrama filtreleme
+  // ★ AKILLI ANTI-SIÇRAMA — Sıçrama tespit edilirse 2 SANİYE BEKLE
+  // Eğer 2 saniye sonra hala yüksek/düşük ise → GERÇEK hız, kabul et
+  // Yoksa → GPS sıçraması, eski değeri koru
   
-  if(!window._hizGecmisi) window._hizGecmisi = [];
+  if(!window._hizBekleyen) window._hizBekleyen = null;
+  if(!window._hizBekleyenZaman) window._hizBekleyenZaman = 0;
   if(!window._hizSonZaman) window._hizSonZaman = 0;
   
   const simdiMs = Date.now();
   const gecenMs = simdiMs - window._hizSonZaman;
   window._hizSonZaman = simdiMs;
   
-  // ★ ANI SIÇRAMA TESPİTİ
-  // Eğer son okuma ile şu anki arasında 1 saniyede 5+ km/h fark varsa → şüpheli
-  // Kamyon 1 saniyede 5 km/h ivmelenmez/yavaşlamaz (sert fren hariç)
-  if(sonHiz > 0 && hiz > 0 && gecenMs < 2000){
+  // Önemli fark: 1 saniyede 8+ km/h değişim = ŞÜPHELİ
+  if(sonHiz > 5 && hiz > 0 && gecenMs > 0 && gecenMs < 2500){
     const fark = Math.abs(hiz - sonHiz);
-    if(fark >= 5){
-      // 1 saniyede 5+ km/h değişim = GPS sıçraması
-      // Önceki değere yakın bir orta nokta al (yumuşat)
-      hiz = sonHiz + (hiz > sonHiz ? 1 : -1) * 1.5;
-    }
-  }
-  
-  // ★ HAREKETLİ ORTALAMA (Son 5 değer)
-  // Sadece 5+ km/h ve normal sürüş aralığında uygula (park halinde yumuşatma yapma)
-  if(hiz >= 5){
-    window._hizGecmisi.push(hiz);
-    if(window._hizGecmisi.length > 5) window._hizGecmisi.shift();
     
-    if(window._hizGecmisi.length >= 3){
-      // Aritmetik ortalama
-      const ortalama = window._hizGecmisi.reduce((a,b) => a+b, 0) / window._hizGecmisi.length;
-      hiz = ortalama;
+    if(fark >= 8){
+      // ŞÜPHELİ değer geldi
+      if(window._hizBekleyen === null){
+        // İlk şüpheli okuma - bekleme moduna gir
+        window._hizBekleyen = hiz;
+        window._hizBekleyenZaman = simdiMs;
+        // Eski değeri kullan (henüz onay yok)
+        hiz = sonHiz;
+        console.log('[GPS] Şüpheli sıçrama bekletildi: '+sonHiz+' → '+window._hizBekleyen);
+      } else {
+        // Bekleme modundayız, 2 saniye geçti mi?
+        const bekleSn = (simdiMs - window._hizBekleyenZaman) / 1000;
+        if(bekleSn >= 2){
+          // 2 saniye doldu - bu hız ile bekleyen yakınsa kabul et
+          const yeniFark = Math.abs(hiz - window._hizBekleyen);
+          if(yeniFark < 10){
+            // Onaylandı - gerçek hız
+            console.log('[GPS] Sıçrama onaylandı (gerçek hız): '+hiz);
+            window._hizBekleyen = null;
+            // hiz olduğu gibi geçer
+          } else {
+            // Hala değişiyor - sıçrama
+            hiz = sonHiz;
+            window._hizBekleyen = null;
+          }
+        } else {
+          // Hala bekliyoruz
+          hiz = sonHiz;
+        }
+      }
+    } else {
+      // Normal değişim - bekleme modunu temizle
+      window._hizBekleyen = null;
     }
-  } else {
-    // Düşük hızlarda geçmişi temizle (kalkışta yumuşatma yok = hızlı tepki)
-    window._hizGecmisi = [];
   }
   
-  // ★ HİSTERİZ (91'de takılma çözümü)
-  // Hız 90+ olduğunda 88'in altına düşene kadar uyarı devam ediyordu
-  // GPS rounded değer gönderirse 91↔90 arası sürekli sallanabilir
-  // Çözüm: 0.5 km/h hassasiyetle yuvarla
-  hiz = Math.round(hiz * 2) / 2; // 0.5 km/h hassasiyet
+  // Tam sayıya yuvarla
+  hiz = Math.round(hiz);
   
   sonHiz = hiz;
   
