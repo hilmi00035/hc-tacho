@@ -5499,19 +5499,15 @@ function bindEvents(){
   });
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){
-      // ★ DEĞİŞTİ: Sürüş modunu KORUYORUZ artık (çalışma'ya çevirmiyoruz)
-      // SEBEP: Araç GPS açıkken sürüş yapıyorsa sürüş sayılmalı
-      // GPS arka planda donsa bile zaten kullanıcı sürüş yaptığı için 
-      // ön plana döndüğünde gerçek sürüş süresi sayaçta görünür
-      
       // Arka plana geçince: sayaçları hesapla ve kaydet (mod KORUNUR)
       sync(); save();
-      
-      // Son zamanı işaretle
+      // ★ KM arka plan: hız ve mevcut mesafeyi sakla
       try {
         localStorage.setItem('arkapan_zamani', String(Date.now()));
         localStorage.setItem('arkapan_mode', S.mode || '');
         localStorage.setItem('arkapan_gps', window.gpsAktif ? '1' : '0');
+        localStorage.setItem('arkapan_hiz', String(typeof sonHiz === 'number' ? sonHiz : 0));
+        localStorage.setItem('arkapan_mesafe', String(typeof toplamMesafe === 'number' ? toplamMesafe : 0));
       } catch(e){}
     } else {
       // Ön plana geri gelince: ne kadar süre arkada kaldık?
@@ -5520,26 +5516,52 @@ function bindEvents(){
         const t = parseFloat(localStorage.getItem('arkapan_zamani')) || 0;
         if(t) arkadaKalanSn = Math.floor((Date.now() - t) / 1000);
       } catch(e){}
-      
-      // sync ile arka planda geçen süre mevcut moda eklenir (sürüş ise sürüşe, çalışma ise çalışmaya)
+
+      // ★ KM arka plan tahmini: GPS aktifti ve araç hareket halindeydi
+      if(arkadaKalanSn > 5 && window.gpsAktif){
+        try {
+          const arkaHiz = parseFloat(localStorage.getItem('arkapan_hiz')) || 0;
+          const arkaMesafe = parseFloat(localStorage.getItem('arkapan_mesafe')) || 0;
+          if(arkaHiz > 2){
+            const ekMetr = (arkaHiz / 3.6) * arkadaKalanSn;
+            toplamMesafe = arkaMesafe + ekMetr;
+            try { localStorage.setItem('gps_mesafe', String(Math.round(toplamMesafe))); } catch(e){}
+            const ekKmStr = (ekMetr / 1000).toFixed(1);
+            setTimeout(()=>{
+              if(typeof toast === 'function')
+                toast('\u{1F4F1} Arka plan: ~'+ekKmStr+' km eklendi ('+Math.floor(arkadaKalanSn/60)+' dk \u00d7 '+Math.round(arkaHiz)+' km/h)','info',4500);
+            }, 900);
+          } else {
+            toplamMesafe = arkaMesafe; // Duruyordu, sadece geri yükle
+          }
+        } catch(e){}
+        // KM kartını güncelle
+        const kmEl = document.getElementById('hiz-toplam-km');
+        if(kmEl){
+          const kmD = (typeof toplamMesafe === 'number' ? toplamMesafe : 0) / 1000;
+          kmEl.textContent = kmD >= 10 ? Math.round(kmD) : kmD.toFixed(1);
+          kmEl.style.color = kmD > 0 ? '#38bdf8' : 'var(--sub)';
+        }
+      }
+
+      // sync ile arka planda geçen süre mevcut moda eklenir
       sync();
       S.lastTickMs = Date.now();
-      
+
       // Bilgilendirme (5 dk üzeri)
       if(arkadaKalanSn > 300 && window.gpsAktif){
         const dkk = Math.floor(arkadaKalanSn/60);
         setTimeout(()=>{
           if(typeof toast === 'function'){
-            const modAdi = S.mode === 'surus' ? '🚛 Sürüş' : (S.mode === 'calisma' ? '⚙ Çalışma' : (S.mode === 'dinlenme' ? '🛌 Mola' : ''));
-            toast('📱 ' + dkk + ' dk arka plan — '+modAdi+' moduna eklendi','info',4000);
+            const modAdi = S.mode === 'surus' ? '\u{1F69B} Sürüş' : (S.mode === 'calisma' ? '\u2699 Çalışma' : (S.mode === 'dinlenme' ? '\u{1F6CC} Mola' : ''));
+            toast('\u{1F4F1} ' + dkk + ' dk arka plan \u2014 '+modAdi+' moduna eklendi','info',4000);
           }
         }, 800);
-        // GPS'i yenile (eğer kapatıldıysa tekrar başlat)
         if(typeof window.gpsBaslat === 'function' && !document.getElementById('gps-durum-bar')?.classList.contains('aktif')){
           setTimeout(()=>{ window.gpsBaslat(); }, 1500);
         }
       }
-      
+
       renderAll();
     }
   });
