@@ -2135,10 +2135,11 @@ select{font:inherit}
       <div id="hiz-ihlal-sayisi" style="font-family:var(--mono);font-size:2.6rem;font-weight:900;color:#22c55e;line-height:1.1;margin-top:6px;">0</div>
       <div style="font-size:.8rem;color:#a8c8a8;font-family:var(--sans);font-weight:700;margin-top:2px;">90+ km/h</div>
     </div>
-    <div style="flex:1;background:#0e1622;border:1px solid #1c3a5a;border-radius:6px;padding:12px 6px;text-align:center;">
+    <div style="flex:1;background:#0e1622;border:1px solid #1c3a5a;border-radius:6px;padding:8px 4px;text-align:center;">
       <div style="font-size:.78rem;color:#a8c0e0;letter-spacing:1px;font-family:var(--sans);font-weight:700;">TOPLAM KM</div>
-      <div id="hiz-toplam-km" style="font-family:var(--mono);font-size:2.6rem;font-weight:900;color:#38bdf8;line-height:1.1;margin-top:6px;">0</div>
-      <div style="font-size:.8rem;color:#a8c0e0;font-family:var(--sans);font-weight:700;margin-top:2px;">km</div>
+      <div id="hiz-toplam-km" style="font-family:var(--mono);font-size:2.6rem;font-weight:900;color:#38bdf8;line-height:1.1;margin-top:4px;">0</div>
+      <div style="font-size:.8rem;color:#a8c0e0;font-family:var(--sans);font-weight:700;margin-top:1px;">km</div>
+      <button onclick="window.kmSifirla()" style="margin-top:4px;background:#0a2030;border:1px solid #38bdf8;border-radius:4px;color:#38bdf8;font-size:.58rem;font-family:var(--sans);font-weight:700;padding:2px 4px;cursor:pointer;letter-spacing:.3px;width:92%;">&#8635; KAYDET &amp; SIFIRLA</button>
     </div>
   </div>
   
@@ -8726,15 +8727,68 @@ function hizKartGuncelle(hiz){
   const kmEl = document.getElementById('hiz-toplam-km');
   if(kmEl){
     const kmDeger = typeof toplamMesafe === 'number' ? (toplamMesafe / 1000) : 0;
-    if(kmDeger >= 10){
-      kmEl.textContent = Math.round(kmDeger);
-    } else {
-      kmEl.textContent = kmDeger.toFixed(1);
-    }
+    kmEl.textContent = kmDeger >= 10 ? Math.round(kmDeger) : kmDeger.toFixed(1);
     kmEl.style.color = kmDeger > 0 ? '#38bdf8' : 'var(--sub)';
   }
 }
 window.hizKartGuncelle = hizKartGuncelle;
+
+/* ── KM KAYDET & SIFIRLA ── */
+window.kmSifirla = function(){
+  const kmSu = typeof toplamMesafe === 'number' ? Math.round(toplamMesafe / 1000) : 0;
+  if(kmSu <= 0){
+    if(typeof window.toast === 'function') window.toast('ℹ️ Sayılan km yok, sıfırlanacak bir şey yok.','info',2500);
+    return;
+  }
+
+  // Onay
+  if(!confirm(kmSu + ' km günlük çalışmaya eklensin ve sayaç sıfırlansın?')) return;
+
+  // Günlük özetlere ekle
+  const S = getS();
+  if(S){
+    if(!S.gunlukOzetler) S.gunlukOzetler = [];
+    const bugun = new Date();
+    const bugunKey = bugun.getFullYear() + '-' +
+      String(bugun.getMonth()+1).padStart(2,'0') + '-' +
+      String(bugun.getDate()).padStart(2,'0');
+
+    // Bugünün kaydı varsa mesafeye ekle, yoksa yeni oluştur
+    const mevcutIdx = S.gunlukOzetler.findIndex(o => o.tarih === bugunKey);
+    if(mevcutIdx >= 0){
+      S.gunlukOzetler[mevcutIdx].mesafeKm = (S.gunlukOzetler[mevcutIdx].mesafeKm || 0) + kmSu;
+      if(typeof window.toast === 'function')
+        window.toast('✅ ' + kmSu + ' km mevcut güne eklendi → Toplam: ' + S.gunlukOzetler[mevcutIdx].mesafeKm + ' km','ok',3500);
+    } else {
+      const ozet = {
+        tarih: bugunKey,
+        tarihGosterim: bugun.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',weekday:'short'}),
+        surusSuresi: S.stats ? (S.stats.drive || 0) : 0,
+        mesaiSuresi: S.stats ? (S.stats.workday || 0) : 0,
+        mola: S.stats ? (S.stats.pause || 0) : 0,
+        mesafeKm: kmSu,
+        baslangic: (S.selections && S.selections.startCountry) || '',
+        bitis: '',
+        istirahatTipi: '-',
+        timestamp: Date.now()
+      };
+      S.gunlukOzetler.unshift(ozet);
+      if(S.gunlukOzetler.length > 60) S.gunlukOzetler.length = 60;
+      if(typeof window.toast === 'function')
+        window.toast('✅ ' + kmSu + ' km günlük kayda eklendi','ok',3000);
+    }
+    if(typeof window.save === 'function') window.save();
+  }
+
+  // Sayacı sıfırla
+  toplamMesafe = 0;
+  try { localStorage.setItem('gps_mesafe','0'); } catch(e){}
+
+  // Kartı güncelle
+  const kmEl = document.getElementById('hiz-toplam-km');
+  if(kmEl){ kmEl.textContent = '0'; kmEl.style.color = 'var(--sub)'; }
+};
+
 function durusEsik(){return 0;} // Anında tepki
 
 /* ── GPS Başlat ── */
@@ -8898,7 +8952,7 @@ window.gpsDurdur = function(){
   sonKonum = null;
   durusBaslangic = null;
   durusSoruldu = false;
-  toplamMesafe = 0;
+  // toplamMesafe — KORUNUYOR: Manuel sıfırla butonu ile sıfırlanır
   sonModDegisikligi = 0;
   durusOnayMs = 0;
   gpsSonyalKayipMs = 0;
@@ -8907,11 +8961,11 @@ window.gpsDurdur = function(){
   gpsHizGecmisi = []; // ★ Hız geçmişini temizle
   gpsKonumGecmisi = [];
   
-  // localStorage'tan da temizle
+  // localStorage'tan da temizle (mesafe hariç)
   try {
-    localStorage.removeItem('gps_mesafe');
     localStorage.removeItem('gps_son_zaman');
     localStorage.setItem('gps_aktif', '0');
+    // gps_mesafe localStorage'da bırakılıyor → yeniden açınca yüklenir
   } catch(e){}
   
   const bar=document.getElementById('gps-durum-bar');
