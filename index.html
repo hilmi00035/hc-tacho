@@ -5517,36 +5517,8 @@ function bindEvents(){
         if(t) arkadaKalanSn = Math.floor((Date.now() - t) / 1000);
       } catch(e){}
 
-      // ★ KM arka plan tahmini
-      // window.gpsAktif yerine kayıtlı arkapan_gps kullanıyoruz
-      // (arka planda event gelmeyince gpsAktif false'a dönmüş olabilir)
-      try {
-        const arkaGpsAktifti = localStorage.getItem('arkapan_gps') === '1';
-        const arkaHiz = parseFloat(localStorage.getItem('arkapan_hiz')) || 0;
-        const arkaMesafe = parseFloat(localStorage.getItem('arkapan_mesafe')) || 0;
-        if(arkadaKalanSn > 5 && arkaGpsAktifti && arkaHiz > 2){
-            // m/s × saniye = metre → localStorage'a yaz (GPS motoru okuyacak)
-            const ekMetr = (arkaHiz / 3.6) * arkadaKalanSn;
-            const yeniMesafe = arkaMesafe + ekMetr;
-            localStorage.setItem('gps_mesafe', String(Math.round(yeniMesafe)));
-            localStorage.setItem('gps_son_zaman', String(Date.now()));
-            // GPS motoruna sinyal: mesafeyi yeniden oku
-            if(typeof window.gpsKmGuncelle === 'function') window.gpsKmGuncelle(yeniMesafe);
-            const ekKmStr = (ekMetr / 1000).toFixed(1);
-            setTimeout(()=>{
-              if(typeof toast === 'function')
-                toast('📱 Arka plan: ~'+ekKmStr+' km eklendi ('+Math.floor(arkadaKalanSn/60)+'dk × '+Math.round(arkaHiz)+' km/h)','info',4500);
-            }, 900);
-        }
-        // Her durumda KM kartını localStorage'dan güncelle
-        const gosterMesafe = parseFloat(localStorage.getItem('gps_mesafe')) || 0;
-        const kmEl = document.getElementById('hiz-toplam-km');
-        if(kmEl){
-          const kmD = gosterMesafe / 1000;
-          kmEl.textContent = kmD >= 10 ? Math.round(kmD) : kmD.toFixed(1);
-          kmEl.style.color = kmD > 0 ? '#38bdf8' : 'var(--sub)';
-        }
-      } catch(e){}
+      // ★ KM arka plan tahmini — merkezi fonksiyona devredelim
+      arkaplanKmHesapla();
 
       // sync ile arka planda geçen süre mevcut moda eklenir
       sync();
@@ -5569,16 +5541,61 @@ function bindEvents(){
       renderAll();
     }
   });
+
+  // ★ Arka plan / tablet kapalı km hesaplama — her "geri dön" eventinde çağrılır
+  function arkaplanKmHesapla(){
+    try {
+      const t = parseFloat(localStorage.getItem('arkapan_zamani')) || 0;
+      if(!t) return;
+      const gecenSn = Math.floor((Date.now() - t) / 1000);
+      if(gecenSn < 5) return; // Çok kısa, hesaplama
+      const arkaGpsAktifti = localStorage.getItem('arkapan_gps') === '1';
+      const arkaHiz = parseFloat(localStorage.getItem('arkapan_hiz')) || 0;
+      const arkaMesafe = parseFloat(localStorage.getItem('arkapan_mesafe')) || 0;
+      if(arkaGpsAktifti && arkaHiz > 2){
+        const ekMetr = (arkaHiz / 3.6) * gecenSn;
+        const yeniMesafe = arkaMesafe + ekMetr;
+        localStorage.setItem('gps_mesafe', String(Math.round(yeniMesafe)));
+        localStorage.setItem('gps_son_zaman', String(Date.now()));
+        if(typeof window.gpsKmGuncelle === 'function') window.gpsKmGuncelle(yeniMesafe);
+        const ekKmStr = (ekMetr / 1000).toFixed(1);
+        setTimeout(()=>{
+          if(typeof toast === 'function')
+            toast('📱 ~'+ekKmStr+' km eklendi ('+Math.floor(gecenSn/60)+'dk × '+Math.round(arkaHiz)+' km/h)','info',4500);
+        }, 900);
+      }
+      // Zaman damgasını sıfırla — bir sonraki açılışta çift sayılmasın
+      localStorage.removeItem('arkapan_zamani');
+      // KM kartını güncelle
+      const gosterMesafe = parseFloat(localStorage.getItem('gps_mesafe')) || 0;
+      const kmEl = document.getElementById('hiz-toplam-km');
+      if(kmEl){
+        const kmD = gosterMesafe / 1000;
+        kmEl.textContent = kmD >= 10 ? Math.round(kmD) : kmD.toFixed(1);
+        kmEl.style.color = kmD > 0 ? '#38bdf8' : 'var(--sub)';
+      }
+    } catch(e){}
+  }
   window.addEventListener('pageshow',e=>{
-    if(e.persisted){
-      // iOS Safari bfcache dönüşü
-      sync();
-      S.lastTickMs = Date.now();
-      renderAll();
-    }
+    // bfcache dönüşü VEYA tablet açılma
+    arkaplanKmHesapla();
+    sync();
+    S.lastTickMs = Date.now();
+    renderAll();
+  });
+  // Tablet ekranı açılınca focus da tetiklenir
+  window.addEventListener('focus', ()=>{
+    arkaplanKmHesapla();
   });
   // iOS/Android için ek güvenlik
-  window.addEventListener('pagehide', ()=>{ sync(); save(); });
+  window.addEventListener('pagehide', ()=>{
+    // Tablet kapanırken son hız/mesafe/zamanı kaydet
+    try {
+      localStorage.setItem('arkapan_zamani', String(Date.now()));
+      localStorage.setItem('arkapan_gps', window.gpsAktif ? '1' : '0');
+    } catch(e){}
+    sync(); save();
+  });
   window.addEventListener('beforeunload',()=>{sync();save();});
 }
 
@@ -9262,7 +9279,16 @@ function gpsGuncelle(pos){
   hiz = Math.round(hiz);
   
   sonHiz = hiz;
-  
+
+  // ★ Tablet kapansa bile son hız ve zamanı sakla
+  // Tablet açılınca bu verilerle arka plan km hesaplanır
+  try {
+    localStorage.setItem('arkapan_hiz', String(sonHiz));
+    localStorage.setItem('arkapan_mesafe', String(Math.round(toplamMesafe)));
+    localStorage.setItem('arkapan_zamani', String(Date.now()));
+    localStorage.setItem('arkapan_gps', '1');
+  } catch(e){}
+
   // ── 3. MESAFE TOPLA (sadece gerçek hareket) ──
   const accuracy = pos.coords.accuracy || 0;
   if(sonKonum && sonHiz >= 5 && accuracy < 50){
