@@ -4058,7 +4058,7 @@ function handleEndOfDay(){
     surusSuresi: S.stats.drive || 0,       // saniye
     mesaiSuresi: S.stats.workday || 0,     // saniye
     mola: S.stats.pause || 0,              // saniye
-    mesafeKm: Math.round((typeof toplamMesafe === 'number' ? toplamMesafe : 0) / 1000), // km
+    mesafeKm: Math.round((parseFloat(localStorage.getItem('gps_mesafe')) || 0) / 1000), // km — localStorage köprüsü (GPS ayrı scope)
     baslangic: S.selections.startCountry || '',
     bitis: S.selections.endCountry || esel.value || window.sonAlgilananUlke || '',
     istirahatTipi: shortRest ? '9 saat (kısa)' : '11 saat (tam)',
@@ -4081,9 +4081,9 @@ function handleEndOfDay(){
   S.stats.drive=0;S.stats.shift=0;S.stats.workday=0;S.stats.pause=0;
   S.extendedDriveApplied=false;
   
-  // ★ Mesafe sayacını da sıfırla
-  if(typeof toplamMesafe === 'number') toplamMesafe = 0;
-  try { localStorage.setItem('gps_mesafe', '0'); } catch(e){}
+  // ★ Mesafe sayacını sıfırla — GPS motoruna köprü üzerinden bildir
+  try { localStorage.setItem('gps_mesafe', '0'); localStorage.setItem('gps_son_zaman', String(Date.now())); } catch(e){}
+  if(typeof window.gpsKmGuncelle === 'function') window.gpsKmGuncelle(0);
   
   S.alerts={
     shiftWarned:false,shiftDone:false,
@@ -5497,105 +5497,94 @@ function bindEvents(){
       if(e.target.value&&ULKELER.includes(e.target.value))setTimeout(handleEndOfDay,0);
     }
   });
-  document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){
-      // Arka plana geçince: sayaçları hesapla ve kaydet (mod KORUNUR)
-      sync(); save();
-      // ★ KM arka plan: hız ve mevcut mesafeyi sakla
-      try {
-        localStorage.setItem('arkapan_zamani', String(Date.now()));
-        localStorage.setItem('arkapan_mode', S.mode || '');
-        localStorage.setItem('arkapan_gps', window.gpsAktif ? '1' : '0');
-        localStorage.setItem('arkapan_hiz', String(typeof sonHiz === 'number' ? sonHiz : 0));
-        localStorage.setItem('arkapan_mesafe', String(typeof toplamMesafe === 'number' ? toplamMesafe : 0));
-      } catch(e){}
-    } else {
-      // Ön plana geri gelince: ne kadar süre arkada kaldık?
-      let arkadaKalanSn = 0;
-      try {
-        const t = parseFloat(localStorage.getItem('arkapan_zamani')) || 0;
-        if(t) arkadaKalanSn = Math.floor((Date.now() - t) / 1000);
-      } catch(e){}
-
-      // ★ KM arka plan tahmini — merkezi fonksiyona devredelim
-      arkaplanKmHesapla();
-
-      // sync ile arka planda geçen süre mevcut moda eklenir
-      sync();
-      S.lastTickMs = Date.now();
-
-      // Bilgilendirme (5 dk üzeri)
-      if(arkadaKalanSn > 300 && window.gpsAktif){
-        const dkk = Math.floor(arkadaKalanSn/60);
-        setTimeout(()=>{
-          if(typeof toast === 'function'){
-            const modAdi = S.mode === 'surus' ? '\u{1F69B} Sürüş' : (S.mode === 'calisma' ? '\u2699 Çalışma' : (S.mode === 'dinlenme' ? '\u{1F6CC} Mola' : ''));
-            toast('\u{1F4F1} ' + dkk + ' dk arka plan \u2014 '+modAdi+' moduna eklendi','info',4000);
-          }
-        }, 800);
-        if(typeof window.gpsBaslat === 'function' && !document.getElementById('gps-durum-bar')?.classList.contains('aktif')){
-          setTimeout(()=>{ window.gpsBaslat(); }, 1500);
-        }
-      }
-
-      renderAll();
-    }
-  });
-
-  // ★ Arka plan / tablet kapalı km hesaplama — her "geri dön" eventinde çağrılır
-  function arkaplanKmHesapla(){
+  // ★ Arka plan / tablet kapalı km hesaplama
+  // Tüm "geri dön" eventleri (visibilitychange, pageshow, focus) buraya bağlanır
+  // Veriler GPS motorundan localStorage aracılığıyla gelir (farklı script scope'ları)
+  window._arkaplanKmHesapla = function(){
     try {
       const t = parseFloat(localStorage.getItem('arkapan_zamani')) || 0;
       if(!t) return;
       const gecenSn = Math.floor((Date.now() - t) / 1000);
-      if(gecenSn < 5) return; // Çok kısa, hesaplama
+      if(gecenSn < 5) return;
       const arkaGpsAktifti = localStorage.getItem('arkapan_gps') === '1';
       const arkaHiz = parseFloat(localStorage.getItem('arkapan_hiz')) || 0;
       const arkaMesafe = parseFloat(localStorage.getItem('arkapan_mesafe')) || 0;
+      // Çift sayılmasın: zaman damgasını hemen sil
+      localStorage.removeItem('arkapan_zamani');
       if(arkaGpsAktifti && arkaHiz > 2){
         const ekMetr = (arkaHiz / 3.6) * gecenSn;
         const yeniMesafe = arkaMesafe + ekMetr;
         localStorage.setItem('gps_mesafe', String(Math.round(yeniMesafe)));
         localStorage.setItem('gps_son_zaman', String(Date.now()));
+        // GPS motoru varsa güncelle
         if(typeof window.gpsKmGuncelle === 'function') window.gpsKmGuncelle(yeniMesafe);
+        // KM kartını güncelle
+        const kmEl = document.getElementById('hiz-toplam-km');
+        if(kmEl){
+          const kmD = yeniMesafe / 1000;
+          kmEl.textContent = kmD >= 10 ? Math.round(kmD) : kmD.toFixed(1);
+          kmEl.style.color = '#38bdf8';
+        }
         const ekKmStr = (ekMetr / 1000).toFixed(1);
         setTimeout(()=>{
           if(typeof toast === 'function')
             toast('📱 ~'+ekKmStr+' km eklendi ('+Math.floor(gecenSn/60)+'dk × '+Math.round(arkaHiz)+' km/h)','info',4500);
-        }, 900);
-      }
-      // Zaman damgasını sıfırla — bir sonraki açılışta çift sayılmasın
-      localStorage.removeItem('arkapan_zamani');
-      // KM kartını güncelle
-      const gosterMesafe = parseFloat(localStorage.getItem('gps_mesafe')) || 0;
-      const kmEl = document.getElementById('hiz-toplam-km');
-      if(kmEl){
-        const kmD = gosterMesafe / 1000;
-        kmEl.textContent = kmD >= 10 ? Math.round(kmD) : kmD.toFixed(1);
-        kmEl.style.color = kmD > 0 ? '#38bdf8' : 'var(--sub)';
+        }, 1000);
       }
     } catch(e){}
-  }
-  window.addEventListener('pageshow',e=>{
-    // bfcache dönüşü VEYA tablet açılma
-    arkaplanKmHesapla();
+  };
+
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+      // Arka plana / ekran kapanınca: zaman ve mod kaydet
+      // (hız+mesafe GPS callback'inden zaten sürekli yazılıyor)
+      try {
+        localStorage.setItem('arkapan_zamani', String(Date.now()));
+        localStorage.setItem('arkapan_mode', S.mode || '');
+        localStorage.setItem('arkapan_gps', window.gpsAktif ? '1' : '0');
+      } catch(e){}
+      sync(); save();
+    } else {
+      // Öne gelince: km hesapla
+      window._arkaplanKmHesapla();
+      // Arka planda geçen süreyi moda ekle
+      sync();
+      S.lastTickMs = Date.now();
+      // Bilgi toast (5 dk üzeri)
+      try {
+        const t0 = parseFloat(localStorage.getItem('arkapan_mode_zaman')) || 0;
+        const gecenSn = t0 ? Math.floor((Date.now()-t0)/1000) : 0;
+        if(gecenSn > 300 && window.gpsAktif){
+          const dkk = Math.floor(gecenSn/60);
+          const modAdi = S.mode==='surus'?'🚛 Sürüş':S.mode==='calisma'?'⚙ Çalışma':S.mode==='dinlenme'?'🛌 Mola':'';
+          setTimeout(()=>{ if(typeof toast==='function') toast('📱 '+dkk+' dk arka plan — '+modAdi+' moduna eklendi','info',4000); },800);
+        }
+      } catch(e){}
+      renderAll();
+    }
+  });
+
+  window.addEventListener('pageshow',()=>{
+    window._arkaplanKmHesapla();
     sync();
     S.lastTickMs = Date.now();
     renderAll();
   });
-  // Tablet ekranı açılınca focus da tetiklenir
-  window.addEventListener('focus', ()=>{
-    arkaplanKmHesapla();
+
+  // focus eventi çok sık tetiklenebilir — sadece arkapan_zamani varsa çalıştır
+  window.addEventListener('focus',()=>{
+    const t = localStorage.getItem('arkapan_zamani');
+    if(t && parseFloat(t) > 0) window._arkaplanKmHesapla();
   });
-  // iOS/Android için ek güvenlik
-  window.addEventListener('pagehide', ()=>{
-    // Tablet kapanırken son hız/mesafe/zamanı kaydet
+
+  window.addEventListener('pagehide',()=>{
     try {
       localStorage.setItem('arkapan_zamani', String(Date.now()));
       localStorage.setItem('arkapan_gps', window.gpsAktif ? '1' : '0');
     } catch(e){}
     sync(); save();
   });
+
   window.addEventListener('beforeunload',()=>{sync();save();});
 }
 
@@ -5806,7 +5795,7 @@ window.mesaiGecmisiRender = function(){
   if(aktifKart && S.stats){
     const aktifSurus = S.stats.drive || 0;
     const aktifMesai = S.stats.workday || 0;
-    const aktifKm = typeof toplamMesafe === 'number' ? Math.round(toplamMesafe / 1000) : 0;
+    const aktifKm = Math.round((parseFloat(localStorage.getItem('gps_mesafe')) || 0) / 1000);
     
     if(aktifSurus > 0 || aktifKm > 0){
       aktifKart.style.display = 'block';
@@ -7182,7 +7171,7 @@ window.dRenderWeekly=function(){
     } else if(ds === today && S.stats){
       // ★ BUGÜN ve henüz mesai bitmemiş → AKTİF veriden çek
       h = (S.stats.drive || 0) / 3600;
-      km = typeof toplamMesafe === 'number' ? Math.round(toplamMesafe / 1000) : 0;
+      km = Math.round((parseFloat(localStorage.getItem('gps_mesafe')) || 0) / 1000);
       if(h > 0 || km > 0) aktif = true;
     }
     
@@ -7525,12 +7514,12 @@ window.dRenderFuel = dRenderFuel;
    🛢️ AKILLI DEPO TAKİBİ (GPS kilometre + kalan yakıt)
 ═══════════════════════════════════════════════════ */
 
-// GPS kilometresini al — toplamMesafe global değişkeni metre cinsinden
+// GPS kilometresini al — localStorage köprüsü (GPS ayrı script scope'ta)
 function depoGetGpsKm(){
   try {
-    if(typeof toplamMesafe === 'number'){
-      return toplamMesafe / 1000; // metre → km
-    }
+    // Önce window.gpsKmGuncelle'den güncel değeri dene, yoksa localStorage
+    const ls = parseFloat(localStorage.getItem('gps_mesafe')) || 0;
+    return ls / 1000;
   } catch(e){}
   return 0;
 }
@@ -8627,7 +8616,13 @@ function gpsKayitOku(){
 window.gpsKmGuncelle = function(yeniMetre){
   toplamMesafe = yeniMetre;
   try { localStorage.setItem('gps_mesafe', String(Math.round(toplamMesafe))); } catch(e){}
-  if(typeof hizKartGuncelle === 'function') hizKartGuncelle(0);
+  // Sadece km kartını güncelle — anlık hız kartına dokunma
+  const kmEl = document.getElementById('hiz-toplam-km');
+  if(kmEl){
+    const kmD = yeniMetre / 1000;
+    kmEl.textContent = kmD >= 10 ? Math.round(kmD) : kmD.toFixed(1);
+    kmEl.style.color = kmD > 0 ? '#38bdf8' : 'var(--sub)';
+  }
 };
 
 function hizEsik(){return 3;} // Takograf standardı: 3 km/h
@@ -9039,55 +9034,59 @@ window.gpsDurdur = function(){
    Sınır kutusu (bounding box) yöntemi - offline çalışır
    ════════════════════════════════════════════ */
 
-// Ülke sınır kutuları (lat min, lat max, lng min, lng max)
-// Avrupa'nın TIR rotaları üzerindeki ülkeler
-const ULKE_SINIRLAR = {
-  'Türkiye':      {latMin:35.8, latMax:42.1, lngMin:25.5, lngMax:44.9},
-  'Yunanistan':   {latMin:34.8, latMax:41.7, lngMin:19.3, lngMax:28.5},
-  'Bulgaristan':  {latMin:41.2, latMax:44.2, lngMin:22.3, lngMax:28.7},
-  'Romanya':      {latMin:43.6, latMax:48.3, lngMin:20.2, lngMax:29.7},
-  'Sırbistan':    {latMin:42.2, latMax:46.2, lngMin:18.8, lngMax:23.0},
-  'Macaristan':   {latMin:45.7, latMax:48.6, lngMin:16.1, lngMax:22.9},
-  'Hırvatistan':  {latMin:42.4, latMax:46.6, lngMin:13.5, lngMax:19.5},
-  'Slovenya':     {latMin:45.4, latMax:46.9, lngMin:13.4, lngMax:16.6},
-  'Avusturya':    {latMin:46.4, latMax:49.0, lngMin:9.5,  lngMax:17.2},
-  'İtalya':       {latMin:36.6, latMax:47.1, lngMin:6.6,  lngMax:18.6},
-  'Slovakya':     {latMin:47.7, latMax:49.6, lngMin:16.8, lngMax:22.6},
-  'Çekya':        {latMin:48.5, latMax:51.1, lngMin:12.1, lngMax:18.9},
-  'Polonya':      {latMin:49.0, latMax:54.9, lngMin:14.1, lngMax:24.2},
-  'Almanya':      {latMin:47.3, latMax:55.0, lngMin:5.9,  lngMax:15.0},
-  'Hollanda':     {latMin:50.7, latMax:53.6, lngMin:3.3,  lngMax:7.2},
-  'Belçika':      {latMin:49.5, latMax:51.5, lngMin:2.5,  lngMax:6.4},
-  'Fransa':       {latMin:42.3, latMax:51.1, lngMin:-5.1, lngMax:8.2},
-  'İsviçre':      {latMin:45.8, latMax:47.8, lngMin:5.9,  lngMax:10.5},
-  'Lüksemburg':   {latMin:49.4, latMax:50.2, lngMin:5.7,  lngMax:6.5},
-  'Danimarka':    {latMin:54.5, latMax:57.8, lngMin:8.0,  lngMax:12.7},
-  'İspanya':      {latMin:36.0, latMax:43.8, lngMin:-9.4, lngMax:3.3},
-  'Portekiz':     {latMin:36.9, latMax:42.2, lngMin:-9.5, lngMax:-6.2},
-  'İngiltere':    {latMin:49.9, latMax:60.9, lngMin:-8.6, lngMax:1.8},
-  'İrlanda':      {latMin:51.4, latMax:55.4, lngMin:-10.5,lngMax:-5.9},
-  'Norveç':       {latMin:57.9, latMax:71.2, lngMin:4.6,  lngMax:31.1},
-  'İsveç':        {latMin:55.3, latMax:69.1, lngMin:11.1, lngMax:24.2},
-  'Finlandiya':   {latMin:59.8, latMax:70.1, lngMin:20.5, lngMax:31.6},
-  'Estonya':      {latMin:57.5, latMax:59.7, lngMin:21.8, lngMax:28.2},
-  'Letonya':      {latMin:55.7, latMax:58.1, lngMin:20.9, lngMax:28.2},
-  'Litvanya':     {latMin:53.9, latMax:56.5, lngMin:20.9, lngMax:26.8},
-  'Belarus':      {latMin:51.3, latMax:56.2, lngMin:23.2, lngMax:32.8},
-  'Ukrayna':      {latMin:44.4, latMax:52.4, lngMin:22.1, lngMax:40.2},
-  'Moldova':      {latMin:45.5, latMax:48.5, lngMin:26.6, lngMax:30.2},
-  'Karadağ':      {latMin:41.9, latMax:43.6, lngMin:18.4, lngMax:20.4},
-  'Arnavutluk':   {latMin:39.6, latMax:42.7, lngMin:19.3, lngMax:21.1},
-  'Makedonya':    {latMin:40.9, latMax:42.4, lngMin:20.5, lngMax:23.0},
-  'Kosova':       {latMin:41.9, latMax:43.3, lngMin:20.0, lngMax:21.8},
-  'Bosna Hersek': {latMin:42.6, latMax:45.3, lngMin:15.7, lngMax:19.6}
-};
+// ★ ÜLKE SINIR KUTULARI — Çakışmalar giderilmiş, kesin koordinatlar
+// Öncelik sırası önemli: küçük/iç içe ülkeler ÖNCE kontrol edilir
+// Kaynak: Natural Earth / OSM sınır verileri
+const ULKE_SINIRLAR = [
+  // ── Küçük ülkeler ÖNCE (büyük ülke kutularına gömülü) ──
+  {ad:'Lüksemburg',   latMin:49.45, latMax:50.18, lngMin:5.73,  lngMax:6.53},
+  {ad:'Slovenya',     latMin:45.42, latMax:46.88, lngMin:13.38, lngMax:16.61},
+  {ad:'Kosova',       latMin:41.86, latMax:43.27, lngMin:20.01, lngMax:21.79},
+  {ad:'Moldova',      latMin:45.47, latMax:48.49, lngMin:26.62, lngMax:30.14},
+  {ad:'Karadağ',      latMin:41.85, latMax:43.56, lngMin:18.45, lngMax:20.36},
+  {ad:'Makedonya',    latMin:40.85, latMax:42.36, lngMin:20.46, lngMax:23.03},
+  {ad:'Arnavutluk',   latMin:39.62, latMax:42.67, lngMin:19.27, lngMax:21.07},
+  {ad:'Bosna Hersek', latMin:42.56, latMax:45.28, lngMin:15.72, lngMax:19.62},
+  {ad:'Belçika',      latMin:49.50, latMax:51.51, lngMin:2.54,  lngMax:6.41},
+  {ad:'Hollanda',     latMin:50.75, latMax:53.56, lngMin:3.36,  lngMax:7.23},
+  {ad:'İsviçre',      latMin:45.82, latMax:47.81, lngMin:5.96,  lngMax:10.49},
+  {ad:'Slovakya',     latMin:47.73, latMax:49.61, lngMin:16.83, lngMax:22.57},
+  {ad:'Hırvatistan',  latMin:42.39, latMax:46.56, lngMin:13.49, lngMax:19.45},
+  {ad:'Sırbistan',    latMin:42.23, latMax:46.19, lngMin:18.83, lngMax:22.99},
+  {ad:'Estonya',      latMin:57.51, latMax:59.68, lngMin:21.76, lngMax:28.21},
+  {ad:'Letonya',      latMin:55.67, latMax:58.08, lngMin:20.97, lngMax:28.24},
+  {ad:'Litvanya',     latMin:53.90, latMax:56.45, lngMin:20.94, lngMax:26.84},
+  {ad:'Danimarka',    latMin:54.56, latMax:57.75, lngMin:8.07,  lngMax:12.69},
+  {ad:'Portekiz',     latMin:36.96, latMax:42.15, lngMin:-9.52, lngMax:-6.19},
+  {ad:'İrlanda',      latMin:51.42, latMax:55.39, lngMin:-10.48,lngMax:-5.98},
+  // ── Orta büyüklük ──
+  {ad:'Macaristan',   latMin:45.74, latMax:48.58, lngMin:16.11, lngMax:22.90},
+  {ad:'Avusturya',    latMin:46.37, latMax:49.02, lngMin:9.53,  lngMax:17.16},
+  {ad:'Çekya',        latMin:48.55, latMax:51.06, lngMin:12.09, lngMax:18.86},
+  {ad:'Yunanistan',   latMin:34.80, latMax:41.75, lngMin:19.37, lngMax:28.24},
+  // Bulgaristan–Romanya: Tuna (Dunav) hattı ~43.80N — kutular kesişmiyor
+  {ad:'Bulgaristan',  latMin:41.24, latMax:43.80, lngMin:22.36, lngMax:28.61},
+  {ad:'Romanya',      latMin:43.81, latMax:48.27, lngMin:20.26, lngMax:29.74},
+  {ad:'Belarus',      latMin:51.26, latMax:56.17, lngMin:23.18, lngMax:32.78},
+  {ad:'Ukrayna',      latMin:44.39, latMax:52.38, lngMin:22.14, lngMax:40.23},
+  {ad:'Norveç',       latMin:57.94, latMax:71.18, lngMin:4.64,  lngMax:31.10},
+  {ad:'Finlandiya',   latMin:59.81, latMax:70.09, lngMin:20.55, lngMax:31.59},
+  // ── Büyük ülkeler SONA (geniş kutular) ──
+  {ad:'İsveç',        latMin:55.34, latMax:69.06, lngMin:11.12, lngMax:24.17},
+  {ad:'Polonya',      latMin:49.00, latMax:54.84, lngMin:14.12, lngMax:24.15},
+  {ad:'İtalya',       latMin:36.65, latMax:47.09, lngMin:6.63,  lngMax:18.52},
+  {ad:'İspanya',      latMin:36.00, latMax:43.79, lngMin:-9.39, lngMax:3.34},
+  {ad:'Fransa',       latMin:42.33, latMax:51.09, lngMin:-5.14, lngMax:8.24},
+  {ad:'Almanya',      latMin:47.27, latMax:55.06, lngMin:5.87,  lngMax:15.04},
+  {ad:'İngiltere',    latMin:49.86, latMax:60.86, lngMin:-8.65, lngMax:1.77},
+  {ad:'Türkiye',      latMin:35.82, latMax:42.11, lngMin:25.66, lngMax:44.83},
+];
 
-// Mevcut ülke tespiti - koordinattan ülke bul
+// Koordinattan ülke bul — öncelik sırası: küçük ülkeler liste başında
 window.koordinattanUlkeBul = function(lat, lng){
-  // Önce kesin eşleşme ara
-  for(const [ulke, s] of Object.entries(ULKE_SINIRLAR)){
-    if(lat >= s.latMin && lat <= s.latMax && lng >= s.lngMin && lng <= s.lngMax){
-      return ulke;
+  for(const u of ULKE_SINIRLAR){
+    if(lat >= u.latMin && lat <= u.latMax && lng >= u.lngMin && lng <= u.lngMax){
+      return u.ad;
     }
   }
   return null;
@@ -9099,97 +9098,99 @@ window.sonUlkeKontrolMs = 0;
 
 window.ulkeAlgila = function(lat, lng){
   const simdi = Date.now();
-  // Her 30 saniyede bir kontrol et (CPU tasarrufu)
-  if(simdi - window.sonUlkeKontrolMs < 30000) return;
+  // Her 15 saniyede bir kontrol et (30'dan indirildi — sınır bölgelerinde daha hassas)
+  if(simdi - window.sonUlkeKontrolMs < 15000) return;
   window.sonUlkeKontrolMs = simdi;
   
   const ulke = window.koordinattanUlkeBul(lat, lng);
   if(!ulke) return; // Bilinmeyen bölge
-  
-  // İlk kez algılama
+
+  // ★ DOĞRULAMA MANTIĞI: Yanlış sınır geçişini önle
+  // GPS doğruluğu düşükse veya ilk tespitse onay sayacı kullan
+  if(!window._ulkeOnaySayaci) window._ulkeOnaySayaci = {};
+  if(!window._ulkeOnayBekleyen) window._ulkeOnayBekleyen = null;
+
+  // İlk kez algılama — doğrulama gerekmez
   if(window.sonAlgilananUlke === null){
     window.sonAlgilananUlke = ulke;
-    
-    // ★ Eğer henüz başlangıç ülkesi seçilmemişse otomatik ata
+    window._ulkeOnayBekleyen = null;
+
+    // ★ Başlangıç ülkesini otomatik ata
     if(S && S.selections && !S.selections.startCountry){
       S.selections.startCountry = ulke;
-      if(typeof window.save === 'function') window.save();
-      
-      // Başlangıç ülkesi dropdown'ını da güncelle
       const startSel = document.getElementById('sel-start');
       if(startSel){
-        // Önce option ekle (yoksa)
-        let exists = false;
-        for(let i=0; i<startSel.options.length; i++){
-          if(startSel.options[i].value === ulke){
-            startSel.selectedIndex = i;
-            exists = true;
-            break;
-          }
+        for(let i=0;i<startSel.options.length;i++){
+          if(startSel.options[i].value===ulke){startSel.selectedIndex=i;break;}
         }
       }
-      
-      if(typeof window.toast === 'function'){
-        window.toast('📍 Başlangıç ülkesi otomatik: ' + ulke,'ok',3500);
-      }
+      if(typeof window.save==='function') window.save();
+      if(typeof window.toast==='function') window.toast('📍 Başlangıç ülkesi: '+ulke,'ok',3500);
     } else {
-      // Sadece bilgi olarak göster
-      if(typeof window.toast === 'function'){
-        window.toast('📍 Şu an: ' + ulke,'info',2500);
-      }
+      if(typeof window.toast==='function') window.toast('📍 Şu an: '+ulke,'info',2500);
     }
     return;
   }
-  
-  // ★ ÜLKE DEĞİŞİMİ ALGILANDI
-  if(ulke !== window.sonAlgilananUlke){
-    const oncekiUlke = window.sonAlgilananUlke;
-    window.sonAlgilananUlke = ulke;
-    
-    // Bildirim
-    if(typeof window.toast === 'function'){
-      window.toast('🌍 SINIR GEÇİŞİ: ' + oncekiUlke + ' → ' + ulke,'warn',5000);
-    }
-    if(typeof window.speak === 'function'){
-      window.speak(ulke + 'a girdiniz.','normal');
-    }
-    
-    // ★ Geçiş kaydı oluştur (DTCO sınır geçişleri için)
-    if(!S.borderCrossings) S.borderCrossings = [];
-    S.borderCrossings.unshift({
-      timestamp: Date.now(),
-      tarih: new Date().toISOString(),
-      from: oncekiUlke,
-      to: ulke,
-      lat: lat,
-      lng: lng,
-      type: 'auto' // Otomatik algılandı
-    });
-    // Max 100 kayıt
-    if(S.borderCrossings.length > 100) S.borderCrossings.length = 100;
-    
-    // ★ Otomatik VARIŞ ülkesi olarak güncelle (varış henüz girilmemişse veya farklıysa)
-    if(S.selections && (!S.selections.endCountry || S.selections.endCountry !== ulke)){
-      S.selections.endCountry = ulke;
-      
-      const endSel = document.getElementById('sel-end');
-      if(endSel){
-        for(let i=0; i<endSel.options.length; i++){
-          if(endSel.options[i].value === ulke){
-            endSel.selectedIndex = i;
-            break;
-          }
-        }
+
+  // Aynı ülkedeyse — onay sayacını sıfırla
+  if(ulke === window.sonAlgilananUlke){
+    window._ulkeOnayBekleyen = null;
+    window._ulkeOnaySayaci = {};
+    return;
+  }
+
+  // ★ FARKLI ÜLKE — 2 ardışık tespitle onayla (yanlış pozitif önleme)
+  // GPS sınır bölgesinde salınım yapabilir, tek ölçümde geçiş kaydetme
+  if(window._ulkeOnayBekleyen !== ulke){
+    // İlk kez bu ülke görüldü — beklemeye al
+    window._ulkeOnayBekleyen = ulke;
+    window._ulkeOnaySayaci[ulke] = 1;
+    return; // Bir sonraki kontrolde onaylanırsa geç
+  } else {
+    // İkinci kez aynı ülke — geçişi onayla
+    window._ulkeOnaySayaci[ulke] = (window._ulkeOnaySayaci[ulke]||0) + 1;
+    if(window._ulkeOnaySayaci[ulke] < 2) return;
+  }
+
+  // ★ SINIR GEÇİŞİ ONAYLANDI
+  const oncekiUlke = window.sonAlgilananUlke;
+  window.sonAlgilananUlke = ulke;
+  window._ulkeOnayBekleyen = null;
+  window._ulkeOnaySayaci = {};
+
+  // Bildirim
+  if(typeof window.toast==='function')
+    window.toast('🌍 SINIR GEÇİŞİ: '+oncekiUlke+' → '+ulke,'warn',6000);
+  if(typeof window.speak==='function')
+    window.speak(ulke+' sınırına girdiniz.','normal');
+
+  // ★ Geçiş kaydı
+  if(!S.borderCrossings) S.borderCrossings=[];
+  S.borderCrossings.unshift({
+    timestamp: Date.now(),
+    tarih: new Date().toISOString(),
+    from: oncekiUlke,
+    to: ulke,
+    lat: lat,
+    lng: lng,
+    type: 'auto'
+  });
+  if(S.borderCrossings.length>100) S.borderCrossings.length=100;
+
+  // ★ Varış ülkesini güncelle
+  if(S.selections && S.selections.endCountry !== ulke){
+    S.selections.endCountry = ulke;
+    const endSel = document.getElementById('sel-end');
+    if(endSel){
+      for(let i=0;i<endSel.options.length;i++){
+        if(endSel.options[i].value===ulke){endSel.selectedIndex=i;break;}
       }
     }
-    
-    if(typeof window.save === 'function') window.save();
-    
-    // Push notification (opsiyonel)
-    if(typeof window.pushBildirim === 'function'){
-      window.pushBildirim('🌍 Sınır Geçişi', oncekiUlke + ' → ' + ulke);
-    }
   }
+
+  if(typeof window.save==='function') window.save();
+  if(typeof window.pushBildirim==='function')
+    window.pushBildirim('🌍 Sınır Geçişi', oncekiUlke+' → '+ulke);
 };
 
 /* ── GPS Konum Güncellemesi — BASİT ve SAĞLAM ── */
@@ -9280,15 +9281,6 @@ function gpsGuncelle(pos){
   
   sonHiz = hiz;
 
-  // ★ Tablet kapansa bile son hız ve zamanı sakla
-  // Tablet açılınca bu verilerle arka plan km hesaplanır
-  try {
-    localStorage.setItem('arkapan_hiz', String(sonHiz));
-    localStorage.setItem('arkapan_mesafe', String(Math.round(toplamMesafe)));
-    localStorage.setItem('arkapan_zamani', String(Date.now()));
-    localStorage.setItem('arkapan_gps', '1');
-  } catch(e){}
-
   // ── 3. MESAFE TOPLA (sadece gerçek hareket) ──
   const accuracy = pos.coords.accuracy || 0;
   if(sonKonum && sonHiz >= 5 && accuracy < 50){
@@ -9301,6 +9293,14 @@ function gpsGuncelle(pos){
       }
     }
   }
+
+  // ★ Mesafe eklendikten SONRA kaydet (tablet kapansa diye)
+  // arkapan_zamani burada yazılmaz — sadece gizlenince yazılır
+  try {
+    localStorage.setItem('arkapan_hiz', String(sonHiz));
+    localStorage.setItem('arkapan_mesafe', String(Math.round(toplamMesafe)));
+    localStorage.setItem('arkapan_gps', '1');
+  } catch(e){}
   
   // Son konumu kaydet
   sonKonum = {
@@ -9312,7 +9312,7 @@ function gpsGuncelle(pos){
   
   // ★ ÜLKE ALGILAMA — Otomatik sınır geçiş
   if(typeof window.ulkeAlgila === 'function'){
-    window.ulkeAlgila(pos.coords.latitude, pos.coords.longitude);
+    window.ulkeAlgila(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 999);
   }
   
   // ── 4. UI GÜNCELLE ──
@@ -9468,8 +9468,9 @@ function gpsUIGuncelle(){
   }
   
   if(mesafeEl){
-    mesafeEl.textContent = (toplamMesafe/1000).toFixed(1) + ' km';
-    mesafeEl.style.color = toplamMesafe > 0 ? 'var(--blue)' : 'var(--sub)';
+    const _gpsMesafeLS = parseFloat(localStorage.getItem('gps_mesafe')) || 0;
+    mesafeEl.textContent = (_gpsMesafeLS/1000).toFixed(1) + ' km';
+    mesafeEl.style.color = _gpsMesafeLS > 0 ? 'var(--blue)' : 'var(--sub)';
   }
   
   // ★ DURUM göstergesi - GPS sağlığı
