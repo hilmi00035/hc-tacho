@@ -1907,8 +1907,56 @@ select{font:inherit}
   </div>
   <div class="hactions">
     <button id="gps-btn" class="hbtn" title="GPS göstergesi">🛰️</button>
+    <button id="kapat-btn" onclick="window.guvenliKapat()" title="Güvenli Kapat"
+      style="position:relative;width:40px;height:40px;border-radius:10px;border:none;
+             cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+             background:linear-gradient(145deg,#0e4a6e,#0a2a40);
+             box-shadow:0 0 0 2px #38bdf8,0 0 12px #38bdf8aa,0 0 28px #38bdf855,inset 0 1px 1px rgba(255,255,255,.15);
+             transition:box-shadow .3s,background .3s;overflow:hidden;">
+      <span style="position:absolute;top:0;left:0;right:0;height:45%;
+                   background:linear-gradient(180deg,rgba(255,255,255,.12),transparent);
+                   border-radius:10px 10px 0 0;pointer-events:none;"></span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <line x1="3" y1="3" x2="13" y2="13" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="13" y1="3" x2="3" y2="13" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </button>
   </div>
 </header>
+
+<!-- ══ GÜVENLİ KAPAT MODAL ══ -->
+<div id="kapat-modal" style="display:none;position:fixed;inset:0;z-index:9999;
+     background:rgba(0,0,0,.88);align-items:center;justify-content:center;">
+  <div style="background:#0d1117;border:2px solid #38bdf8;border-radius:16px;
+              padding:28px 22px;max-width:310px;width:90%;text-align:center;
+              box-shadow:0 0 30px #38bdf844;">
+    <div style="font-size:2rem;margin-bottom:6px;">⏻</div>
+    <div style="color:#38bdf8;font-size:1.05rem;font-weight:800;letter-spacing:1px;
+                font-family:var(--sans);margin-bottom:6px;">GÜVENLİ KAPAT</div>
+    <div style="color:#7a92b0;font-size:.8rem;font-family:var(--sans);margin-bottom:20px;line-height:1.6;">
+      GPS ve tüm sayaçlar kaydedilecek.<br>Nasıl devam etmek istersin?
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="window.guvenliKapatVeYedekle()"
+        style="background:#7f1d1d;border:none;border-radius:10px;color:#fff;
+               font-size:.88rem;font-family:var(--sans);font-weight:700;padding:13px;cursor:pointer;">
+        💾 KAYDET VE KAPAT (GPS Durdur)
+      </button>
+      <button onclick="window.sadecArkaPlana()"
+        style="background:#1c2a1c;border:1px solid #166534;border-radius:10px;color:#86efac;
+               font-size:.88rem;font-family:var(--sans);font-weight:700;padding:13px;cursor:pointer;">
+        📱 ARKA PLANA AL (GPS devam)
+      </button>
+      <button onclick="document.getElementById('kapat-modal').style.display='none'"
+        style="background:transparent;border:1px solid #1e3a5f;border-radius:10px;
+               color:#7a92b0;font-size:.82rem;font-family:var(--sans);padding:10px;cursor:pointer;">
+        ✕ İptal
+      </button>
+    </div>
+    <div id="kapat-durum" style="margin-top:12px;font-size:.72rem;color:#22c55e;
+         font-family:var(--sans);min-height:16px;"></div>
+  </div>
+</div>
 
 <!-- ══ DTCO OVERLAY ══ -->
 <div id="dtco-overlay" onclick="dtcoSidebarClose()"></div>
@@ -2367,21 +2415,34 @@ select{font:inherit}
     <div class="d-gauge"><div class="d-g-lbl">Dinlenme</div><div class="d-g-val" id="dg-rd">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dgf-rd" style="width:0%"></div></div><div class="d-g-sub">Gerekli 11:00</div></div>
   </div>
   <div id="d-alerts" style="margin-bottom:10px"></div>
-  <div class="d-card">
-    <div class="d-card-hd">Aktif Sefer</div>
-    <div id="d-active-trip-info"><div class="d-empty"><div class="d-empty-ico">🗺️</div><p>Aktif sefer yok</p></div></div>
+  <div class="d-card"><div class="d-card-hd">Aktif Sefer</div><div id="d-active-trip-info"><div class="d-empty"><div class="d-empty-ico">🗺️</div><p>Aktif sefer yok</p></div></div></div>
+  <div class="d-card"><div class="d-card-hd">Son Aktiviteler</div><div style="overflow-x:auto"><table class="d-tbl"><thead><tr><th>Saat</th><th>Aktivite</th><th>Süre</th><th>Ülke</th></tr></thead><tbody id="d-quick-log"><tr><td colspan="4"><div class="d-empty">Kayıt yok</div></td></tr></tbody></table></div></div>
+  
+  <!-- ★ YOL BİLGİSİ & YASAKLAR -->
+  <div class="d-card" id="d-yol-bilgi-card">
+    <div id="yol-bilgi-baslik" class="d-card-hd" onclick="window.yolBilgiToggle()"
+         style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:all .3s;">
+      <span>🛣️ Yol Bilgisi & Kamyon Yasakları</span>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span id="yol-bilgi-uyari-badge" style="display:none;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:4px;"></span>
+        <span id="yol-bilgi-ok" style="font-size:.9rem;color:#38bdf8;transition:transform .3s;">▼</span>
+      </div>
+    </div>
+    <div id="yol-bilgi-icerik" style="display:none;margin-top:10px;">
+      <div id="d-yol-bilgi-bugun" style="margin-bottom:10px;"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;" id="d-yol-bilgi-ulkeler"></div>
+      <div id="d-yol-bilgi-detay" style="display:none;"></div>
+      <div style="font-size:.62rem;color:#3d5a7a;margin-top:8px;font-style:italic;">ℹ️ Bu bilgiler rehber niteliğindedir. Resmi yetkili kaynaklardan da kontrol edin.</div>
+    </div>
   </div>
 
-  <!-- ★ POSTA KODU ARAMA -->
+  <!-- ★ POSTA KODU REHBERİ -->
   <div class="d-card" id="posta-kodu-card">
-    <!-- Başlık — tıklayınca içerik açılıp kapanır -->
-    <div class="d-card-hd" onclick="window.postaTogglePanel()" 
+    <div class="d-card-hd" onclick="window.postaTogglePanel()"
          style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;">
       <span>📮 Posta Kodu Rehberi</span>
       <span id="posta-panel-ok" style="font-size:.9rem;color:#38bdf8;transition:transform .3s;">▼</span>
     </div>
-
-    <!-- Gizli içerik -->
     <div id="posta-panel-icerik" style="display:none;margin-top:10px;">
       <div style="font-size:.75rem;color:#94a3b8;margin-bottom:10px;font-family:var(--sans);">Ülkeye tıkla → Posta kodları açılır | Tekrar tıkla → Kapanır</div>
       <div id="posta-ulke-butonlar" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;"></div>
@@ -2393,25 +2454,6 @@ select{font:inherit}
       </div>
       <div id="posta-sonuc" style="display:none;max-height:360px;overflow-y:auto;
            border:1px solid #1e3a5f;border-radius:8px;"></div>
-    </div>
-  </div>
-  <div class="d-card"><div class="d-card-hd">Son Aktiviteler</div><div style="overflow-x:auto"><table class="d-tbl"><thead><tr><th>Saat</th><th>Aktivite</th><th>Süre</th><th>Ülke</th></tr></thead><tbody id="d-quick-log"><tr><td colspan="4"><div class="d-empty">Kayıt yok</div></td></tr></tbody></table></div></div>
-  
-  <!-- ★ YOL BİLGİSİ & YASAKLAR -->
-  <div class="d-card" id="d-yol-bilgi-card">
-    <div id="yol-bilgi-baslik" class="d-card-hd" onclick="window.yolBilgiToggle()"
-         style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:all .3s;">
-      <span id="yol-bilgi-baslik-metin">🛣️ Yol Bilgisi & Kamyon Yasakları</span>
-      <div style="display:flex;align-items:center;gap:6px;">
-        <span id="yol-bilgi-uyari-badge" style="display:none;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:4px;"></span>
-        <span id="yol-bilgi-ok" style="font-size:.9rem;color:#38bdf8;transition:transform .3s;">▼</span>
-      </div>
-    </div>
-    <div id="yol-bilgi-icerik" style="display:none;margin-top:10px;">
-      <div id="d-yol-bilgi-bugun" style="margin-bottom:10px;"></div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;" id="d-yol-bilgi-ulkeler"></div>
-      <div id="d-yol-bilgi-detay" style="display:none;"></div>
-      <div style="font-size:.62rem;color:#3d5a7a;margin-top:8px;font-style:italic;">ℹ️ Bu bilgiler rehber niteliğindedir. Resmi yetkili kaynaklardan da kontrol edin.</div>
     </div>
   </div>
 </div>
@@ -3337,8 +3379,140 @@ let _weekView=1;
 function save(){
   try{localStorage.setItem(SK,JSON.stringify(S));}
   catch(e){console.warn('save err',e);}
+  try{if(window._idbYedekle) window._idbYedekle();}catch(e){}
 }
 window.save = save;
+
+/* ══ IndexedDB YEDEK ══ */
+(function(){
+  const DB='hctacho_bk',VER=1,ST='bk';
+  let db=null;
+  function ac(cb){
+    if(db){cb(db);return;}
+    const r=indexedDB.open(DB,VER);
+    r.onupgradeneeded=e=>e.target.result.createObjectStore(ST,{keyPath:'id'});
+    r.onsuccess=e=>{db=e.target.result;cb(db);};
+    r.onerror=()=>{};
+  }
+  window._idbYedekle=function(){
+    ac(function(db){
+      try{
+        const tx=db.transaction(ST,'readwrite'),st=tx.objectStore(ST);
+        st.put({id:'ana', v:localStorage.getItem(SK),          t:Date.now()});
+        st.put({id:'dtco',v:localStorage.getItem('dtco41_v4'), t:Date.now()});
+        st.put({id:'km',  v:localStorage.getItem('gps_mesafe'),t:Date.now()});
+      }catch(e){}
+    });
+  };
+  window._idbKurtar=function(){
+    // Ana veri yoksa kurtarmayı dene
+    if(localStorage.getItem(SK)) {
+      // Ana veri var ama km yoksa km'yi kurtarmayı dene
+      if(!localStorage.getItem('gps_mesafe') || localStorage.getItem('gps_mesafe')==='0'){
+        ac(function(db){
+          try{
+            const rk=db.transaction(ST,'readonly').objectStore(ST).get('km');
+            rk.onsuccess=function(ek){
+              if(ek.target.result&&ek.target.result.v&&parseFloat(ek.target.result.v)>0){
+                localStorage.setItem('gps_mesafe', ek.target.result.v);
+                if(window.gpsKmGuncelle) window.gpsKmGuncelle(parseFloat(ek.target.result.v));
+              }
+            };
+          }catch(e){}
+        });
+      }
+      return;
+    }
+    ac(function(db){
+      try{
+        const r=db.transaction(ST,'readonly').objectStore(ST).get('ana');
+        r.onsuccess=function(e){
+          const row=e.target.result;
+          if(!row||!row.v) return;
+          if((Date.now()-row.t)/3600000>72) return;
+          const onay=confirm('Veri kaybi tespit edildi! Son yedek: '+new Date(row.t).toLocaleString('tr-TR')+' Yedekten yuklensin mi?');
+          if(!onay) return;
+          localStorage.setItem(SK,row.v);
+          const r2=db.transaction(ST,'readonly').objectStore(ST).get('dtco');
+          r2.onsuccess=e2=>{if(e2.target.result&&e2.target.result.v) localStorage.setItem('dtco41_v4',e2.target.result.v);};
+          const r3=db.transaction(ST,'readonly').objectStore(ST).get('km');
+          r3.onsuccess=e3=>{if(e3.target.result&&e3.target.result.v) localStorage.setItem('gps_mesafe',e3.target.result.v);};
+          setTimeout(function(){location.reload();},500);
+        };
+      }catch(e){}
+    });
+  };
+})();
+
+/* ══ GÜVENLİ KAPAT ══ */
+window.guvenliKapat=function(){
+  sync(); save();
+  const m=document.getElementById('kapat-modal');
+  if(m){
+    m.style.display='flex';
+    const d=document.getElementById('kapat-durum');
+    if(d) d.textContent='Veriler kaydedildi ve yedeklendi.';
+  }
+};
+window.guvenliKapatVeYedekle=function(){
+  if(typeof window.gpsDurdur==='function') window.gpsDurdur();
+  sync(); save();
+  const btn=document.getElementById('kapat-btn');
+  if(btn){
+    btn.style.boxShadow='0 0 0 2px #ef4444,0 0 12px #ef4444aa,0 0 28px #ef444455,inset 0 1px 1px rgba(255,255,255,.1)';
+    btn.style.background='linear-gradient(145deg,#4a0e0e,#2a0a0a)';
+  }
+  const d=document.getElementById('kapat-durum');
+  if(d) d.textContent='GPS durduruldu. Guvenle kapatabilirsiniz.';
+  setTimeout(function(){
+    document.getElementById('kapat-modal').style.display='none';
+    toast('Guvenli kapatma tamamlandi','ok',4000);
+  },1200);
+};
+window.sadecArkaPlana=function(){
+  sync(); save();
+  document.getElementById('kapat-modal').style.display='none';
+  toast('Kaydedildi — arka plana alabilirsiniz','info',3000);
+};
+
+/* ══ YOL BİLGİSİ TOGGLE ══ */
+window.yolBilgiToggle=function(){
+  const ic=document.getElementById('yol-bilgi-icerik');
+  const ok=document.getElementById('yol-bilgi-ok');
+  if(!ic) return;
+  if(ic.style.display==='none'){
+    ic.style.display='block';
+    if(ok) ok.style.transform='rotate(180deg)';
+    if(typeof window.dRenderYolBilgi==='function') window.dRenderYolBilgi();
+  } else {
+    ic.style.display='none';
+    if(ok) ok.style.transform='rotate(0deg)';
+  }
+};
+
+/* ══ POSTA KODU TOGGLE ══ */
+window._postaAktifUlke=null;
+window.postaTogglePanel=function(){
+  const ic=document.getElementById('posta-panel-icerik');
+  const ok=document.getElementById('posta-panel-ok');
+  if(!ic) return;
+  if(ic.style.display==='none'){
+    ic.style.display='block';
+    if(ok) ok.style.transform='rotate(180deg)';
+    if(typeof window.postaInit==='function') window.postaInit();
+  } else {
+    ic.style.display='none';
+    if(ok) ok.style.transform='rotate(0deg)';
+    window._postaAktifUlke=null;
+    const s=document.getElementById('posta-sonuc');
+    const a=document.getElementById('posta-arama-wrap');
+    if(s) s.style.display='none';
+    if(a) a.style.display='none';
+    document.querySelectorAll('[id^="posta-btn-"]').forEach(function(b){
+      b.style.borderColor='#1e3a5f'; b.style.background='#0d1a26';
+    });
+  }
+};
 function sN(v,fb=0){const n=Number(v);return Number.isFinite(n)&&n>=0?n:fb;}
 
 function load(){
@@ -5538,20 +5712,20 @@ function bindEvents(){
   // Veriler GPS motorundan localStorage aracılığıyla gelir (farklı script scope'ları)
   window._arkaplanKmHesapla = function(){
     try {
-      // arkapan_zamani yoksa (Android sekme kill) → gps_son_zaman fallback
+      // Zaman: arkapan_zamani yoksa gps_son_zaman fallback (Android kill senaryosu)
       let t = parseFloat(localStorage.getItem('arkapan_zamani')) || 0;
-      if(!t){
-        t = parseFloat(localStorage.getItem('gps_son_zaman')) || 0;
-      }
+      if(!t) t = parseFloat(localStorage.getItem('gps_son_zaman')) || 0;
       if(!t) return;
       const gecenSn = Math.floor((Date.now() - t) / 1000);
       if(gecenSn < 5) return;
-      if(gecenSn > 12 * 3600) return; // 12 saatten fazlaysa hesaplama (gerçekçi değil)
+      if(gecenSn > 15 * 3600) return; // 15 saat+ → dinlenme molası, hesaplama
       const arkaGpsAktifti = localStorage.getItem('arkapan_gps') === '1';
       const arkaHiz = parseFloat(localStorage.getItem('arkapan_hiz')) || 0;
       const arkaMesafe = parseFloat(localStorage.getItem('arkapan_mesafe')) || 0;
       // Çift sayılmasın: zaman damgasını hemen sil
       localStorage.removeItem('arkapan_zamani');
+      // Önce mevcut gps_mesafe'yi kontrol et — zaten ileride olabilir
+      const mevcutMesafe = parseFloat(localStorage.getItem('gps_mesafe')) || 0;
       if(arkaGpsAktifti && arkaHiz > 2){
         const ekMetr = (arkaHiz / 3.6) * gecenSn;
         const yeniMesafe = arkaMesafe + ekMetr;
@@ -5631,6 +5805,7 @@ function bindEvents(){
 
 /* ══ İNİT ══ */
 function init(){
+  try{if(window._idbKurtar) window._idbKurtar();}catch(e){}
   load();
   populateCountries();
   bindEvents();
@@ -5644,1058 +5819,624 @@ function init(){
 }
 
 
-/* ══════════════════════════════════════════
+/* ══════════════════════════════════
    POSTA KODU REHBERİ
-   ══════════════════════════════════════════ */
+══════════════════════════════════ */
 (function(){
-
 const POSTA_DB = {
-  'DE': {
-    ad:'Almanya', bayrak:'🇩🇪', format:'5 haneli',
-    bolgeler:[
-      {kod:'00-09', bolge:'Leitzone 0 — Saksonya, Saksonya-Anhalt, Thüringen (Doğu)',
-       detay:[
-        {pref:'01',sehirler:'Dresden, Görlitz, Riesa, Meißen, Pirna, Freital'},
-        {pref:'02',sehirler:'Bautzen, Zittau, Hoyerswerda, Löbau, Görlitz (Doğu)'},
-        {pref:'03',sehirler:'Cottbus, Spremberg, Guben, Forst (Lausitz), Senftenberg'},
-        {pref:'04',sehirler:'Leipzig, Altenburg, Torgau, Grimma, Borna, Wurzen'},
-        {pref:'05',sehirler:'— (rezerv, kullanılmıyor)'},
-        {pref:'06',sehirler:'Halle (Saale), Dessau-Roßlau, Wittenberg, Merseburg, Bitterfeld, Köthen'},
-        {pref:'07',sehirler:'Jena, Gera, Plauen, Weimar, Rudolstadt, Pößneck, Schleiz'},
-        {pref:'08',sehirler:'Zwickau, Plauen (Vogtl.), Aue, Oelsnitz, Stollberg, Reichenbach'},
-        {pref:'09',sehirler:'Chemnitz, Freiberg, Annaberg-Buchholz, Mittweida, Marienberg, Rochlitz'}
-       ]},
-      {kod:'10-19', bolge:'Leitzone 1 — Berlin, Brandenburg, Mecklenburg-Vorpommern',
-       detay:[
-        {pref:'10',sehirler:'Berlin: Mitte, Prenzlauer Berg, Kreuzberg, Friedrichshain, Charlottenburg'},
-        {pref:'11',sehirler:'Berlin: Posta kutuları, büyük kurumlar'},
-        {pref:'12',sehirler:'Berlin: Tempelhof, Neukölln, Treptow, Köpenick, Lichtenberg'},
-        {pref:'13',sehirler:'Berlin: Reinickendorf, Wedding, Spandau, Tegel'},
-        {pref:'14',sehirler:'Berlin: Steglitz, Zehlendorf, Wannsee — Potsdam, Brandenburg an der Havel'},
-        {pref:'15',sehirler:'Frankfurt (Oder), Eisenhüttenstadt, Fürstenwalde, Beeskow'},
-        {pref:'16',sehirler:'Oranienburg, Eberswalde, Schwedt, Neuruppin, Hennigsdorf'},
-        {pref:'17',sehirler:'Neubrandenburg, Greifswald, Stralsund, Anklam, Demmin'},
-        {pref:'18',sehirler:'Rostock, Wismar, Güstrow, Warnemünde, Bad Doberan'},
-        {pref:'19',sehirler:'Schwerin, Wittenberge, Parchim, Hagenow, Ludwigslust'}
-       ]},
-      {kod:'20-29', bolge:'Leitzone 2 — Hamburg, Schleswig-Holstein, Bremen, Kuzey Aşağı Saksonya',
-       detay:[
-        {pref:'20',sehirler:'Hamburg: Mitte, Altona, Eimsbüttel, Barmbek'},
-        {pref:'21',sehirler:'Hamburg: Bergedorf, Harburg — Buchholz, Stade, Buxtehude'},
-        {pref:'22',sehirler:'Hamburg: Wandsbek, Rahlstedt — Norderstedt, Ahrensburg'},
-        {pref:'23',sehirler:'Lübeck, Bad Segeberg, Eutin, Ratzeburg'},
-        {pref:'24',sehirler:'Kiel, Flensburg, Neumünster, Schleswig, Rendsburg'},
-        {pref:'25',sehirler:'Elmshorn, Heide, Husum, Itzehoe, Pinneberg'},
-        {pref:'26',sehirler:'Oldenburg, Wilhelmshaven, Emden, Aurich, Leer'},
-        {pref:'27',sehirler:'Bremerhaven, Cuxhaven, Zeven, Rotenburg (Wümme)'},
-        {pref:'28',sehirler:'Bremen: Mitte, Neustadt, Walle, Ostertor, Hemelingen'},
-        {pref:'29',sehirler:'Lüneburg, Celle, Uelzen, Soltau, Winsen (Luhe), Soltau'}
-       ]},
-      {kod:'30-39', bolge:'Leitzone 3 — Hannover, Braunschweig, Magdeburg, Kassel',
-       detay:[
-        {pref:'30',sehirler:'Hannover: Mitte, List, Linden, Südstadt, Kirchrode'},
-        {pref:'31',sehirler:'Hildesheim, Hameln, Peine, Alfeld, Holzminden'},
-        {pref:'32',sehirler:'Herford, Minden, Bad Oeynhausen, Löhne, Vlotho'},
-        {pref:'33',sehirler:'Paderborn, Bielefeld (Doğu), Detmold, Gütersloh, Lemgo'},
-        {pref:'34',sehirler:'Kassel, Bad Wildungen, Bad Hersfeld, Korbach, Fritzlar'},
-        {pref:'35',sehirler:'Marburg, Gießen, Wetzlar, Lahn, Dillenburg'},
-        {pref:'36',sehirler:'Fulda, Bad Hersfeld, Lauterbach, Hünfeld, Schlüchtern'},
-        {pref:'37',sehirler:'Göttingen, Northeim, Duderstadt, Einbeck, Osterode'},
-        {pref:'38',sehirler:'Braunschweig, Wolfsburg, Salzgitter, Helmstedt, Wolfenbüttel'},
-        {pref:'39',sehirler:'Magdeburg, Halberstadt, Stendal, Schönebeck, Gardelegen, Oschersleben'}
-       ]},
-      {kod:'40-49', bolge:'Leitzone 4 — Kuzey Ren-Vestfalya: Düsseldorf, Dortmund, Essen, Münster',
-       detay:[
-        {pref:'40',sehirler:'Düsseldorf: Altstadt, Friedrichstadt, Bilk, Derendorf, Gerresheim'},
-        {pref:'41',sehirler:'Krefeld, Mönchengladbach, Neuss, Viersen, Kempen'},
-        {pref:'42',sehirler:'Wuppertal, Solingen, Remscheid, Velbert'},
-        {pref:'43',sehirler:'— (rezerv)'},
-        {pref:'44',sehirler:'Dortmund: Mitte, Aplerbeck, Hörde — Bochum Doğu, Castrop-Rauxel'},
-        {pref:'45',sehirler:'Essen: Mitte, Rüttenscheid — Mülheim an der Ruhr, Oberhausen, Bottrop'},
-        {pref:'46',sehirler:'Wesel, Dinslaken, Voerde, Moers (Kuzey), Xanten'},
-        {pref:'47',sehirler:'Duisburg: Mitte, Hamborn — Kleve, Emmerich, Geldern'},
-        {pref:'48',sehirler:'Münster: Mitte, Hiltrup — Steinfurt, Warendorf, Coesfeld'},
-        {pref:'49',sehirler:'Osnabrück, Lingen (Ems), Nordhorn, Meppen, Ibbenbüren'}
-       ]},
-      {kod:'50-59', bolge:'Leitzone 5 — Köln, Bonn, Aachen, Koblenz, Trier',
-       detay:[
-        {pref:'50',sehirler:'Köln: Innenstadt, Ehrenfeld, Nippes, Rodenkirchen'},
-        {pref:'51',sehirler:'Köln: Mülheim, Kalk — Bergisch Gladbach, Leverkusen (Doğu)'},
-        {pref:'52',sehirler:'Aachen, Düren, Jülich, Eschweiler, Stolberg, Herzogenrath'},
-        {pref:'53',sehirler:'Bonn: Zentrum, Bad Godesberg — Siegburg, Königswinter, Euskirchen'},
-        {pref:'54',sehirler:'Trier, Bitburg, Wittlich, Prüm, Saarburg'},
-        {pref:'55',sehirler:'Mainz, Ingelheim, Bingen, Bad Kreuznach, Alzey'},
-        {pref:'56',sehirler:'Koblenz, Neuwied, Andernach, Mayen, Cochem'},
-        {pref:'57',sehirler:'Siegen, Olpe, Betzdorf, Freudenberg, Kreuztal'},
-        {pref:'58',sehirler:'Hagen, Lüdenscheid, Iserlohn, Menden, Plettenberg'},
-        {pref:'59',sehirler:'Hamm, Unna, Soest, Lippstadt, Arnsberg'}
-       ]},
-      {kod:'60-69', bolge:'Leitzone 6 — Frankfurt, Wiesbaden, Mannheim, Saarbrücken, Heidelberg',
-       detay:[
-        {pref:'60',sehirler:'Frankfurt am Main: Innenstadt, Sachsenhausen, Nordend, Bornheim'},
-        {pref:'61',sehirler:'Frankfurt: Höchst, Niederrad — Bad Homburg, Friedberg, Oberursel'},
-        {pref:'62',sehirler:'— (rezerv)'},
-        {pref:'63',sehirler:'Offenbach am Main, Hanau, Seligenstadt, Obertshausen'},
-        {pref:'64',sehirler:'Darmstadt, Rüsselsheim, Bensheim, Erbach, Heppenheim'},
-        {pref:'65',sehirler:'Wiesbaden, Rüdesheim, Geisenheim, Bad Schwalbach'},
-        {pref:'66',sehirler:'Saarbrücken, Neunkirchen, Homburg, St. Ingbert, Völklingen'},
-        {pref:'67',sehirler:'Kaiserslautern, Ludwigshafen, Neustadt (Weinstraße), Speyer, Worms'},
-        {pref:'68',sehirler:'Mannheim: Innenstadt, Neckarstadt — Viernheim'},
-        {pref:'69',sehirler:'Heidelberg: Altstadt, Weststadt — Weinheim, Wiesloch, Sinsheim'}
-       ]},
-      {kod:'70-79', bolge:'Leitzone 7 — Baden-Württemberg: Stuttgart, Karlsruhe, Freiburg',
-       detay:[
-        {pref:'70',sehirler:'Stuttgart: Mitte, Süd, West, Nord, Feuerbach, Zuffenhausen'},
-        {pref:'71',sehirler:'Stuttgart çevresi: Waiblingen, Ludwigsburg, Böblingen, Leonberg'},
-        {pref:'72',sehirler:'Reutlingen, Tübingen, Balingen, Albstadt, Metzingen'},
-        {pref:'73',sehirler:'Göppingen, Schwäbisch Gmünd, Aalen, Geislingen, Heidenheim'},
-        {pref:'74',sehirler:'Heilbronn, Schwäbisch Hall, Crailsheim, Künzelsau, Öhringen'},
-        {pref:'75',sehirler:'Pforzheim, Bruchsal, Bretten, Mühlacker, Kraichtal'},
-        {pref:'76',sehirler:'Karlsruhe, Baden-Baden, Rastatt, Ettlingen, Achern'},
-        {pref:'77',sehirler:'Offenburg, Lahr, Kehl, Gengenbach, Wolfach, Haslach'},
-        {pref:'78',sehirler:'Konstanz, Villingen-Schwenningen, Singen, Tuttlingen, Rottweil'},
-        {pref:'79',sehirler:'Freiburg im Breisgau, Müllheim, Breisach, Titisee-Neustadt, Waldkirch'}
-       ]},
-      {kod:'80-89', bolge:'Leitzone 8 — Bavyera Güney: München, Augsburg, Rosenheim, Ulm',
-       detay:[
-        {pref:'80',sehirler:'München: Altstadt, Schwabing, Maxvorstadt, Bogenhausen, Haidhausen'},
-        {pref:'81',sehirler:'München: Pasing, Sendling, Giesing, Riem, Trudering'},
-        {pref:'82',sehirler:'Fürstenfeldbruck, Weilheim, Garmisch-Partenkirchen, Starnberg'},
-        {pref:'83',sehirler:'Rosenheim, Traunstein, Mühldorf am Inn, Wasserburg'},
-        {pref:'84',sehirler:'Landshut, Dingolfing, Eggenfelden, Pfarrkirchen'},
-        {pref:'85',sehirler:'Ingolstadt, Freising, Erding, Dachau, Pfaffenhofen'},
-        {pref:'86',sehirler:'Augsburg, Günzburg, Dillingen, Donauwörth, Aichach'},
-        {pref:'87',sehirler:'Kempten, Kaufbeuren, Memmingen, Marktoberdorf, Sonthofen'},
-        {pref:'88',sehirler:'Ravensburg, Friedrichshafen, Biberach, Wangen, Leutkirch'},
-        {pref:'89',sehirler:'Ulm, Neu-Ulm, Heidenheim, Günzburg (Doğu), Blaubeuren'}
-       ]},
-      {kod:'90-99', bolge:'Leitzone 9 — Bavyera Kuzey: Nürnberg, Würzburg, Erfurt, Bamberg',
-       detay:[
-        {pref:'90',sehirler:'Nürnberg: Altstadt, Gostenhof, Maxfeld, Gibitzenhof, Wöhrd'},
-        {pref:'91',sehirler:'Erlangen, Fürth, Schwabach, Ansbach, Neustadt (Aisch)'},
-        {pref:'92',sehirler:'Amberg, Weiden in der Oberpfalz, Schwandorf, Cham'},
-        {pref:'93',sehirler:'Regensburg, Straubing, Cham, Kelheim, Roding'},
-        {pref:'94',sehirler:'Passau, Deggendorf, Freyung, Waldkirchen, Grafenau'},
-        {pref:'95',sehirler:'Hof, Bayreuth, Wunsiedel, Marktredwitz, Selb'},
-        {pref:'96',sehirler:'Bamberg, Coburg, Lichtenfels, Kronach, Forchheim'},
-        {pref:'97',sehirler:'Würzburg, Schweinfurt, Bad Kissingen, Kitzingen, Ochsenfurt'},
-        {pref:'98',sehirler:'Meiningen, Suhl, Schmalkalden, Hildburghausen, Sonneberg'},
-        {pref:'99',sehirler:'Erfurt, Gotha, Weimar, Eisenach, Apolda, Sömmerda'}
-       ]}
+  'DE':{ad:'Almanya',bayrak:'🇩🇪',format:'5 haneli',bolgeler:[
+    {kod:'00-09',bolge:'Leitzone 0 — Saksonya, Saksonya-Anhalt, Thüringen',detay:[
+      {pref:'01',sehirler:'Dresden, Görlitz, Riesa, Meißen, Pirna, Freital'},
+      {pref:'02',sehirler:'Bautzen, Zittau, Hoyerswerda, Löbau'},
+      {pref:'03',sehirler:'Cottbus, Spremberg, Guben, Forst'},
+      {pref:'04',sehirler:'Leipzig, Altenburg, Torgau, Grimma, Borna'},
+      {pref:'05',sehirler:'— (rezerv, kullanılmıyor)'},
+      {pref:'06',sehirler:'Halle (Saale), Dessau-Roßlau, Wittenberg, Merseburg, Bitterfeld'},
+      {pref:'07',sehirler:'Jena, Gera, Plauen, Weimar, Rudolstadt, Pößneck'},
+      {pref:'08',sehirler:'Zwickau, Plauen (Vogtl.), Aue, Oelsnitz, Stollberg'},
+      {pref:'09',sehirler:'Chemnitz, Freiberg, Annaberg-Buchholz, Mittweida'}
     ]},
-
-  'AT': {
-    ad:'Avusturya', bayrak:'🇦🇹', format:'4 haneli',
-    bolgeler:[
-      {kod:'1xxx', bolge:'Viyana (Wien)', detay:[
-        {pref:'1010-1090',sehirler:'Wien Merkez, Innere Stadt, Leopoldstadt, Landstraße'},
-        {pref:'1100-1230',sehirler:'Wien dış ilçeler: Favoriten, Simmering, Meidling, Hietzing'},
-        {pref:'1220-1230',sehirler:'Wien Donaustadt, Liesing'}
-      ]},
-      {kod:'2xxx-3xxx', bolge:'Aşağı Avusturya (Niederösterreich)', detay:[
-        {pref:'2100-2490',sehirler:'Klosterneuburg, Korneuburg, Stockerau, Mistelbach'},
-        {pref:'2500-2700',sehirler:'Baden, Wiener Neustadt, Neunkirchen'},
-        {pref:'3100-3500',sehirler:'St. Pölten, Krems, Tulln, Zwettl'},
-        {pref:'3500-3900',sehirler:'Krems (Batı), Waidhofen, Horn, Melk'}
-      ]},
-      {kod:'4xxx', bolge:'Yukarı Avusturya (Oberösterreich)', detay:[
-        {pref:'4020-4100',sehirler:'Linz (Merkez ve ilçeler)'},
-        {pref:'4300-4600',sehirler:'Perg, Steyr, Kirchdorf'},
-        {pref:'4700-4900',sehirler:'Braunau, Ried im Innkreis, Schärding'},
-        {pref:'4800-5000',sehirler:'Gmunden, Vöcklabruck, Wels'}
-      ]},
-      {kod:'5xxx', bolge:'Salzburg + Batı Yukarı Avusturya', detay:[
-        {pref:'5020-5100',sehirler:'Salzburg (Merkez, Maxglan, Gnigl)'},
-        {pref:'5110-5400',sehirler:'Hallein, St. Johann, Zell am See'},
-        {pref:'5500-5700',sehirler:'Bischofshofen, Radstadt, Tamsweg'}
-      ]},
-      {kod:'6xxx', bolge:'Tirol + Vorarlberg', detay:[
-        {pref:'6020-6100',sehirler:'Innsbruck (Merkez ve ilçeler)'},
-        {pref:'6200-6500',sehirler:'Schwaz, Kufstein, Wörgl, Kitzbühel'},
-        {pref:'6700-6900',sehirler:'Bludenz, Feldkirch, Dornbirn, Bregenz (Vorarlberg)'},
-        {pref:'6900-6993',sehirler:'Bregenz, Hard, Lochau'}
-      ]},
-      {kod:'7xxx', bolge:'Burgenland', detay:[
-        {pref:'7000-7100',sehirler:'Eisenstadt, Rust, Mörbisch'},
-        {pref:'7200-7540',sehirler:'Mattersburg, Oberpullendorf, Oberwart'},
-        {pref:'7400-7540',sehirler:'Oberwart, Güssing, Jennersdorf'}
-      ]},
-      {kod:'8xxx', bolge:'Steiermark (Stirya)', detay:[
-        {pref:'8010-8100',sehirler:'Graz (Merkez, Gries, Jakomini)'},
-        {pref:'8200-8600',sehirler:'Gleisdorf, Weiz, Bruck an der Mur, Leoben'},
-        {pref:'8700-8990',sehirler:'Leoben, Judenburg, Knittelfeld, Mürzzuschlag'}
-      ]},
-      {kod:'9xxx', bolge:'Kärnten (Karintya) + Doğu Tirol', detay:[
-        {pref:'9020-9100',sehirler:'Klagenfurt (Merkez ve ilçeler)'},
-        {pref:'9200-9500',sehirler:'Wolfsberg, St. Veit, Feldkirchen, Spittal'},
-        {pref:'9500-9900',sehirler:'Villach, Hermagor, Lienz (Doğu Tirol)'}
-      ]}
+    {kod:'10-19',bolge:'Leitzone 1 — Berlin, Brandenburg, Mecklenburg-Vorpommern',detay:[
+      {pref:'10',sehirler:'Berlin: Mitte, Prenzlauer Berg, Kreuzberg, Friedrichshain, Charlottenburg'},
+      {pref:'11',sehirler:'Berlin: Posta kutuları, büyük kurumlar'},
+      {pref:'12',sehirler:'Berlin: Tempelhof, Neukölln, Treptow, Köpenick'},
+      {pref:'13',sehirler:'Berlin: Reinickendorf, Wedding, Spandau, Tegel'},
+      {pref:'14',sehirler:'Berlin Güney + Potsdam, Brandenburg an der Havel'},
+      {pref:'15',sehirler:'Frankfurt (Oder), Eisenhüttenstadt, Fürstenwalde'},
+      {pref:'16',sehirler:'Oranienburg, Eberswalde, Schwedt, Neuruppin'},
+      {pref:'17',sehirler:'Neubrandenburg, Greifswald, Stralsund, Anklam'},
+      {pref:'18',sehirler:'Rostock, Wismar, Güstrow, Warnemünde'},
+      {pref:'19',sehirler:'Schwerin, Wittenberge, Parchim, Hagenow'}
     ]},
-
-  'BG': {
-    ad:'Bulgaristan', bayrak:'🇧🇬', format:'4 haneli',
-    bolgeler:[
-      {kod:'1xxx', bolge:'Sofya (Sofia)', detay:[
-        {pref:'1000-1700',sehirler:'Sofia Merkez, Ovcha Kupel, Lyulin, Studentski, Mladost'},
-        {pref:'1800-1900',sehirler:'Sofia Doğu: Nadezhda, Slatina, Iskur'}
-      ]},
-      {kod:'2xxx', bolge:'Pernik, Kyustendil, Sofia Çevresi', detay:[
-        {pref:'2300-2400',sehirler:'Pernik, Radomir, Breznik'},
-        {pref:'2500-2700',sehirler:'Kyustendil, Dupnitsa, Blagoevgrad (Kuzey)'},
-        {pref:'2700-2900',sehirler:'Blagoevgrad, Razlog, Bansko, Sandanski'}
-      ]},
-      {kod:'3xxx', bolge:'Montana, Vidin, Vratsa', detay:[
-        {pref:'3000-3200',sehirler:'Vratsa, Mezdra, Byala Slatina'},
-        {pref:'3400-3700',sehirler:'Montana, Berkovitsa, Lom'},
-        {pref:'3700-3900',sehirler:'Vidin, Belogradchik, Kula'}
-      ]},
-      {kod:'4xxx', bolge:'Plovdiv, Smolyan, Pazardzhik', detay:[
-        {pref:'4000-4200',sehirler:'Plovdiv (Merkez, Krichim, Perushtitsa)'},
-        {pref:'4200-4400',sehirler:'Asenovgrad, Hisarya, Karlovo'},
-        {pref:'4400-4700',sehirler:'Pazardzhik, Panagyurishte, Peshtera'},
-        {pref:'4700-4900',sehirler:'Smolyan, Madan, Rudozem'}
-      ]},
-      {kod:'5xxx', bolge:'Veliko Tarnovo, Lovech, Pleven', detay:[
-        {pref:'5000-5300',sehirler:'Veliko Tarnovo, Gorna Oryahovitsa, Svishtov'},
-        {pref:'5300-5500',sehirler:'Gabrovo, Sevlievo, Dryanovo'},
-        {pref:'5500-5800',sehirler:'Lovech, Teteven, Lukovit'},
-        {pref:'5800-5900',sehirler:'Pleven, Levski, Nikopol'}
-      ]},
-      {kod:'6xxx', bolge:'Stara Zagora, Haskovo, Kardzhali', detay:[
-        {pref:'6000-6200',sehirler:'Stara Zagora, Kazanlak, Chirpan'},
-        {pref:'6200-6400',sehirler:'Dimitrovgrad, Haskovo, Harmanli'},
-        {pref:'6400-6600',sehirler:'Kardzhali, Momchilgrad, Krumovgrad'}
-      ]},
-      {kod:'7xxx', bolge:'Ruse, Razgrad, Silistra, Targovishte', detay:[
-        {pref:'7000-7200',sehirler:'Ruse (Merkez ve ilçeler)'},
-        {pref:'7200-7500',sehirler:'Razgrad, Isperih, Kubrat'},
-        {pref:'7500-7700',sehirler:'Silistra, Dulovo, Tutrakan'},
-        {pref:'7700-7900',sehirler:'Targovishte, Popovo, Omurtag'}
-      ]},
-      {kod:'8xxx', bolge:'Burgas, Sliven, Yambol', detay:[
-        {pref:'8000-8200',sehirler:'Burgas (Merkez), Nesebar, Aytos'},
-        {pref:'8200-8400',sehirler:'Pomorie, Karnobat, Sunny Beach (Slanchev Bryag)'},
-        {pref:'8400-8600',sehirler:'Sliven, Nova Zagora, Kotel'},
-        {pref:'8600-8800',sehirler:'Yambol, Elhovo, Straldzha'}
-      ]},
-      {kod:'9xxx', bolge:'Varna, Shumen, Dobrich', detay:[
-        {pref:'9000-9300',sehirler:'Varna (Merkez, Asparuhovo, Mladost)'},
-        {pref:'9300-9500',sehirler:'Shumen, Preslav, Kaspichan'},
-        {pref:'9500-9700',sehirler:'Dobrich, Balchik, General Toshevo'},
-        {pref:'9700-9900',sehirler:'Razgrad (Kuzey), Popovo çevresi'}
-      ]}
+    {kod:'20-29',bolge:'Leitzone 2 — Hamburg, Schleswig-Holstein, Bremen',detay:[
+      {pref:'20',sehirler:'Hamburg: Mitte, Altona, Eimsbüttel, Barmbek'},
+      {pref:'21',sehirler:'Hamburg: Bergedorf, Harburg — Buchholz, Stade'},
+      {pref:'22',sehirler:'Hamburg: Wandsbek — Norderstedt, Ahrensburg'},
+      {pref:'23',sehirler:'Lübeck, Bad Segeberg, Eutin, Ratzeburg'},
+      {pref:'24',sehirler:'Kiel, Flensburg, Neumünster, Schleswig'},
+      {pref:'25',sehirler:'Elmshorn, Heide, Husum, Itzehoe'},
+      {pref:'26',sehirler:'Oldenburg, Wilhelmshaven, Emden, Aurich, Leer'},
+      {pref:'27',sehirler:'Bremerhaven, Cuxhaven, Rotenburg'},
+      {pref:'28',sehirler:'Bremen: Mitte, Neustadt, Walle, Hemelingen'},
+      {pref:'29',sehirler:'Lüneburg, Celle, Uelzen, Soltau'}
     ]},
-
-  'RS': {
-    ad:'Sırbistan', bayrak:'🇷🇸', format:'5 haneli',
-    bolgeler:[
-      {kod:'10000-19999', bolge:'Belgrad (Beograd)', detay:[
-        {pref:'11000-11080',sehirler:'Beograd Merkez, Stari Grad, Vračar, Savski venac'},
-        {pref:'11050-11300',sehirler:'Palilula, Zvezdara, Voždovac, Rakovica'},
-        {pref:'11080-11500',sehirler:'Zemun, Novi Beograd, Surčin, Sopot'}
-      ]},
-      {kod:'20000-29999', bolge:'Güney & Batı Sırbistan', detay:[
-        {pref:'21000',sehirler:'Novi Sad (Vojvodina başkenti)'},
-        {pref:'22000-24000',sehirler:'Sremska Mitrovica, Šabac, Valjevo'},
-        {pref:'26000-29000',sehirler:'Pančevo, Smederevo, Požarevac'}
-      ]},
-      {kod:'30000-39999', bolge:'Doğu Sırbistan', detay:[
-        {pref:'34000-35000',sehirler:'Kragujevac, Jagodina, Paraćin'},
-        {pref:'37000-38000',sehirler:'Kruševac, Aleksandrovac'},
-        {pref:'38000-39000',sehirler:'Priština bölgesi, Kosovska Mitrovica'}
-      ]},
-      {kod:'14000-18000', bolge:'Orta ve Güney Sırbistan', detay:[
-        {pref:'14000',sehirler:'Valjevo'},
-        {pref:'16000',sehirler:'Leskovac, Vlasotince'},
-        {pref:'17000',sehirler:'Vranje, Surdulica'},
-        {pref:'18000',sehirler:'Niš, Aleksinac, Svrljig'}
-      ]}
+    {kod:'30-39',bolge:'Leitzone 3 — Hannover, Braunschweig, Magdeburg, Kassel',detay:[
+      {pref:'30',sehirler:'Hannover: Mitte, List, Linden, Südstadt'},
+      {pref:'31',sehirler:'Hildesheim, Hameln, Peine, Alfeld'},
+      {pref:'32',sehirler:'Herford, Minden, Bad Oeynhausen'},
+      {pref:'33',sehirler:'Paderborn, Bielefeld (Doğu), Detmold, Gütersloh'},
+      {pref:'34',sehirler:'Kassel, Bad Wildungen, Bad Hersfeld'},
+      {pref:'35',sehirler:'Marburg, Gießen, Wetzlar, Dillenburg'},
+      {pref:'36',sehirler:'Fulda, Bad Hersfeld, Lauterbach'},
+      {pref:'37',sehirler:'Göttingen, Northeim, Duderstadt, Einbeck'},
+      {pref:'38',sehirler:'Braunschweig, Wolfsburg, Salzgitter, Helmstedt'},
+      {pref:'39',sehirler:'Magdeburg, Halberstadt, Stendal, Schönebeck'}
     ]},
-
-  'HU': {
-    ad:'Macaristan', bayrak:'🇭🇺', format:'4 haneli',
-    bolgeler:[
-      {kod:'1xxx', bolge:'Budapeşte (Budapest)', detay:[
-        {pref:'1011-1145',sehirler:'Budapest I-XIV. ilçe (Merkez, Buda, Pest)'},
-        {pref:'1151-1239',sehirler:'Budapest XV-XXIII. ilçe (Dış bölgeler)'},
-        {pref:'1300-1476',sehirler:'Budapest posta kutuları ve özel kullanım'}
-      ]},
-      {kod:'2xxx', bolge:'Pest Çevresi, Szentendre', detay:[
-        {pref:'2000-2100',sehirler:'Szentendre, Vác, Pomáz, Dunakeszi'},
-        {pref:'2100-2400',sehirler:'Gödöllő, Aszód, Cegléd'},
-        {pref:'2400-2700',sehirler:'Dunaújváros, Adony, Paks'}
-      ]},
-      {kod:'3xxx', bolge:'Hatvan, Eger, Miskolc', detay:[
-        {pref:'3000-3200',sehirler:'Hatvan, Gyöngyös, Eger'},
-        {pref:'3200-3600',sehirler:'Eger, Heves, Füzesabony'},
-        {pref:'3500-3900',sehirler:'Miskolc, Ózd, Kazincbarcika, Sárospatak'}
-      ]},
-      {kod:'4xxx', bolge:'Debrecen, Nyíregyháza, Kuzey Doğu', detay:[
-        {pref:'4000-4100',sehirler:'Debrecen (Merkez ve ilçeler)'},
-        {pref:'4200-4500',sehirler:'Hajdúböszörmény, Hajdúnánás, Berettyóújfalu'},
-        {pref:'4400-4800',sehirler:'Nyíregyháza, Kisvárda, Nyírbátor'}
-      ]},
-      {kod:'5xxx', bolge:'Szolnok, Güney Ova', detay:[
-        {pref:'5000-5100',sehirler:'Szolnok, Tiszaföldvár'},
-        {pref:'5200-5600',sehirler:'Törökszentmiklós, Mezőtúr, Gyula'},
-        {pref:'5600-5900',sehirler:'Békéscsaba, Orosháza, Szarvas'}
-      ]},
-      {kod:'6xxx', bolge:'Kecskemét, Güney Orta', detay:[
-        {pref:'6000-6100',sehirler:'Kecskemét, Kiskunfélegyháza'},
-        {pref:'6200-6500',sehirler:'Kiskunhalas, Baja, Kalocsa'},
-        {pref:'6700-6900',sehirler:'Szeged, Makó, Hódmezővásárhely'}
-      ]},
-      {kod:'7xxx', bolge:'Pécs, Kaposvár, Güney Batı', detay:[
-        {pref:'7000-7100',sehirler:'Sárbogárd, Dunaföldvár, Tamási'},
-        {pref:'7400-7700',sehirler:'Kaposvár, Dombóvár, Bonyhád'},
-        {pref:'7600-7900',sehirler:'Pécs, Mohács, Siklós, Szigetvár'}
-      ]},
-      {kod:'8xxx', bolge:'Székesfehérvár, Balaton, Batı', detay:[
-        {pref:'8000-8100',sehirler:'Székesfehérvár, Bicske, Mór'},
-        {pref:'8200-8700',sehirler:'Veszprém, Balatonfüred, Siófok, Marcali'},
-        {pref:'8800-8900',sehirler:'Nagykanizsa, Keszthely, Zalaegerszeg (Güney)'}
-      ]},
-      {kod:'9xxx', bolge:'Győr, Sopron, Kuzey Batı', detay:[
-        {pref:'9000-9100',sehirler:'Győr (Merkez ve ilçeler)'},
-        {pref:'9200-9500',sehirler:'Mosonmagyaróvár, Sopron, Kapuvár'},
-        {pref:'9700-9900',sehirler:'Szombathely, Körmend, Szentgotthárd'}
-      ]}
+    {kod:'40-49',bolge:'Leitzone 4 — NRW: Düsseldorf, Dortmund, Essen, Münster',detay:[
+      {pref:'40',sehirler:'Düsseldorf: Altstadt, Friedrichstadt, Bilk, Derendorf'},
+      {pref:'41',sehirler:'Krefeld, Mönchengladbach, Neuss, Viersen'},
+      {pref:'42',sehirler:'Wuppertal, Solingen, Remscheid, Velbert'},
+      {pref:'43',sehirler:'— (rezerv)'},
+      {pref:'44',sehirler:'Dortmund: Mitte, Aplerbeck — Castrop-Rauxel'},
+      {pref:'45',sehirler:'Essen: Mitte — Mülheim, Oberhausen, Bottrop'},
+      {pref:'46',sehirler:'Wesel, Dinslaken, Moers (Kuzey), Xanten'},
+      {pref:'47',sehirler:'Duisburg: Mitte, Hamborn — Kleve, Emmerich'},
+      {pref:'48',sehirler:'Münster: Mitte — Steinfurt, Warendorf, Coesfeld'},
+      {pref:'49',sehirler:'Osnabrück, Lingen, Nordhorn, Meppen'}
     ]},
-
-  'TR': {
-    ad:'Türkiye', bayrak:'🇹🇷', format:'5 haneli (il kodu)',
-    bolgeler:[
-      {kod:'01-09', bolge:'Akdeniz & Ege İlleri', detay:[
-        {pref:'01xxx',sehirler:'Adana'},
-        {pref:'02xxx',sehirler:'Adıyaman'},
-        {pref:'03xxx',sehirler:'Afyonkarahisar'},
-        {pref:'04xxx',sehirler:'Ağrı'},
-        {pref:'06xxx',sehirler:'Ankara'},
-        {pref:'07xxx',sehirler:'Antalya'},
-        {pref:'08xxx',sehirler:'Artvin'},
-        {pref:'09xxx',sehirler:'Aydın'}
-      ]},
-      {kod:'34, 41', bolge:'İstanbul ve Kocaeli', detay:[
-        {pref:'34xxx',sehirler:'İstanbul (Avrupa: 34000-34499, Anadolu: 34500-34999)'},
-        {pref:'41xxx',sehirler:'Kocaeli (İzmit, Gebze, Körfez)'}
-      ]},
-      {kod:'06', bolge:'Ankara', detay:[
-        {pref:'06010-06490',sehirler:'Ankara Merkez ilçeler'},
-        {pref:'06500-06980',sehirler:'Ankara dış ilçeler: Sincan, Etimesgut, Yenimahalle'}
-      ]},
-      {kod:'35', bolge:'İzmir', detay:[
-        {pref:'35xxx',sehirler:'İzmir (Konak, Karşıyaka, Bornova, Buca, Balçova)'}
-      ]},
-      {kod:'16, 26', bolge:'Bursa ve Eskişehir (TIR Koridoru)', detay:[
-        {pref:'16xxx',sehirler:'Bursa'},
-        {pref:'26xxx',sehirler:'Eskişehir'},
-        {pref:'59xxx',sehirler:'Tekirdağ (TIR Kapı: Kapıkule yakını)'},
-        {pref:'22xxx',sehirler:'Edirne (Kapıkule sınır kapısı)'}
-      ]}
+    {kod:'50-59',bolge:'Leitzone 5 — Köln, Bonn, Aachen, Koblenz, Trier',detay:[
+      {pref:'50',sehirler:'Köln: Innenstadt, Ehrenfeld, Nippes, Rodenkirchen'},
+      {pref:'51',sehirler:'Köln: Mülheim, Kalk — Bergisch Gladbach, Leverkusen'},
+      {pref:'52',sehirler:'Aachen, Düren, Jülich, Eschweiler, Stolberg'},
+      {pref:'53',sehirler:'Bonn: Zentrum, Bad Godesberg — Siegburg, Euskirchen'},
+      {pref:'54',sehirler:'Trier, Bitburg, Wittlich, Prüm'},
+      {pref:'55',sehirler:'Mainz, Ingelheim, Bingen, Bad Kreuznach'},
+      {pref:'56',sehirler:'Koblenz, Neuwied, Andernach, Mayen'},
+      {pref:'57',sehirler:'Siegen, Olpe, Betzdorf, Freudenberg'},
+      {pref:'58',sehirler:'Hagen, Lüdenscheid, Iserlohn, Menden'},
+      {pref:'59',sehirler:'Hamm, Unna, Soest, Lippstadt, Arnsberg'}
     ]},
-
-  'NL': {
-    ad:'Hollanda', bayrak:'🇳🇱', format:'4 rakam + 2 harf',
-    bolgeler:[
-      {kod:'1000-1999', bolge:'Amsterdam ve Kuzey Holland', detay:[
-        {pref:'1000-1109',sehirler:'Amsterdam Merkez (Centrum, Jordaan, De Pijp)'},
-        {pref:'1110-1500',sehirler:'Amsterdam Doğu, Diemen, Almere'},
-        {pref:'1700-1999',sehirler:'Alkmaar, Hoorn, Purmerend, Den Helder'}
-      ]},
-      {kod:'2000-2999', bolge:'Den Haag, Rotterdam Güney', detay:[
-        {pref:'2000-2299',sehirler:'Haarlem, Hoofddorp, Schiphol'},
-        {pref:'2500-2599',sehirler:'Den Haag (Merkez ve ilçeler)'},
-        {pref:'2900-2999',sehirler:'Capelle a/d IJssel, Krimpen, Nieuwerkerk'}
-      ]},
-      {kod:'3000-3999', bolge:'Rotterdam, Utrecht', detay:[
-        {pref:'3000-3099',sehirler:'Rotterdam Merkez (Centrum, Kralingen)'},
-        {pref:'3100-3500',sehirler:'Schiedam, Vlaardingen, Delft'},
-        {pref:'3500-3999',sehirler:'Utrecht (Merkez), Nieuwegein, IJsselstein'}
-      ]},
-      {kod:'4000-4999', bolge:'Zeeland, Brabant Güney', detay:[
-        {pref:'4300-4600',sehirler:'Goes, Middelburg, Vlissingen (Zeeland)'},
-        {pref:'4600-4900',sehirler:'Bergen op Zoom, Roosendaal, Breda (Güney)'}
-      ]},
-      {kod:'5000-5999', bolge:'Noord-Brabant', detay:[
-        {pref:'5000-5199',sehirler:'Tilburg (Merkez ve ilçeler)'},
-        {pref:'5200-5500',sehirler:"'s-Hertogenbosch, Oss, Veghel"},
-        {pref:'5600-5900',sehirler:'Eindhoven (Merkez ve ilçeler), Helmond'}
-      ]},
-      {kod:'6000-6999', bolge:'Limburg, Nijmegen', detay:[
-        {pref:'6200-6229',sehirler:'Maastricht'},
-        {pref:'6500-6600',sehirler:'Nijmegen, Arnhem (Güney)'},
-        {pref:'6800-6900',sehirler:'Arnhem (Merkez), Velp, Duiven'}
-      ]},
-      {kod:'7000-7999', bolge:'Gelderland, Overijssel', detay:[
-        {pref:'7400-7600',sehirler:'Deventer, Zutphen, Apeldoorn (Doğu)'},
-        {pref:'7600-7900',sehirler:'Almelo, Hengelo, Enschede'}
-      ]},
-      {kod:'8000-9999', bolge:'Kuzey: Zwolle, Groningen, Friesland', detay:[
-        {pref:'8000-8200',sehirler:'Zwolle, Kampen, Hardenberg'},
-        {pref:'8900-9000',sehirler:'Leeuwarden (Friesland)'},
-        {pref:'9700-9999',sehirler:'Groningen (Merkez ve ilçeler)'}
-      ]}
+    {kod:'60-69',bolge:'Leitzone 6 — Frankfurt, Wiesbaden, Mannheim, Saarbrücken',detay:[
+      {pref:'60',sehirler:'Frankfurt am Main: Innenstadt, Sachsenhausen, Nordend'},
+      {pref:'61',sehirler:'Frankfurt: Höchst — Bad Homburg, Friedberg, Oberursel'},
+      {pref:'63',sehirler:'Offenbach am Main, Hanau, Seligenstadt'},
+      {pref:'64',sehirler:'Darmstadt, Rüsselsheim, Bensheim, Erbach'},
+      {pref:'65',sehirler:'Wiesbaden, Rüdesheim, Geisenheim'},
+      {pref:'66',sehirler:'Saarbrücken, Neunkirchen, Homburg, Völklingen'},
+      {pref:'67',sehirler:'Kaiserslautern, Ludwigshafen, Neustadt, Speyer, Worms'},
+      {pref:'68',sehirler:'Mannheim: Innenstadt, Neckarstadt'},
+      {pref:'69',sehirler:'Heidelberg: Altstadt — Weinheim, Wiesloch, Sinsheim'}
     ]},
-
-  'HR': {
-    ad:'Hırvatistan', bayrak:'🇭🇷', format:'5 haneli',
-    bolgeler:[
-      {kod:'10xxx', bolge:'Zagreb (Başkent)',detay:[
-        {pref:'10000',sehirler:'Zagreb Merkez (Grad Zagreb)'},
-        {pref:'10020-10431',sehirler:'Zagreb ilçeleri: Sesvete, Stenjevec, Novi Zagreb, Samobor'}
-      ]},
-      {kod:'2xxxx', bolge:'Güney Hırvatistan (Dalmaçya)',detay:[
-        {pref:'20xxx',sehirler:'Dubrovnik-Neretva: Dubrovnik, Korčula, Metković'},
-        {pref:'21xxx',sehirler:'Split-Dalmatia: Split, Kaštela, Trogir, Sinj, Makarska'},
-        {pref:'22xxx',sehirler:'Šibenik-Knin: Šibenik, Knin, Drniš'},
-        {pref:'23xxx',sehirler:'Zadar: Zadar, Biograd, Benkovac, Pag'}
-      ]},
-      {kod:'3xxxx', bolge:'Doğu Hırvatistan (Slavonya)',detay:[
-        {pref:'31xxx',sehirler:'Osijek-Baranja: Osijek, Đakovo, Beli Manastir'},
-        {pref:'32xxx',sehirler:'Vukovar-Srijem: Vukovar, Vinkovci, Županja'},
-        {pref:'33xxx',sehirler:'Virovitica-Podravina: Virovitica, Slatina'},
-        {pref:'34xxx',sehirler:'Požega-Slavonija: Požega, Pleternica'},
-        {pref:'35xxx',sehirler:'Brod-Posavina: Slavonski Brod, Nova Gradiška'}
-      ]},
-      {kod:'4xxxx', bolge:'Orta Hırvatistan',detay:[
-        {pref:'40xxx',sehirler:'Međimurje: Čakovec, Prelog'},
-        {pref:'42xxx',sehirler:'Varaždin: Varaždin, Ludbreg, Ivanec'},
-        {pref:'43xxx',sehirler:'Bjelovar-Bilogora: Bjelovar, Čazma, Daruvar'},
-        {pref:'44xxx',sehirler:'Sisak-Moslavina: Sisak, Petrinja, Kutina'},
-        {pref:'47xxx',sehirler:'Karlovac: Karlovac, Ogulin, Slunj'},
-        {pref:'48xxx',sehirler:'Koprivnica-Križevci: Koprivnica, Križevci'},
-        {pref:'49xxx',sehirler:'Krapina-Zagorje: Krapina, Zabok, Zlatar'}
-      ]},
-      {kod:'5xxxx', bolge:'Batı Hırvatistan (İstriya, Kvarner)',detay:[
-        {pref:'51xxx',sehirler:'Primorje-Gorski Kotar: Rijeka, Opatija, Crikvenica, Krk'},
-        {pref:'52xxx',sehirler:'İstriya (Istra): Pula, Rovinj, Poreč, Umag, Labin'},
-        {pref:'53xxx',sehirler:'Lika-Senj: Gospić, Otočac, Novalja (Pag)'}
-      ]}
+    {kod:'70-79',bolge:'Leitzone 7 — Baden-Württemberg: Stuttgart, Karlsruhe, Freiburg',detay:[
+      {pref:'70',sehirler:'Stuttgart: Mitte, Süd, West, Nord, Feuerbach'},
+      {pref:'71',sehirler:'Stuttgart çevresi: Waiblingen, Ludwigsburg, Böblingen'},
+      {pref:'72',sehirler:'Reutlingen, Tübingen, Balingen, Albstadt'},
+      {pref:'73',sehirler:'Göppingen, Schwäbisch Gmünd, Aalen, Geislingen'},
+      {pref:'74',sehirler:'Heilbronn, Schwäbisch Hall, Crailsheim, Öhringen'},
+      {pref:'75',sehirler:'Pforzheim, Bruchsal, Bretten, Mühlacker'},
+      {pref:'76',sehirler:'Karlsruhe, Baden-Baden, Rastatt, Ettlingen'},
+      {pref:'77',sehirler:'Offenburg, Lahr, Kehl, Gengenbach'},
+      {pref:'78',sehirler:'Konstanz, Villingen-Schwenningen, Singen, Tuttlingen'},
+      {pref:'79',sehirler:'Freiburg im Breisgau, Müllheim, Breisach'}
     ]},
-
-  'SI': {
-    ad:'Slovenya', bayrak:'🇸🇮', format:'4 haneli',
-    bolgeler:[
-      {kod:'1xxx', bolge:'Ljubljana ve Orta Slovenya',detay:[
-        {pref:'1000',sehirler:'Ljubljana Merkez'},
-        {pref:'1001-1420',sehirler:'Ljubljana ilçeleri: Šiška, Vič, Moste, Polje, Rožnik'},
-        {pref:'1230-1295',sehirler:'Domžale, Kamnik, Mengeš, Trzin'}
-      ]},
-      {kod:'2xxx', bolge:'Kuzey Doğu (Maribor, Štajerska)',detay:[
-        {pref:'2000',sehirler:'Maribor Merkez'},
-        {pref:'2001-2391',sehirler:'Maribor ilçeleri, Ptuj, Ormož, Lenart'},
-        {pref:'2380-2391',sehirler:'Slovenj Gradec, Ravne na Koroškem, Dravograd'}
-      ]},
-      {kod:'3xxx', bolge:'Orta Doğu (Celje, Savinjska)',detay:[
-        {pref:'3000',sehirler:'Celje Merkez'},
-        {pref:'3001-3330',sehirler:'Žalec, Šentjur, Laško, Mozirje, Velenje (Güney)'},
-        {pref:'3320-3330',sehirler:'Velenje, Šoštanj'}
-      ]},
-      {kod:'4xxx', bolge:'Kuzey Batı (Kranj, Gorenjska)',detay:[
-        {pref:'4000',sehirler:'Kranj Merkez'},
-        {pref:'4001-4294',sehirler:'Škofja Loka, Jesenice, Radovljica, Tržič'},
-        {pref:'4260',sehirler:'Bled'}
-      ]},
-      {kod:'5xxx', bolge:'Batı (Nova Gorica, Primorska)',detay:[
-        {pref:'5000',sehirler:'Nova Gorica Merkez'},
-        {pref:'5001-5294',sehirler:'Ajdovščina, Tolmin, Idrija, Postojna'},
-        {pref:'6000',sehirler:'Koper (Capodistria), Portorož, Piran, Izola'}
-      ]},
-      {kod:'8xxx', bolge:'Güney Doğu (Novo Mesto, Dolenjska)',detay:[
-        {pref:'8000',sehirler:'Novo Mesto Merkez'},
-        {pref:'8001-8362',sehirler:'Krško, Brežice, Trebnje, Kočevje, Črnomelj'}
-      ]}
+    {kod:'80-89',bolge:'Leitzone 8 — Bavyera Güney: München, Augsburg, Ulm',detay:[
+      {pref:'80',sehirler:'München: Altstadt, Schwabing, Maxvorstadt, Bogenhausen'},
+      {pref:'81',sehirler:'München: Pasing, Sendling, Giesing, Riem'},
+      {pref:'82',sehirler:'Fürstenfeldbruck, Weilheim, Garmisch-Partenkirchen'},
+      {pref:'83',sehirler:'Rosenheim, Traunstein, Mühldorf am Inn'},
+      {pref:'84',sehirler:'Landshut, Dingolfing, Eggenfelden'},
+      {pref:'85',sehirler:'Ingolstadt, Freising, Erding, Dachau'},
+      {pref:'86',sehirler:'Augsburg, Günzburg, Dillingen, Donauwörth'},
+      {pref:'87',sehirler:'Kempten, Kaufbeuren, Memmingen'},
+      {pref:'88',sehirler:'Ravensburg, Friedrichshafen, Biberach'},
+      {pref:'89',sehirler:'Ulm, Neu-Ulm, Heidenheim'}
     ]},
-
-  'RO': {
-    ad:'Romanya', bayrak:'🇷🇴', format:'6 haneli',
-    bolgeler:[
-      {kod:'01-06xxxx', bolge:'Bükreş (Bucharest) — 6 Sektör',detay:[
-        {pref:'01xxxx',sehirler:'Bükreş Sektör 1: Aviatorilor, Dorobanți, Floreasca'},
-        {pref:'02xxxx',sehirler:'Bükreş Sektör 2: Colentina, Pantelimon, Iancului'},
-        {pref:'03xxxx',sehirler:'Bükreş Sektör 3: Titan, Dristor, Vitan'},
-        {pref:'04xxxx',sehirler:'Bükreş Sektör 4: Berceni, Giurgiului, Olteniței'},
-        {pref:'05xxxx',sehirler:'Bükreş Sektör 5: Rahova, Ferentari, 13 Septembrie'},
-        {pref:'06xxxx',sehirler:'Bükreş Sektör 6: Drumul Taberei, Militari, Giulești'}
-      ]},
-      {kod:'07-09xxxx', bolge:'Bükreş Çevresi (Ilfov, Giurgiu)',detay:[
-        {pref:'07xxxx',sehirler:'Ilfov İli: Otopeni, Voluntari, Pantelimon, Buftea'},
-        {pref:'08xxxx',sehirler:'Giurgiu İli: Giurgiu, Bolintin-Vale'}
-      ]},
-      {kod:'10xxxx', bolge:'Prahova (Ploiești)',detay:[
-        {pref:'10xxxx',sehirler:'Prahova: Ploiești, Câmpina, Sinaia, Bușteni'}
-      ]},
-      {kod:'11xxxx', bolge:'Cluj (Transilvanya)',detay:[
-        {pref:'11xxxx',sehirler:'Cluj: Cluj-Napoca, Turda, Câmpia Turzii, Dej'}
-      ]},
-      {kod:'20xxxx', bolge:'Constanța (Karadeniz Kıyısı)',detay:[
-        {pref:'20xxxx',sehirler:'Constanța: Constanța, Mangalia, Eforie, Năvodari, Mamaia'}
-      ]},
-      {kod:'30xxxx', bolge:'Timișoara (Banat)',detay:[
-        {pref:'30xxxx',sehirler:'Timiș: Timișoara, Lugoj, Jimbolia'},
-        {pref:'31xxxx',sehirler:'Arad: Arad, Ineu, Lipova'}
-      ]},
-      {kod:'40xxxx', bolge:'Cluj Merkez (Cluj-Napoca)',detay:[
-        {pref:'40xxxx',sehirler:'Cluj-Napoca Merkez ve ilçeleri'}
-      ]},
-      {kod:'50xxxx', bolge:'Brașov (Transilvanya)',detay:[
-        {pref:'50xxxx',sehirler:'Brașov: Brașov, Sinaia, Predeal, Zărnești, Făgăraș'}
-      ]},
-      {kod:'70-79xxxx', bolge:'Diğer Önemli İller',detay:[
-        {pref:'70xxxx',sehirler:'Bacău: Bacău, Onești, Moinești'},
-        {pref:'71xxxx',sehirler:'Suceava: Suceava, Fălticeni, Rădăuți'},
-        {pref:'72xxxx',sehirler:'Iași: Iași, Pașcani, Hârlău'},
-        {pref:'73xxxx',sehirler:'Galați: Galați, Tecuci, Târgu Bujor'},
-        {pref:'74xxxx',sehirler:'Brăila: Brăila, Ianca'},
-        {pref:'75xxxx',sehirler:'Buzău: Buzău, Râmnicu Sărat'},
-        {pref:'76xxxx',sehirler:'Vâlcea: Râmnicu Vâlcea, Drăgășani'},
-        {pref:'77xxxx',sehirler:'Sibiu: Sibiu, Mediaș, Cisnădie'},
-        {pref:'78xxxx',sehirler:'Alba: Alba Iulia, Sebeș, Aiud'},
-        {pref:'79xxxx',sehirler:'Mureș: Târgu Mureș, Reghin, Sighișoara'}
-      ]}
-    ]},
-
-  'GR': {
-    ad:'Yunanistan', bayrak:'🇬🇷', format:'5 haneli',
-    bolgeler:[
-      {kod:'100-180', bolge:'Atina (Attika)',detay:[
-        {pref:'100-115',sehirler:'Atina Merkez: Kolonaki, Exarchia, Pangrati, Kypseli, Zografou'},
-        {pref:'116-124',sehirler:'Atina Güney: Neos Kosmos, Kallithea, Moschato, Tavros'},
-        {pref:'130-145',sehirler:'Atina Kuzey: Kifisia, Marousi, Chalandri, Agia Paraskevi'},
-        {pref:'151-175',sehirler:'Atina Batı/Doğu: Piraeus, Peristeri, Ilion, Glyfada'}
-      ]},
-      {kod:'181-199', bolge:'Attika (Atina çevresi)',detay:[
-        {pref:'185',sehirler:'Piraeus (Pire) Merkez'},
-        {pref:'190-199',sehirler:'Elefsina, Marathon, Lavrio, Rafina, Spata (Havaalanı)'}
-      ]},
-      {kod:'200-299', bolge:'Kuzey Yunanistan (Makedonya, Trakya)',detay:[
-        {pref:'200-214',sehirler:'Korinthos, Argos, Nafplio, Sparta (Peloponnesos Kuzey)'},
-        {pref:'541-570',sehirler:'Selanik (Thessaloniki): Merkez, Kalamaria, Panorama, Thermi'},
-        {pref:'600-641',sehirler:'Kavala, Drama, Serres, Xanthi, Komotini, Alexandroupoli'}
-      ]},
-      {kod:'300-499', bolge:'Orta ve Batı Yunanistan',detay:[
-        {pref:'300-310',sehirler:'Messolongi, Agrinio, Arta (Batı Yunanistan)'},
-        {pref:'411-435',sehirler:'Larissa, Volos, Trikala, Karditsa (Thessalia)'},
-        {pref:'451-482',sehirler:'Ioannina, Preveza, Lefkada (Epirus)'}
-      ]},
-      {kod:'700-855', bolge:'Adalар ve Girit',detay:[
-        {pref:'700-745',sehirler:'Girit (Crete): Heraklion, Chania, Rethymno, Agios Nikolaos'},
-        {pref:'811-855',sehirler:'Adalar: Lesbos (Mytilene), Chios, Samos, Rhodes (Rodos), Kos'}
-      ]}
-    ]},
-
-  'IT': {
-    ad:'İtalya', bayrak:'🇮🇹', format:'5 haneli (CAP)',
-    bolgeler:[
-      {kod:'00-09', bolge:'Lazio, Sardegna (Roma)',detay:[
-        {pref:'00',sehirler:'Roma: Merkez (00100), Parioli, Prati, Trastevere, EUR, Ostia'},
-        {pref:'01',sehirler:'Viterbo, Rieti, Civitavecchia'},
-        {pref:'02',sehirler:'Rieti, L\'Aquila (Kuzey)'},
-        {pref:'03',sehirler:'Frosinone, Latina (Güney Lazio)'},
-        {pref:'04',sehirler:'Latina, Terracina, Formia'},
-        {pref:'07',sehirler:'Sassari (Sardegna Kuzey), Nuoro'},
-        {pref:'08',sehirler:'Nuoro, Oristano (Sardegna Orta)'},
-        {pref:'09',sehirler:'Cagliari (Sardegna Güney)'}
-      ]},
-      {kod:'10-19', bolge:'Piemonte, Valle d\'Aosta (Torino)',detay:[
-        {pref:'10',sehirler:'Torino: Merkez, Mirafiori, Lingotto, Barriera di Milano'},
-        {pref:'11',sehirler:'Aosta (Valle d\'Aosta)'},
-        {pref:'12',sehirler:'Cuneo, Alba, Savigliano, Fossano'},
-        {pref:'13',sehirler:'Vercelli, Biella, Novara (Doğu)'},
-        {pref:'14',sehirler:'Asti, Casale Monferrato'},
-        {pref:'15',sehirler:'Alessandria, Tortona, Novi Ligure'}
-      ]},
-      {kod:'16-19', bolge:'Liguria (Genova)',detay:[
-        {pref:'16',sehirler:'Genova: Merkez, Sampierdarena, Sestri Ponente, Nervi'},
-        {pref:'17',sehirler:'Savona, Albenga, Finale Ligure'},
-        {pref:'18',sehirler:'Imperia, Sanremo, Ventimiglia'},
-        {pref:'19',sehirler:'La Spezia, Sarzana, Lerici'}
-      ]},
-      {kod:'20-29', bolge:'Lombardia (Milano)',detay:[
-        {pref:'20',sehirler:'Milano: Merkez, Navigli, Brera, Isola, Bicocca, Porta Romana'},
-        {pref:'21',sehirler:'Varese, Busto Arsizio, Gallarate, Luino'},
-        {pref:'22',sehirler:'Como, Lecco, Cantù, Erba'},
-        {pref:'23',sehirler:'Sondrio, Lecco (Doğu), Morbegno'},
-        {pref:'24',sehirler:'Bergamo: Merkez, Dalmine, Treviglio, Romano di Lombardia'},
-        {pref:'25',sehirler:'Brescia: Merkez, Desenzano (Garda), Salò'},
-        {pref:'26',sehirler:'Cremona, Crema, Soresina'},
-        {pref:'27',sehirler:'Pavia, Vigevano, Voghera, Lodi (Güney)'},
-        {pref:'28',sehirler:'Novara (Batı), Verbania, Arona'},
-        {pref:'29',sehirler:'Piacenza (Emilia Sınırı)'}
-      ]},
-      {kod:'30-39', bolge:'Veneto, Trentino-Alto Adige (Venezia, Verona)',detay:[
-        {pref:'30',sehirler:'Venezia (Venedik): Mestre, Marghera, Mira, Chioggia'},
-        {pref:'31',sehirler:'Treviso, Vittorio Veneto, Conegliano'},
-        {pref:'32',sehirler:'Belluno, Feltre, Cortina d\'Ampezzo'},
-        {pref:'33',sehirler:'Udine, Cividale del Friuli (Friuli)'},
-        {pref:'34',sehirler:'Trieste, Gorizia (Friuli-Venezia Giulia)'},
-        {pref:'35',sehirler:'Padova (Padua): Merkez, Abano Terme, Cittadella'},
-        {pref:'36',sehirler:'Vicenza, Bassano del Grappa, Thiene'},
-        {pref:'37',sehirler:'Verona: Merkez, Villafranca, San Bonifacio, Legnago'},
-        {pref:'38',sehirler:'Trento, Rovereto, Riva del Garda (Trentino)'},
-        {pref:'39',sehirler:'Bolzano/Bozen, Merano/Meran (Alto Adige/Güney Tirol)'}
-      ]},
-      {kod:'40-49', bolge:'Emilia-Romagna (Bologna)',detay:[
-        {pref:'40',sehirler:'Bologna: Merkez, San Lazzaro, Casalecchio, Imola'},
-        {pref:'41',sehirler:'Modena, Carpi, Sassuolo, Vignola'},
-        {pref:'42',sehirler:'Reggio Emilia, Guastalla, Correggio'},
-        {pref:'43',sehirler:'Parma, Fidenza, Langhirano'},
-        {pref:'44',sehirler:'Ferrara, Cento, Comacchio'},
-        {pref:'45',sehirler:'Rovigo, Adria (Veneto Güney)'},
-        {pref:'46',sehirler:'Mantova (Mantua), Castiglione delle Stiviere'},
-        {pref:'47',sehirler:'Forlì-Cesena, Rimini, Cesenatico'},
-        {pref:'48',sehirler:'Ravenna, Faenza, Lugo'},
-        {pref:'61-63',sehirler:'Marche: Pesaro, Ancona, Macerata, Ascoli Piceno'}
-      ]},
-      {kod:'50-59', bolge:'Toscana (Firenze)',detay:[
-        {pref:'50',sehirler:'Firenze (Floransa): Merkez, Peretola, Scandicci, Sesto F.no'},
-        {pref:'51',sehirler:'Pistoia, Montecatini Terme, Pescia'},
-        {pref:'52',sehirler:'Arezzo, Cortona, Sansepolcro'},
-        {pref:'53',sehirler:'Siena, Montepulciano, Poggibonsi'},
-        {pref:'54',sehirler:'Massa-Carrara, Marina di Carrara'},
-        {pref:'55',sehirler:'Lucca, Viareggio, Pietrasanta'},
-        {pref:'56',sehirler:'Pisa, Pontedera, Volterra'},
-        {pref:'57',sehirler:'Livorno, Piombino, Portoferraio (Elba)'},
-        {pref:'58',sehirler:'Grosseto, Orbetello, Porto Ercole'},
-        {pref:'59',sehirler:'Prato, Montemurlo'}
-      ]},
-      {kod:'70-89', bolge:'Güney İtalya (Napoli, Sicilya, Calabria)',detay:[
-        {pref:'70',sehirler:'Bari: Merkez, Altamura, Molfetta, Taranto (Kuzey)'},
-        {pref:'71',sehirler:'Foggia, Manfredonia, Lucera, San Severo'},
-        {pref:'72',sehirler:'Brindisi, Taranto (Batı), Ostuni, Fasano'},
-        {pref:'73',sehirler:'Lecce, Gallipoli, Otranto, Maglie'},
-        {pref:'74',sehirler:'Taranto: Merkez, Massafra, Manduria'},
-        {pref:'75',sehirler:'Matera, Potenza (Güney)'},
-        {pref:'76',sehirler:'Barletta-Andria-Trani, Canosa di Puglia'},
-        {pref:'80',sehirler:'Napoli (Napoli): Merkez, Posillipo, Bagnoli, Chiaia'},
-        {pref:'81',sehirler:'Caserta, Santa Maria Capua Vetere, Aversa'},
-        {pref:'82',sehirler:'Benevento, Telese Terme'},
-        {pref:'83',sehirler:'Avellino, Ariano Irpino, Nola'},
-        {pref:'84',sehirler:'Salerno, Amalfi, Positano, Eboli, Battipaglia'},
-        {pref:'85',sehirler:'Potenza: Merkez, Melfi, Lagonegro'},
-        {pref:'87',sehirler:'Cosenza, Rende, Rossano, Paola (Calabria)'},
-        {pref:'88',sehirler:'Catanzaro, Lamezia Terme, Vibo Valentia'},
-        {pref:'89',sehirler:'Reggio Calabria, Gioia Tauro, Locri'},
-        {pref:'90',sehirler:'Palermo: Merkez, Monreale, Bagheria (Sicilya)'},
-        {pref:'91',sehirler:'Trapani, Marsala, Mazara del Vallo (Sicilya Batı)'},
-        {pref:'92',sehirler:'Agrigento, Sciacca, Licata (Sicilya Güney)'},
-        {pref:'93',sehirler:'Caltanissetta, Enna, Gela (Sicilya Orta)'},
-        {pref:'94',sehirler:'Enna, Piazza Armerina'},
-        {pref:'95',sehirler:'Catania: Merkez, Acireale, Caltagirone (Sicilya Doğu)'},
-        {pref:'96',sehirler:'Siracusa (Siracuse), Noto, Augusta'},
-        {pref:'97',sehirler:'Ragusa, Modica, Vittoria, Comiso'},
-        {pref:'98',sehirler:'Messina, Milazzo, Barcellona Pozzo di Gotto'}
-      ]}
-    ]},
-
-  'CZ': {
-    ad:'Çekya', bayrak:'🇨🇿', format:'5 haneli (PSČ)',
-    bolgeler:[
-      {kod:'1xx xx', bolge:'Praha (Prag)',detay:[
-        {pref:'100-109',sehirler:'Praha 1-9: Staré Město, Nové Město, Vinohrady, Žižkov'},
-        {pref:'110-149',sehirler:'Praha 10-21: Vršovice, Nusle, Smíchov, Košíře'},
-        {pref:'150-199',sehirler:'Praha çevresi: Roztoky, Černošice, Říčany, Brandýs'}
-      ]},
-      {kod:'2xx xx', bolge:'Orta Bohemya (Středočeský)',detay:[
-        {pref:'250-270',sehirler:'Mladá Boleslav, Kladno, Mělník, Kolín'},
-        {pref:'280-299',sehirler:'Kolín, Kutná Hora, Nymburk, Poděbrady'}
-      ]},
-      {kod:'3xx xx', bolge:'Güney Bohemya, Batı Bohemya',detay:[
-        {pref:'301-340',sehirler:'Plzeň (Pilsen): Merkez ve ilçeleri'},
-        {pref:'370-399',sehirler:'České Budějovice, Třeboň, Písek, Strakonice'}
-      ]},
-      {kod:'4xx xx', bolge:'Kuzey Bohemya (Liberec, Ústí)',detay:[
-        {pref:'400-418',sehirler:'Ústí nad Labem, Děčín, Teplice, Most, Chomutov'},
-        {pref:'460-468',sehirler:'Liberec, Jablonec nad Nisou, Frýdlant'}
-      ]},
-      {kod:'5xx xx', bolge:'Doğu Bohemya (Hradec Králové, Pardubice)',detay:[
-        {pref:'500-516',sehirler:'Hradec Králové, Jičín, Náchod, Trutnov'},
-        {pref:'530-572',sehirler:'Pardubice, Chrudim, Svitavy, Ústí nad Orlicí'}
-      ]},
-      {kod:'6xx xx', bolge:'Güney Moravya (Brno)',detay:[
-        {pref:'600-620',sehirler:'Brno: Merkez, Žabovřesky, Bystrc, Líšeň, Bohunice'},
-        {pref:'621-699',sehirler:'Znojmo, Třebíč, Jihlava, Břeclav, Hodonín'}
-      ]},
-      {kod:'7xx xx', bolge:'Kuzey Moravya, Silezya (Ostrava)',detay:[
-        {pref:'700-720',sehirler:'Ostrava: Merkez, Poruba, Vítkovice, Hrabová'},
-        {pref:'741-799',sehirler:'Opava, Karviná, Frýdek-Místek, Havířov, Nový Jičín'}
-      ]},
-      {kod:'8xx xx', bolge:'Olomouc, Zlín (Orta Moravya)',detay:[
-        {pref:'760-799',sehirler:'Zlín, Uherské Hradiště, Vsetín, Kroměříž'},
-        {pref:'770-799',sehirler:'Olomouc, Prostějov, Přerov, Šumperk'}
-      ]}
-    ]},
-
-  'SK': {
-    ad:'Slovakya', bayrak:'🇸🇰', format:'5 haneli (PSČ)',
-    bolgeler:[
-      {kod:'8xx xx', bolge:'Bratislava (Başkent)',detay:[
-        {pref:'811-841',sehirler:'Bratislava: Staré Mesto, Petržalka, Ružinov, Karlova Ves'},
-        {pref:'842-899',sehirler:'Bratislava çevresi: Senec, Malacky, Pezinok'}
-      ]},
-      {kod:'9xx xx', bolge:'Batı ve Orta Slovakya',detay:[
-        {pref:'911',sehirler:'Trenčín, Dubnica nad Váhom, Ilava'},
-        {pref:'917',sehirler:'Trnava, Hlohovec, Piešťany'},
-        {pref:'920-940',sehirler:'Galanta, Šaľa, Dunajská Streda, Komárno'},
-        {pref:'949',sehirler:'Nitra, Zlaté Moravce, Šurany'},
-        {pref:'960',sehirler:'Zvolen, Detva, Krupina'},
-        {pref:'974',sehirler:'Banská Bystrica, Brezno, Rimavská Sobota'},
-        {pref:'984',sehirler:'Lučenec, Fiľakovo, Veľký Krtíš'}
-      ]},
-      {kod:'0xx xx', bolge:'Kuzey ve Doğu Slovakya',detay:[
-        {pref:'010',sehirler:'Žilina, Bytča, Kysucké Nové Mesto'},
-        {pref:'017-022',sehirler:'Považská Bystrica, Čadca, Námestovo'},
-        {pref:'034-036',sehirler:'Ružomberok, Martin, Turčianske Teplice'},
-        {pref:'040-044',sehirler:'Košice: Merkez, Sever, Juh, Západ, Džungľa'},
-        {pref:'058',sehirler:'Poprad, Tatry, Kežmarok, Levoča'},
-        {pref:'071',sehirler:'Michalovce, Sobrance, Strážske'},
-        {pref:'080',sehirler:'Prešov, Sabinov, Bardejov'},
-        {pref:'085-090',sehirler:'Bardejov, Stará Ľubovňa, Humenné, Vranov nad Topľou'}
-      ]}
-    ]},
-
-  'FR': {
-    ad:'Fransa', bayrak:'🇫🇷', format:'5 haneli',
-    bolgeler:[
-      {kod:'01-09', bolge:'Doğu Fransa (Ain, Ariège, Aude)',detay:[
-        {pref:'01',sehirler:'Ain: Bourg-en-Bresse, Oyonnax, Ambérieu-en-Bugey'},
-        {pref:'02',sehirler:'Aisne: Laon, Saint-Quentin, Soissons, Château-Thierry'},
-        {pref:'03',sehirler:'Allier: Moulins, Vichy, Montluçon'},
-        {pref:'06',sehirler:'Alpes-Maritimes: Nice, Cannes, Antibes, Menton'},
-        {pref:'07',sehirler:'Ardèche: Privas, Aubenas, Annonay'},
-        {pref:'08',sehirler:'Ardennes: Charleville-Mézières, Sedan, Rethel'},
-        {pref:'09',sehirler:'Ariège: Foix, Pamiers, Saint-Girons'}
-      ]},
-      {kod:'13', bolge:'Marseille ve Bouches-du-Rhône',detay:[
-        {pref:'13001-13016',sehirler:'Marseille 1. ile 16. arrondissement'},
-        {pref:'13100-13960',sehirler:'Aix-en-Provence, Arles, Martigues, Salon-de-Provence'}
-      ]},
-      {kod:'31-33', bolge:'Toulouse, Bordeaux (Güney Batı)',detay:[
-        {pref:'31',sehirler:'Haute-Garonne: Toulouse, Colomiers, Muret, Saint-Gaudens'},
-        {pref:'33',sehirler:'Gironde: Bordeaux, Mérignac, Pessac, Libourne, Arcachon'}
-      ]},
-      {kod:'38, 69', bolge:'Lyon, Grenoble (Rhône-Alpes)',detay:[
-        {pref:'38',sehirler:'Isère: Grenoble, Bourgoin-Jallieu, Voiron, Vienne'},
-        {pref:'69',sehirler:'Rhône: Lyon (1-9. arr.), Villeurbanne, Bron, Vénissieux'}
-      ]},
-      {kod:'44, 67, 75', bolge:'Paris, Nantes, Strasbourg',detay:[
-        {pref:'44',sehirler:'Loire-Atlantique: Nantes, Saint-Nazaire, Saint-Herblain'},
-        {pref:'67',sehirler:'Bas-Rhin: Strasbourg, Haguenau, Saverne, Obernai'},
-        {pref:'75',sehirler:'Paris: 75001-75020 (1. ile 20. arrondissement)'}
-      ]},
-      {kod:'59, 60, 62', bolge:'Kuzey Fransa (Lille, Amiens)',detay:[
-        {pref:'59',sehirler:'Nord: Lille, Roubaix, Tourcoing, Dunkerque, Valenciennes'},
-        {pref:'60',sehirler:'Oise: Beauvais, Compiègne, Creil, Senlis'},
-        {pref:'62',sehirler:'Pas-de-Calais: Arras, Calais, Boulogne-sur-Mer, Lens'}
-      ]},
-      {kod:'76, 80', bolge:'Normandie (Rouen, Amiens)',detay:[
-        {pref:'76',sehirler:'Seine-Maritime: Rouen, Le Havre, Dieppe, Fécamp'},
-        {pref:'80',sehirler:'Somme: Amiens, Abbeville, Péronne'}
-      ]},
-      {kod:'83-84', bolge:'Provence-Alpes (Nice, Toulon)',detay:[
-        {pref:'83',sehirler:'Var: Toulon, Fréjus, Saint-Raphaël, Draguignan, Hyères'},
-        {pref:'84',sehirler:'Vaucluse: Avignon, Orange, Carpentras, Apt'}
-      ]}
-    ]},
-
-  'BE': {
-    ad:'Belçika', bayrak:'🇧🇪', format:'4 haneli',
-    bolgeler:[
-      {kod:'1xxx', bolge:'Brüksel ve Brabant',detay:[
-        {pref:'1000-1099',sehirler:'Brüksel (Brussel/Bruxelles): Merkez, Ixelles, Etterbeek, Uccle'},
-        {pref:'1100-1499',sehirler:'Brabant Wallon: Nivelles, Wavre, Waterloo, Ottignies'},
-        {pref:'1500-1999',sehirler:'Flemish Brabant: Halle, Vilvoorde, Leuven, Tienen'}
-      ]},
-      {kod:'2xxx', bolge:'Antwerpen (Antwerp) Eyaleti',detay:[
-        {pref:'2000-2099',sehirler:'Antwerpen: Merkez, Berchem, Borgerhout, Deurne'},
-        {pref:'2100-2990',sehirler:'Mechelen, Turnhout, Herentals, Geel, Mol, Lier'}
-      ]},
-      {kod:'3xxx', bolge:'Flemish Brabant ve Limburg',detay:[
-        {pref:'3000-3099',sehirler:'Leuven (Louvain): Merkez ve ilçeleri'},
-        {pref:'3200-3990',sehirler:'Aarschot, Diest, Hasselt, Genk, Sint-Truiden, Tongeren'}
-      ]},
-      {kod:'4xxx', bolge:'Liège (Liège Eyaleti)',detay:[
-        {pref:'4000-4099',sehirler:'Liège: Merkez, Guillemins, Outremeuse, Rocourt'},
-        {pref:'4100-4990',sehirler:'Huy, Seraing, Verviers, Eupen, Spa, Malmedy'}
-      ]},
-      {kod:'5xxx', bolge:'Namur Eyaleti',detay:[
-        {pref:'5000-5099',sehirler:'Namur: Merkez, Jambes, Salzinnes'},
-        {pref:'5100-5680',sehirler:'Andenne, Dinant, Philippeville, Couvin, Rochefort'}
-      ]},
-      {kod:'6xxx', bolge:'Hainaut ve Luxembourg',detay:[
-        {pref:'6000-6299',sehirler:'Charleroi, Mons, Tournai, La Louvière, Soignies'},
-        {pref:'6600-6997',sehirler:'Arlon, Bastogne, Marche-en-Famenne, Neufchâteau'}
-      ]},
-      {kod:'7xxx', bolge:'Hainaut Batı',detay:[
-        {pref:'7000-7099',sehirler:'Mons: Merkez, Colfontaine, Frameries'},
-        {pref:'7100-7900',sehirler:'La Louvière, Soignies, Enghien, Ath, Mouscron, Tournai'}
-      ]},
-      {kod:'8xxx', bolge:'West-Vlaanderen (Brugge, Gent)',detay:[
-        {pref:'8000-8099',sehirler:'Brugge (Bruges): Merkez, Sint-Michiels, Sint-Andries'},
-        {pref:'8200-8990',sehirler:'Oostende, Kortrijk, Roeselare, Ieper, Veurne, Poperinge'}
-      ]},
-      {kod:'9xxx', bolge:'Oost-Vlaanderen (Gent)',detay:[
-        {pref:'9000-9099',sehirler:'Gent: Merkez, Ledeberg, Sint-Amandsberg, Drongen'},
-        {pref:'9100-9999',sehirler:'Sint-Niklaas, Aalst, Dendermonde, Ronse, Oudenaarde, Eeklo'}
-      ]}
-    ]},
-
-  'PL': {
-    ad:'Polonya', bayrak:'🇵🇱', format:'2 rakam - 3 rakam',
-    bolgeler:[
-      {kod:'00-09', bolge:'Warszawa (Varşova)', detay:[
-        {pref:'00-09',sehirler:'Warszawa Merkez, Śródmieście, Wola, Praga'}
-      ]},
-      {kod:'10-19', bolge:'Warmia-Mazury, Podlaskie', detay:[
-        {pref:'10-11',sehirler:'Olsztyn, Elbląg, Bartoszyce'},
-        {pref:'15-18',sehirler:'Białystok, Łomża, Suwałki'}
-      ]},
-      {kod:'20-29', bolge:'Lublin, Rzeszów', detay:[
-        {pref:'20-24',sehirler:'Lublin, Chełm, Zamość'},
-        {pref:'35-39',sehirler:'Rzeszów, Przemyśl, Tarnów'}
-      ]},
-      {kod:'30-49', bolge:'Kraków, Katowice, Śląsk', detay:[
-        {pref:'30-34',sehirler:'Kraków (Merkez ve ilçeler)'},
-        {pref:'40-44',sehirler:'Katowice, Sosnowiec, Gliwice, Bytom'},
-        {pref:'45-49',sehirler:'Opole, Częstochowa, Bielsko-Biała'}
-      ]},
-      {kod:'50-59', bolge:'Wrocław, Dolny Śląsk', detay:[
-        {pref:'50-55',sehirler:'Wrocław (Merkez ve ilçeler)'},
-        {pref:'58-59',sehirler:'Jelenia Góra, Wałbrzych, Legnica'}
-      ]},
-      {kod:'60-69', bolge:'Poznań, Wielkopolska', detay:[
-        {pref:'60-62',sehirler:'Poznań (Merkez ve ilçeler)'},
-        {pref:'63-69',sehirler:'Kalisz, Konin, Leszno, Gniezno'}
-      ]},
-      {kod:'70-79', bolge:'Szczecin, Kuzey Batı', detay:[
-        {pref:'70-72',sehirler:'Szczecin (Merkez ve ilçeler)'},
-        {pref:'75-78',sehirler:'Koszalin, Słupsk, Kołobrzeg'}
-      ]},
-      {kod:'80-89', bolge:'Gdańsk, Trójmiasto, Kuzey', detay:[
-        {pref:'80-82',sehirler:'Gdańsk (Merkez), Gdynia, Sopot'},
-        {pref:'83-87',sehirler:'Starogard Gdański, Tczew, Bydgoszcz'},
-        {pref:'87-89',sehirler:'Toruń, Włocławek, Grudziądz'}
-      ]},
-      {kod:'90-99', bolge:'Łódź, Orta Polonya', detay:[
-        {pref:'90-94',sehirler:'Łódź (Merkez ve ilçeler)'},
-        {pref:'95-99',sehirler:'Skierniewice, Piotrków Trybunalski, Radom'}
-      ]}
+    {kod:'90-99',bolge:'Leitzone 9 — Bavyera Kuzey: Nürnberg, Würzburg, Erfurt',detay:[
+      {pref:'90',sehirler:'Nürnberg: Altstadt, Gostenhof, Maxfeld'},
+      {pref:'91',sehirler:'Erlangen, Fürth, Schwabach, Ansbach'},
+      {pref:'92',sehirler:'Amberg, Weiden in der Oberpfalz, Schwandorf'},
+      {pref:'93',sehirler:'Regensburg, Straubing, Cham, Kelheim'},
+      {pref:'94',sehirler:'Passau, Deggendorf, Freyung, Waldkirchen'},
+      {pref:'95',sehirler:'Hof, Bayreuth, Wunsiedel, Marktredwitz'},
+      {pref:'96',sehirler:'Bamberg, Coburg, Lichtenfels, Kronach'},
+      {pref:'97',sehirler:'Würzburg, Schweinfurt, Bad Kissingen, Kitzingen'},
+      {pref:'98',sehirler:'Meiningen, Suhl, Schmalkalden, Sonneberg'},
+      {pref:'99',sehirler:'Erfurt, Gotha, Weimar, Eisenach, Apolda'}
     ]}
+  ]},
+  'AT':{ad:'Avusturya',bayrak:'🇦🇹',format:'4 haneli',bolgeler:[
+    {kod:'1xxx',bolge:'Viyana (Wien)',detay:[
+      {pref:'1010-1090',sehirler:'Wien Merkez, Innere Stadt, Leopoldstadt, Landstraße'},
+      {pref:'1100-1230',sehirler:'Wien dış ilçeler: Favoriten, Simmering, Meidling, Hietzing'},
+      {pref:'1220-1230',sehirler:'Wien: Donaustadt, Liesing'}
+    ]},
+    {kod:'2xxx-3xxx',bolge:'Aşağı Avusturya (Niederösterreich)',detay:[
+      {pref:'2100-2490',sehirler:'Klosterneuburg, Korneuburg, Stockerau, Mistelbach'},
+      {pref:'2500-2700',sehirler:'Baden, Wiener Neustadt, Neunkirchen'},
+      {pref:'3100-3500',sehirler:'St. Pölten, Krems, Tulln, Zwettl'},
+      {pref:'3500-3900',sehirler:'Krems (Batı), Waidhofen, Horn, Melk'}
+    ]},
+    {kod:'4xxx',bolge:'Yukarı Avusturya (Oberösterreich)',detay:[
+      {pref:'4020-4100',sehirler:'Linz (Merkez ve ilçeleri)'},
+      {pref:'4300-4600',sehirler:'Perg, Steyr, Kirchdorf'},
+      {pref:'4700-4900',sehirler:'Braunau, Ried im Innkreis, Schärding'},
+      {pref:'4800-5000',sehirler:'Gmunden, Vöcklabruck, Wels'}
+    ]},
+    {kod:'5xxx',bolge:'Salzburg',detay:[
+      {pref:'5020-5100',sehirler:'Salzburg (Merkez, Maxglan, Gnigl)'},
+      {pref:'5110-5400',sehirler:'Hallein, St. Johann, Zell am See'},
+      {pref:'5500-5700',sehirler:'Bischofshofen, Radstadt, Tamsweg'}
+    ]},
+    {kod:'6xxx',bolge:'Tirol + Vorarlberg',detay:[
+      {pref:'6020-6100',sehirler:'Innsbruck (Merkez ve ilçeleri)'},
+      {pref:'6200-6500',sehirler:'Schwaz, Kufstein, Wörgl, Kitzbühel'},
+      {pref:'6700-6900',sehirler:'Bludenz, Feldkirch, Dornbirn, Bregenz (Vorarlberg)'}
+    ]},
+    {kod:'7xxx',bolge:'Burgenland',detay:[
+      {pref:'7000-7100',sehirler:'Eisenstadt, Rust, Mörbisch'},
+      {pref:'7200-7540',sehirler:'Mattersburg, Oberpullendorf, Oberwart'},
+      {pref:'7400-7540',sehirler:'Oberwart, Güssing, Jennersdorf'}
+    ]},
+    {kod:'8xxx',bolge:'Steiermark (Stirya)',detay:[
+      {pref:'8010-8100',sehirler:'Graz (Merkez, Gries, Jakomini)'},
+      {pref:'8200-8600',sehirler:'Gleisdorf, Weiz, Bruck an der Mur, Leoben'},
+      {pref:'8700-8990',sehirler:'Leoben, Judenburg, Knittelfeld, Mürzzuschlag'}
+    ]},
+    {kod:'9xxx',bolge:'Kärnten (Karintya)',detay:[
+      {pref:'9020-9100',sehirler:'Klagenfurt (Merkez ve ilçeleri)'},
+      {pref:'9200-9500',sehirler:'Wolfsberg, St. Veit, Feldkirchen, Spittal'},
+      {pref:'9500-9900',sehirler:'Villach, Hermagor, Lienz (Doğu Tirol)'}
+    ]}
+  ]},
+  'BG':{ad:'Bulgaristan',bayrak:'🇧🇬',format:'4 haneli',bolgeler:[
+    {kod:'1xxx',bolge:'Sofya (Sofia)',detay:[
+      {pref:'1000-1700',sehirler:'Sofia Merkez, Ovcha Kupel, Lyulin, Studentski, Mladost'},
+      {pref:'1800-1900',sehirler:'Sofia Doğu: Nadezhda, Slatina, Iskur'}
+    ]},
+    {kod:'2xxx',bolge:'Pernik, Kyustendil, Blagoevgrad',detay:[
+      {pref:'2300-2400',sehirler:'Pernik, Radomir, Breznik'},
+      {pref:'2500-2700',sehirler:'Kyustendil, Dupnitsa, Blagoevgrad (Kuzey)'},
+      {pref:'2700-2900',sehirler:'Blagoevgrad, Razlog, Bansko, Sandanski'}
+    ]},
+    {kod:'3xxx',bolge:'Montana, Vidin, Vratsa',detay:[
+      {pref:'3000-3200',sehirler:'Vratsa, Mezdra, Byala Slatina'},
+      {pref:'3400-3700',sehirler:'Montana, Berkovitsa, Lom'},
+      {pref:'3700-3900',sehirler:'Vidin, Belogradchik, Kula'}
+    ]},
+    {kod:'4xxx',bolge:'Plovdiv, Smolyan, Pazardzhik',detay:[
+      {pref:'4000-4200',sehirler:'Plovdiv (Merkez, Krichim, Perushtitsa)'},
+      {pref:'4200-4400',sehirler:'Asenovgrad, Hisarya, Karlovo'},
+      {pref:'4400-4700',sehirler:'Pazardzhik, Panagyurishte, Peshtera'},
+      {pref:'4700-4900',sehirler:'Smolyan, Madan, Rudozem'}
+    ]},
+    {kod:'5xxx',bolge:'Veliko Tarnovo, Lovech, Pleven',detay:[
+      {pref:'5000-5300',sehirler:'Veliko Tarnovo, Gorna Oryahovitsa, Svishtov'},
+      {pref:'5300-5500',sehirler:'Gabrovo, Sevlievo, Dryanovo'},
+      {pref:'5500-5800',sehirler:'Lovech, Teteven, Lukovit'},
+      {pref:'5800-5900',sehirler:'Pleven, Levski, Nikopol'}
+    ]},
+    {kod:'6xxx',bolge:'Stara Zagora, Haskovo, Kardzhali',detay:[
+      {pref:'6000-6200',sehirler:'Stara Zagora, Kazanlak, Chirpan'},
+      {pref:'6200-6400',sehirler:'Dimitrovgrad, Haskovo, Harmanli'},
+      {pref:'6400-6600',sehirler:'Kardzhali, Momchilgrad, Krumovgrad'}
+    ]},
+    {kod:'7xxx',bolge:'Ruse, Razgrad, Silistra, Targovishte',detay:[
+      {pref:'7000-7200',sehirler:'Ruse (Merkez ve ilçeleri)'},
+      {pref:'7200-7500',sehirler:'Razgrad, Isperih, Kubrat'},
+      {pref:'7500-7700',sehirler:'Silistra, Dulovo, Tutrakan'},
+      {pref:'7700-7900',sehirler:'Targovishte, Popovo, Omurtag'}
+    ]},
+    {kod:'8xxx',bolge:'Burgas, Sliven, Yambol',detay:[
+      {pref:'8000-8200',sehirler:'Burgas (Merkez), Nesebar, Aytos'},
+      {pref:'8200-8400',sehirler:'Pomorie, Karnobat, Sunny Beach'},
+      {pref:'8400-8600',sehirler:'Sliven, Nova Zagora, Kotel'},
+      {pref:'8600-8800',sehirler:'Yambol, Elhovo, Straldzha'}
+    ]},
+    {kod:'9xxx',bolge:'Varna, Shumen, Dobrich',detay:[
+      {pref:'9000-9300',sehirler:'Varna (Merkez, Asparuhovo, Mladost)'},
+      {pref:'9300-9500',sehirler:'Shumen, Preslav, Kaspichan'},
+      {pref:'9500-9700',sehirler:'Dobrich, Balchik, General Toshevo'}
+    ]}
+  ]},
+  'RS':{ad:'Sırbistan',bayrak:'🇷🇸',format:'5 haneli',bolgeler:[
+    {kod:'11xxx',bolge:'Belgrad (Beograd)',detay:[
+      {pref:'11000-11080',sehirler:'Beograd Merkez, Stari Grad, Vračar, Savski venac'},
+      {pref:'11050-11300',sehirler:'Palilula, Zvezdara, Voždovac, Rakovica'},
+      {pref:'11080-11500',sehirler:'Zemun, Novi Beograd, Surčin'}
+    ]},
+    {kod:'21xxx',bolge:'Vojvodina (Novi Sad)',detay:[
+      {pref:'21000',sehirler:'Novi Sad (Vojvodina başkenti)'},
+      {pref:'22000-24000',sehirler:'Sremska Mitrovica, Šabac, Valjevo'}
+    ]},
+    {kod:'18xxx',bolge:'Güney Sırbistan (Niš)',detay:[
+      {pref:'18000',sehirler:'Niš, Aleksinac, Svrljig'},
+      {pref:'16000-17000',sehirler:'Leskovac, Vranje, Surdulica'},
+      {pref:'34000-35000',sehirler:'Kragujevac, Jagodina, Paraćin'}
+    ]}
+  ]},
+  'HU':{ad:'Macaristan',bayrak:'🇭🇺',format:'4 haneli',bolgeler:[
+    {kod:'1xxx',bolge:'Budapeşte (Budapest)',detay:[
+      {pref:'1011-1145',sehirler:'Budapest I-XIV. ilçe (Merkez, Buda, Pest)'},
+      {pref:'1151-1239',sehirler:'Budapest XV-XXIII. ilçe (Dış bölgeler)'}
+    ]},
+    {kod:'2xxx',bolge:'Pest Çevresi',detay:[
+      {pref:'2000-2100',sehirler:'Szentendre, Vác, Pomáz, Dunakeszi'},
+      {pref:'2100-2400',sehirler:'Gödöllő, Aszód, Cegléd'}
+    ]},
+    {kod:'3xxx',bolge:'Hatvan, Eger, Miskolc',detay:[
+      {pref:'3000-3200',sehirler:'Hatvan, Gyöngyös, Eger'},
+      {pref:'3500-3900',sehirler:'Miskolc, Ózd, Kazincbarcika, Sárospatak'}
+    ]},
+    {kod:'4xxx',bolge:'Debrecen, Nyíregyháza',detay:[
+      {pref:'4000-4100',sehirler:'Debrecen (Merkez ve ilçeleri)'},
+      {pref:'4400-4800',sehirler:'Nyíregyháza, Kisvárda, Nyírbátor'}
+    ]},
+    {kod:'6xxx',bolge:'Kecskemét, Szeged',detay:[
+      {pref:'6000-6100',sehirler:'Kecskemét, Kiskunfélegyháza'},
+      {pref:'6700-6900',sehirler:'Szeged, Makó, Hódmezővásárhely'}
+    ]},
+    {kod:'7xxx',bolge:'Pécs, Kaposvár',detay:[
+      {pref:'7400-7700',sehirler:'Kaposvár, Dombóvár, Bonyhád'},
+      {pref:'7600-7900',sehirler:'Pécs, Mohács, Siklós, Szigetvár'}
+    ]},
+    {kod:'8xxx',bolge:'Székesfehérvár, Balaton',detay:[
+      {pref:'8000-8100',sehirler:'Székesfehérvár, Bicske, Mór'},
+      {pref:'8200-8700',sehirler:'Veszprém, Balatonfüred, Siófok, Marcali'}
+    ]},
+    {kod:'9xxx',bolge:'Győr, Sopron',detay:[
+      {pref:'9000-9100',sehirler:'Győr (Merkez ve ilçeleri)'},
+      {pref:'9200-9500',sehirler:'Mosonmagyaróvár, Sopron, Kapuvár'},
+      {pref:'9700-9900',sehirler:'Szombathely, Körmend, Szentgotthárd'}
+    ]}
+  ]},
+  'TR':{ad:'Türkiye',bayrak:'🇹🇷',format:'5 haneli (il kodu)',bolgeler:[
+    {kod:'01-09',bolge:'Akdeniz & Ege İlleri',detay:[
+      {pref:'01xxx',sehirler:'Adana'},{pref:'03xxx',sehirler:'Afyonkarahisar'},
+      {pref:'06xxx',sehirler:'Ankara'},{pref:'07xxx',sehirler:'Antalya'},
+      {pref:'09xxx',sehirler:'Aydın'}
+    ]},
+    {kod:'22, 59',bolge:'Trakya (TIR Koridoru)',detay:[
+      {pref:'22xxx',sehirler:'Edirne (Kapıkule sınır kapısı, Uzunköprü)'},
+      {pref:'59xxx',sehirler:'Tekirdağ (TIR parkı, Çorlu, Çerkezköy)'}
+    ]},
+    {kod:'34, 41',bolge:'İstanbul ve Kocaeli',detay:[
+      {pref:'34xxx',sehirler:'İstanbul (Avrupa: 34000-34499, Anadolu: 34500-34999)'},
+      {pref:'41xxx',sehirler:'Kocaeli (İzmit, Gebze, Körfez, Dilovası)'}
+    ]},
+    {kod:'06',bolge:'Ankara',detay:[
+      {pref:'06010-06490',sehirler:'Ankara Merkez ilçeler'},
+      {pref:'06500-06980',sehirler:'Ankara dış ilçeler: Sincan, Etimesgut, Yenimahalle'}
+    ]},
+    {kod:'16, 26',bolge:'Bursa ve Eskişehir',detay:[
+      {pref:'16xxx',sehirler:'Bursa'},{pref:'26xxx',sehirler:'Eskişehir'}
+    ]}
+  ]},
+  'NL':{ad:'Hollanda',bayrak:'🇳🇱',format:'4 rakam + 2 harf',bolgeler:[
+    {kod:'1xxx-2xxx',bolge:'Amsterdam, Den Haag',detay:[
+      {pref:'1000-1109',sehirler:'Amsterdam Merkez (Centrum, Jordaan, De Pijp)'},
+      {pref:'1110-1500',sehirler:'Amsterdam Doğu, Diemen, Almere'},
+      {pref:'2500-2599',sehirler:'Den Haag (Merkez ve ilçeleri)'}
+    ]},
+    {kod:'3xxx',bolge:'Rotterdam, Utrecht',detay:[
+      {pref:'3000-3099',sehirler:'Rotterdam Merkez (Centrum, Kralingen)'},
+      {pref:'3100-3500',sehirler:'Schiedam, Vlaardingen, Delft'},
+      {pref:'3500-3999',sehirler:'Utrecht (Merkez), Nieuwegein'}
+    ]},
+    {kod:'5xxx-6xxx',bolge:'Noord-Brabant, Limburg',detay:[
+      {pref:'5000-5199',sehirler:'Tilburg (Merkez ve ilçeleri)'},
+      {pref:'5600-5900',sehirler:'Eindhoven (Merkez ve ilçeleri), Helmond'},
+      {pref:'6200-6229',sehirler:'Maastricht'},
+      {pref:'6500-6600',sehirler:'Nijmegen, Arnhem (Güney)'}
+    ]},
+    {kod:'7xxx-9xxx',bolge:'Kuzey (Zwolle, Groningen)',detay:[
+      {pref:'8000-8200',sehirler:'Zwolle, Kampen, Hardenberg'},
+      {pref:'9700-9999',sehirler:'Groningen (Merkez ve ilçeleri)'}
+    ]}
+  ]},
+  'PL':{ad:'Polonya',bayrak:'🇵🇱',format:'2 rakam - 3 rakam',bolgeler:[
+    {kod:'00-09',bolge:'Warszawa (Varşova)',detay:[
+      {pref:'00-09',sehirler:'Warszawa Merkez, Śródmieście, Wola, Praga'}
+    ]},
+    {kod:'30-49',bolge:'Kraków, Katowice, Śląsk',detay:[
+      {pref:'30-34',sehirler:'Kraków (Merkez ve ilçeleri)'},
+      {pref:'40-44',sehirler:'Katowice, Sosnowiec, Gliwice, Bytom'},
+      {pref:'50-55',sehirler:'Wrocław (Merkez ve ilçeleri)'}
+    ]},
+    {kod:'60-79',bolge:'Poznań, Szczecin, Gdańsk',detay:[
+      {pref:'60-62',sehirler:'Poznań (Merkez ve ilçeleri)'},
+      {pref:'70-72',sehirler:'Szczecin (Merkez ve ilçeleri)'},
+      {pref:'80-82',sehirler:'Gdańsk (Merkez), Gdynia, Sopot'}
+    ]},
+    {kod:'90-99',bolge:'Łódź, Orta Polonya',detay:[
+      {pref:'90-94',sehirler:'Łódź (Merkez ve ilçeleri)'},
+      {pref:'95-99',sehirler:'Skierniewice, Piotrków Trybunalski'}
+    ]}
+  ]},
+  'HR':{ad:'Hırvatistan',bayrak:'🇭🇷',format:'5 haneli',bolgeler:[
+    {kod:'10xxx',bolge:'Zagreb',detay:[
+      {pref:'10000',sehirler:'Zagreb Merkez (Grad Zagreb)'},
+      {pref:'10020-10431',sehirler:'Zagreb ilçeleri: Sesvete, Stenjevec, Novi Zagreb'}
+    ]},
+    {kod:'2xxxx',bolge:'Dalmaçya',detay:[
+      {pref:'21xxx',sehirler:'Split-Dalmatia: Split, Kaštela, Trogir, Makarska'},
+      {pref:'20xxx',sehirler:'Dubrovnik-Neretva: Dubrovnik, Korčula'},
+      {pref:'23xxx',sehirler:'Zadar: Zadar, Biograd, Benkovac'}
+    ]},
+    {kod:'3xxxx-5xxxx',bolge:'Slavonya, İstriya',detay:[
+      {pref:'31xxx',sehirler:'Osijek, Đakovo, Beli Manastir'},
+      {pref:'51xxx',sehirler:'Rijeka, Opatija, Crikvenica, Krk'},
+      {pref:'52xxx',sehirler:'İstriya: Pula, Rovinj, Poreč, Umag'}
+    ]}
+  ]},
+  'SI':{ad:'Slovenya',bayrak:'🇸🇮',format:'4 haneli',bolgeler:[
+    {kod:'1xxx',bolge:'Ljubljana',detay:[
+      {pref:'1000',sehirler:'Ljubljana Merkez'},
+      {pref:'1001-1420',sehirler:'Ljubljana ilçeleri: Šiška, Vič, Moste, Polje'}
+    ]},
+    {kod:'2xxx-4xxx',bolge:'Maribor, Celje, Kranj',detay:[
+      {pref:'2000',sehirler:'Maribor Merkez'},
+      {pref:'3000',sehirler:'Celje Merkez'},
+      {pref:'4000',sehirler:'Kranj Merkez'},
+      {pref:'4260',sehirler:'Bled'}
+    ]},
+    {kod:'5xxx-6xxx',bolge:'Nova Gorica, Koper',detay:[
+      {pref:'5000',sehirler:'Nova Gorica Merkez'},
+      {pref:'6000',sehirler:'Koper (Capodistria), Portorož, Piran, Izola'}
+    ]}
+  ]},
+  'RO':{ad:'Romanya',bayrak:'🇷🇴',format:'6 haneli',bolgeler:[
+    {kod:'01-06xxxx',bolge:'Bükreş (Bucharest)',detay:[
+      {pref:'01xxxx',sehirler:'Bükreş Sektör 1: Aviatorilor, Dorobanți, Floreasca'},
+      {pref:'02xxxx',sehirler:'Bükreş Sektör 2: Colentina, Pantelimon'},
+      {pref:'03xxxx',sehirler:'Bükreş Sektör 3: Titan, Dristor, Vitan'},
+      {pref:'04xxxx',sehirler:'Bükreş Sektör 4: Berceni, Giurgiului'},
+      {pref:'05xxxx',sehirler:'Bükreş Sektör 5: Rahova, Ferentari'},
+      {pref:'06xxxx',sehirler:'Bükreş Sektör 6: Drumul Taberei, Militari'}
+    ]},
+    {kod:'10-50xxxx',bolge:'Büyük Şehirler',detay:[
+      {pref:'10xxxx',sehirler:'Prahova: Ploiești, Câmpina, Sinaia'},
+      {pref:'20xxxx',sehirler:'Constanța: Constanța, Mangalia, Mamaia'},
+      {pref:'30xxxx',sehirler:'Timiș: Timișoara, Lugoj'},
+      {pref:'40xxxx',sehirler:'Cluj-Napoca Merkez ve ilçeleri'},
+      {pref:'50xxxx',sehirler:'Brașov: Brașov, Sinaia, Predeal'}
+    ]},
+    {kod:'70-79xxxx',bolge:'Diğer İller',detay:[
+      {pref:'70xxxx',sehirler:'Bacău'},{pref:'71xxxx',sehirler:'Suceava'},
+      {pref:'72xxxx',sehirler:'Iași'},{pref:'73xxxx',sehirler:'Galați'},
+      {pref:'77xxxx',sehirler:'Sibiu'},{pref:'78xxxx',sehirler:'Alba Iulia'},
+      {pref:'79xxxx',sehirler:'Târgu Mureș'}
+    ]}
+  ]},
+  'GR':{ad:'Yunanistan',bayrak:'🇬🇷',format:'5 haneli',bolgeler:[
+    {kod:'100-199',bolge:'Atina (Attika)',detay:[
+      {pref:'100-115',sehirler:'Atina Merkez: Kolonaki, Exarchia, Pangrati, Kypseli'},
+      {pref:'116-124',sehirler:'Atina Güney: Kallithea, Moschato, Tavros'},
+      {pref:'130-145',sehirler:'Atina Kuzey: Kifisia, Marousi, Chalandri'},
+      {pref:'185',sehirler:'Piraeus (Pire) Merkez'},
+      {pref:'190-199',sehirler:'Elefsina, Marathon, Rafina, Spata (Havaalanı)'}
+    ]},
+    {kod:'540-570',bolge:'Selanik (Thessaloniki)',detay:[
+      {pref:'541-570',sehirler:'Selanik: Merkez, Kalamaria, Panorama, Thermi'}
+    ]},
+    {kod:'600-641',bolge:'Kuzey Yunanistan',detay:[
+      {pref:'600-641',sehirler:'Kavala, Drama, Serres, Xanthi, Komotini, Alexandroupoli'}
+    ]},
+    {kod:'700-745',bolge:'Girit ve Adalar',detay:[
+      {pref:'700-745',sehirler:'Girit: Heraklion, Chania, Rethymno'},
+      {pref:'851-855',sehirler:'Rhodes (Rodos), Kos, Samos'}
+    ]}
+  ]},
+  'IT':{ad:'İtalya',bayrak:'🇮🇹',format:'5 haneli (CAP)',bolgeler:[
+    {kod:'00-09',bolge:'Roma, Sardegna',detay:[
+      {pref:'00',sehirler:'Roma: Merkez (00100), Parioli, Prati, Trastevere, EUR, Ostia'},
+      {pref:'01',sehirler:'Viterbo, Rieti, Civitavecchia'},
+      {pref:'04',sehirler:'Latina, Terracina, Formia'},
+      {pref:'09',sehirler:'Cagliari (Sardegna Güney)'}
+    ]},
+    {kod:'10-19',bolge:'Piemonte, Liguria (Torino, Genova)',detay:[
+      {pref:'10',sehirler:'Torino: Merkez, Mirafiori, Lingotto'},
+      {pref:'12',sehirler:'Cuneo, Alba, Savigliano'},
+      {pref:'16',sehirler:'Genova: Merkez, Sampierdarena'},
+      {pref:'18',sehirler:'Imperia, Sanremo, Ventimiglia'},
+      {pref:'19',sehirler:'La Spezia, Sarzana'}
+    ]},
+    {kod:'20-29',bolge:'Lombardia (Milano)',detay:[
+      {pref:'20',sehirler:'Milano: Merkez, Navigli, Brera, Isola, Bicocca'},
+      {pref:'21',sehirler:'Varese, Busto Arsizio, Gallarate'},
+      {pref:'22',sehirler:'Como, Lecco, Cantù'},
+      {pref:'24',sehirler:'Bergamo: Merkez, Dalmine, Treviglio'},
+      {pref:'25',sehirler:'Brescia: Merkez, Desenzano (Garda)'}
+    ]},
+    {kod:'30-39',bolge:'Veneto, Trentino (Venezia, Verona)',detay:[
+      {pref:'30',sehirler:'Venezia (Venedik): Mestre, Marghera, Chioggia'},
+      {pref:'35',sehirler:'Padova (Padua): Merkez, Abano Terme'},
+      {pref:'37',sehirler:'Verona: Merkez, Villafranca'},
+      {pref:'38',sehirler:'Trento, Rovereto (Trentino)'},
+      {pref:'39',sehirler:'Bolzano/Bozen, Merano/Meran (Güney Tirol)'}
+    ]},
+    {kod:'40-59',bolge:'Emilia-Romagna, Toscana',detay:[
+      {pref:'40',sehirler:'Bologna: Merkez, Imola'},
+      {pref:'41',sehirler:'Modena, Carpi, Sassuolo'},
+      {pref:'43',sehirler:'Parma, Fidenza'},
+      {pref:'47',sehirler:'Forlì-Cesena, Rimini'},
+      {pref:'50',sehirler:'Firenze (Floransa): Merkez, Scandicci'},
+      {pref:'56',sehirler:'Pisa, Pontedera, Volterra'},
+      {pref:'57',sehirler:'Livorno, Piombino'}
+    ]},
+    {kod:'70-89',bolge:'Güney İtalya, Sicilya',detay:[
+      {pref:'70',sehirler:'Bari: Merkez, Altamura, Molfetta'},
+      {pref:'80',sehirler:'Napoli: Merkez, Posillipo, Bagnoli'},
+      {pref:'84',sehirler:'Salerno, Amalfi, Positano'},
+      {pref:'87',sehirler:'Cosenza, Rende (Calabria)'},
+      {pref:'90',sehirler:'Palermo: Merkez, Monreale (Sicilya)'},
+      {pref:'95',sehirler:'Catania: Merkez, Acireale (Sicilya)'}
+    ]}
+  ]},
+  'CZ':{ad:'Çekya',bayrak:'🇨🇿',format:'5 haneli (PSČ)',bolgeler:[
+    {kod:'1xx',bolge:'Praha (Prag)',detay:[
+      {pref:'100-109',sehirler:'Praha 1-9: Staré Město, Nové Město, Vinohrady'},
+      {pref:'110-149',sehirler:'Praha 10-21: Vršovice, Nusle, Smíchov'}
+    ]},
+    {kod:'3xx-4xx',bolge:'Bohemya (Plzeň, Liberec)',detay:[
+      {pref:'301-340',sehirler:'Plzeň (Pilsen): Merkez ve ilçeleri'},
+      {pref:'370-399',sehirler:'České Budějovice, Třeboň, Písek'},
+      {pref:'400-418',sehirler:'Ústí nad Labem, Děčín, Teplice, Most'}
+    ]},
+    {kod:'6xx',bolge:'Güney Moravya (Brno)',detay:[
+      {pref:'600-620',sehirler:'Brno: Merkez, Žabovřesky, Bystrc, Líšeň'},
+      {pref:'621-699',sehirler:'Znojmo, Třebíč, Jihlava, Břeclav'}
+    ]},
+    {kod:'7xx',bolge:'Kuzey Moravya (Ostrava)',detay:[
+      {pref:'700-720',sehirler:'Ostrava: Merkez, Poruba, Vítkovice'},
+      {pref:'741-799',sehirler:'Opava, Karviná, Frýdek-Místek, Havířov'}
+    ]}
+  ]},
+  'SK':{ad:'Slovakya',bayrak:'🇸🇰',format:'5 haneli (PSČ)',bolgeler:[
+    {kod:'8xx',bolge:'Bratislava',detay:[
+      {pref:'811-841',sehirler:'Bratislava: Staré Mesto, Petržalka, Ružinov'},
+      {pref:'842-899',sehirler:'Bratislava çevresi: Senec, Malacky, Pezinok'}
+    ]},
+    {kod:'9xx',bolge:'Batı ve Orta Slovakya',detay:[
+      {pref:'917',sehirler:'Trnava, Hlohovec, Piešťany'},
+      {pref:'949',sehirler:'Nitra, Zlaté Moravce'},
+      {pref:'974',sehirler:'Banská Bystrica, Brezno'}
+    ]},
+    {kod:'0xx',bolge:'Kuzey ve Doğu Slovakya',detay:[
+      {pref:'010',sehirler:'Žilina, Bytča'},
+      {pref:'040-044',sehirler:'Košice: Merkez, Sever, Juh'},
+      {pref:'058',sehirler:'Poprad, Tatry, Kežmarok'},
+      {pref:'080',sehirler:'Prešov, Sabinov, Bardejov'}
+    ]}
+  ]},
+  'FR':{ad:'Fransa',bayrak:'🇫🇷',format:'5 haneli',bolgeler:[
+    {kod:'06, 13',bolge:'Güney Fransa (Nice, Marseille)',detay:[
+      {pref:'06',sehirler:'Alpes-Maritimes: Nice, Cannes, Antibes, Menton'},
+      {pref:'13001-13016',sehirler:'Marseille 1.-16. arrondissement'},
+      {pref:'13100-13960',sehirler:'Aix-en-Provence, Arles, Martigues'}
+    ]},
+    {kod:'31, 33',bolge:'Toulouse, Bordeaux',detay:[
+      {pref:'31',sehirler:'Haute-Garonne: Toulouse, Colomiers, Muret'},
+      {pref:'33',sehirler:'Gironde: Bordeaux, Mérignac, Pessac, Arcachon'}
+    ]},
+    {kod:'38, 69',bolge:'Lyon, Grenoble',detay:[
+      {pref:'38',sehirler:'Isère: Grenoble, Bourgoin-Jallieu, Vienne'},
+      {pref:'69',sehirler:'Rhône: Lyon (1-9. arr.), Villeurbanne, Bron'}
+    ]},
+    {kod:'44, 67, 75',bolge:'Paris, Nantes, Strasbourg',detay:[
+      {pref:'44',sehirler:'Loire-Atlantique: Nantes, Saint-Nazaire'},
+      {pref:'67',sehirler:'Bas-Rhin: Strasbourg, Haguenau, Saverne'},
+      {pref:'75',sehirler:'Paris: 75001-75020 (1.-20. arrondissement)'}
+    ]},
+    {kod:'59, 62',bolge:'Kuzey Fransa (Lille)',detay:[
+      {pref:'59',sehirler:'Nord: Lille, Roubaix, Tourcoing, Dunkerque'},
+      {pref:'62',sehirler:'Pas-de-Calais: Arras, Calais, Boulogne-sur-Mer'}
+    ]}
+  ]},
+  'BE':{ad:'Belçika',bayrak:'🇧🇪',format:'4 haneli',bolgeler:[
+    {kod:'1xxx',bolge:'Brüksel ve Brabant',detay:[
+      {pref:'1000-1099',sehirler:'Brüksel: Merkez, Ixelles, Etterbeek, Uccle'},
+      {pref:'1500-1999',sehirler:'Flemish Brabant: Halle, Vilvoorde, Leuven'}
+    ]},
+    {kod:'2xxx',bolge:'Antwerpen',detay:[
+      {pref:'2000-2099',sehirler:'Antwerpen: Merkez, Berchem, Borgerhout'},
+      {pref:'2100-2990',sehirler:'Mechelen, Turnhout, Herentals, Geel, Mol'}
+    ]},
+    {kod:'4xxx',bolge:'Liège',detay:[
+      {pref:'4000-4099',sehirler:'Liège: Merkez, Guillemins, Outremeuse'},
+      {pref:'4100-4990',sehirler:'Huy, Seraing, Verviers, Eupen, Spa'}
+    ]},
+    {kod:'8xxx-9xxx',bolge:'Gent, Brugge (Vlaanderen)',detay:[
+      {pref:'8000-8099',sehirler:'Brugge (Bruges): Merkez, Sint-Michiels'},
+      {pref:'8200-8990',sehirler:'Oostende, Kortrijk, Roeselare, Ieper'},
+      {pref:'9000-9099',sehirler:'Gent: Merkez, Ledeberg, Sint-Amandsberg'},
+      {pref:'9100-9999',sehirler:'Sint-Niklaas, Aalst, Dendermonde, Ronse'}
+    ]}
+  ]}
 };
 
-let _postaAktifUlke = null;
+window._postaAktifUlke = window._postaAktifUlke || null;
 
-// Başlık butonunu yasak durumuna göre renklendir
-window.yolBilgiBaslikGuncelle = function(){
-  if(typeof window.yasakDurumKontrol !== 'function' || typeof window.KAMYON_YASAK === 'undefined') return;
-
-  let enKotuDurum = 'serbest';
-  let yasakUlkeler = [];
-  let yarinUlkeler = [];
-
-  Object.keys(window.KAMYON_YASAK).forEach(function(ad){
-    const yd = window.yasakDurumKontrol(ad);
-    if(yd.durum === 'aktif'){
-      yasakUlkeler.push(window.KAMYON_YASAK[ad].flag + ' ' + ad);
-      enKotuDurum = 'aktif';
-    } else if(yd.durum === 'yakin' && enKotuDurum !== 'aktif'){
-      yarinUlkeler.push(window.KAMYON_YASAK[ad].flag + ' ' + ad);
-      enKotuDurum = 'yakin';
-    } else if(yd.durum === 'uyari' && enKotuDurum === 'serbest'){
-      enKotuDurum = 'uyari';
-    }
-  });
-
-  const kart = document.getElementById('d-yol-bilgi-card');
-  const baslik = document.getElementById('yol-bilgi-baslik');
-  const badge = document.getElementById('yol-bilgi-uyari-badge');
-  if(!baslik || !badge) return;
-
-  if(enKotuDurum === 'aktif'){
-    baslik.style.borderBottom = '2px solid #ef4444';
-    baslik.style.color = '#ef4444';
-    if(kart) kart.style.boxShadow = '0 0 12px #ef444433';
-    badge.style.display = 'inline-block';
-    badge.style.background = '#ef4444';
-    badge.style.color = '#fff';
-    badge.textContent = '🚫 YASAK VAR';
-  } else if(enKotuDurum === 'yakin'){
-    baslik.style.borderBottom = '2px solid #f59e0b';
-    baslik.style.color = '#f59e0b';
-    if(kart) kart.style.boxShadow = '0 0 10px #f59e0b33';
-    badge.style.display = 'inline-block';
-    badge.style.background = '#f59e0b';
-    badge.style.color = '#000';
-    badge.textContent = '⚠️ YARIN YASAK';
-  } else if(enKotuDurum === 'uyari'){
-    baslik.style.borderBottom = '1px solid #fbbf24';
-    baslik.style.color = '#fbbf24';
-    if(kart) kart.style.boxShadow = '0 0 6px #fbbf2422';
-    badge.style.display = 'inline-block';
-    badge.style.background = '#854d0e';
-    badge.style.color = '#fbbf24';
-    badge.textContent = '📅 2 GÜN';
-  } else {
-    baslik.style.borderBottom = '';
-    baslik.style.color = '';
-    if(kart) kart.style.boxShadow = '';
-    badge.style.display = 'none';
-  }
-};
-
-window.yolBilgiToggle = function(){
-  const ic = document.getElementById('yol-bilgi-icerik');
-  const ok = document.getElementById('yol-bilgi-ok');
-  if(!ic) return;
-  if(ic.style.display === 'none'){
-    ic.style.display = 'block';
-    if(ok) ok.style.transform = 'rotate(180deg)';
-    // İçerik açılınca render et
-    if(typeof window.dRenderYolBilgi === 'function') window.dRenderYolBilgi();
-  } else {
-    ic.style.display = 'none';
-    if(ok) ok.style.transform = 'rotate(0deg)';
-  }
-};
-
-window.postaTogglePanel = function(){
-  const ic = document.getElementById('posta-panel-icerik');
-  const ok = document.getElementById('posta-panel-ok');
-  if(!ic) return;
-  if(ic.style.display === 'none'){
-    ic.style.display = 'block';
-    if(ok) ok.style.transform = 'rotate(180deg)';
-  } else {
-    ic.style.display = 'none';
-    if(ok) ok.style.transform = 'rotate(0deg)';
-    // Kapanınca ülke seçimini de sıfırla
-    _postaAktifUlke = null;
-    const sonuc = document.getElementById('posta-sonuc');
-    const aramaWrap = document.getElementById('posta-arama-wrap');
-    if(sonuc) sonuc.style.display='none';
-    if(aramaWrap) aramaWrap.style.display='none';
-    document.querySelectorAll('[id^="posta-btn-"]').forEach(b=>{
-      b.style.borderColor='#1e3a5f'; b.style.background='#0d1a26';
-    });
-  }
-};
-
-window.postaInit = function postaInit(){
+window.postaInit = function(){
   const wrap = document.getElementById('posta-ulke-butonlar');
   if(!wrap) return;
-  wrap.innerHTML = Object.entries(POSTA_DB).map(([kod, u])=>
-    '<button onclick="window.postaToggle(\'' + kod + '\')" ' +
-    'style="background:#0d1a26;border:1px solid #1e3a5f;border-radius:8px;' +
-    'padding:7px 12px;cursor:pointer;font-size:.82rem;color:var(--fg);' +
-    'font-family:var(--sans);transition:all .2s;white-space:nowrap;display:flex;' +
-    'align-items:center;gap:5px;" ' +
-    'id="posta-btn-' + kod + '">' +
-    '<span style="font-size:1.1rem;">' + u.bayrak + '</span>' +
-    '<span style="color:#e2e8f0;">' + u.ad + '</span>' +
-    '</button>'
-  ).join('');
+  wrap.innerHTML = Object.entries(POSTA_DB).map(function(e){
+    const kod=e[0], u=e[1];
+    return '<button onclick="window.postaToggle(\''+kod+'\')" id="posta-btn-'+kod+'"'+
+      ' style="background:#0d1a26;border:1px solid #1e3a5f;border-radius:8px;'+
+      'padding:7px 12px;cursor:pointer;font-size:.82rem;color:#e2e8f0;'+
+      'font-family:sans-serif;transition:all .2s;white-space:nowrap;'+
+      'display:flex;align-items:center;gap:5px;">'+
+      '<span style="font-size:1.1rem;">'+u.bayrak+'</span>'+
+      '<span>'+u.ad+'</span></button>';
+  }).join('');
 };
 
-window.postaToggle = function postaToggle(kod){
+window.postaToggle = function(kod){
   const sonuc = document.getElementById('posta-sonuc');
   const aramaWrap = document.getElementById('posta-arama-wrap');
   const aramaInput = document.getElementById('posta-arama-input');
-
-  // Aynı ülkeye tekrar tıklayınca kapat
-  if(_postaAktifUlke === kod){
-    _postaAktifUlke = null;
-    sonuc.style.display = 'none';
-    aramaWrap.style.display = 'none';
-    // Buton rengini sıfırla
-    document.querySelectorAll('[id^="posta-btn-"]').forEach(b=>{
-      b.style.borderColor='#1e3a5f'; b.style.background='#0d1a26'; b.style.color='var(--fg)';
+  if(window._postaAktifUlke===kod){
+    window._postaAktifUlke=null;
+    if(sonuc) sonuc.style.display='none';
+    if(aramaWrap) aramaWrap.style.display='none';
+    document.querySelectorAll('[id^="posta-btn-"]').forEach(function(b){
+      b.style.borderColor='#1e3a5f'; b.style.background='#0d1a26'; b.style.color='#e2e8f0';
     });
     return;
   }
-
-  _postaAktifUlke = kod;
-  const u = POSTA_DB[kod];
-
-  // Buton vurgula
-  document.querySelectorAll('[id^="posta-btn-"]').forEach(b=>{
-    b.style.borderColor='#1e3a5f'; b.style.background='#0d1a26'; b.style.color='var(--fg)';
+  window._postaAktifUlke=kod;
+  document.querySelectorAll('[id^="posta-btn-"]').forEach(function(b){
+    b.style.borderColor='#1e3a5f'; b.style.background='#0d1a26'; b.style.color='#e2e8f0';
   });
-  const aktifBtn = document.getElementById('posta-btn-'+kod);
-  if(aktifBtn){
-    aktifBtn.style.borderColor='#38bdf8'; aktifBtn.style.background='#0a2030'; aktifBtn.style.color='#38bdf8';
-  }
+  const aktifBtn=document.getElementById('posta-btn-'+kod);
+  if(aktifBtn){aktifBtn.style.borderColor='#38bdf8';aktifBtn.style.background='#0a2030';aktifBtn.style.color='#38bdf8';}
+  if(aramaWrap) aramaWrap.style.display='block';
+  if(aramaInput) aramaInput.value='';
+  window.postaRender(POSTA_DB[kod],'');
+  if(sonuc) sonuc.style.display='block';
+};
 
-  // Arama kutusunu göster
-  aramaWrap.style.display = 'block';
-  aramaInput.value = '';
-
-  // Sonuçları göster
-  postaRender(u, '');
-  sonuc.style.display = 'block';
-}
-
-window.postaRender = function postaRender(u, filtre){
+window.postaRender = function(u, filtre){
   const sonuc = document.getElementById('posta-sonuc');
-  let html = `<div style="background:#0a1520;padding:10px 12px;border-bottom:1px solid #1e3a5f;
-                font-weight:700;font-size:.88rem;color:#38bdf8;font-family:var(--sans);">
-    ${u.bayrak} ${u.ad} — Posta Kodu Rehberi <span style="color:var(--sub);font-weight:400;">(${u.format})</span>
-  </div>`;
-
-  const f = filtre.toLowerCase().trim();
-
-  u.bolgeler.forEach(bolge=>{
-    const satirlar = bolge.detay.filter(d=>
-      !f || d.pref.toLowerCase().includes(f) || d.sehirler.toLowerCase().includes(f)
-    );
-    if(!satirlar.length) return;
-
-    html += `<div style="padding:8px 12px;background:#0d1117;border-bottom:1px solid #1a2a3a;">
-      <div style="font-size:.78rem;color:#38bdf8;font-weight:700;font-family:var(--sans);margin-bottom:4px;">
-        📍 ${bolge.kod} — ${bolge.bolge}
-      </div>`;
-
-    satirlar.forEach(d=>{
-      // İlk şehir adını al (harita araması için)
-      const ilkSehir = d.sehirler.split(',')[0].trim().replace(/\(.*?\)/g,'').trim();
-      const ulkeAdi = u.ad;
-      const haritaQuery = encodeURIComponent(ilkSehir + ', ' + ulkeAdi);
-      const haritaUrl = 'https://www.google.com/maps/search/' + haritaQuery;
-
-      html += '<div onclick="window.open(\'' + haritaUrl + '\',\'_blank\')"' +
-        ' style="display:flex;gap:8px;padding:6px 4px;border-bottom:1px solid #1a2535;' +
-        'align-items:center;cursor:pointer;border-radius:4px;transition:background .15s;"' +
-        ' onmouseover="this.style.background=\'#0a2030\'"' +
-        ' onmouseout="this.style.background=\'transparent\'">' +
-        '<span style="font-family:monospace;font-size:.85rem;color:#fbbf24;min-width:70px;flex-shrink:0;font-weight:700;">' + d.pref + '</span>' +
-        '<span style="font-size:.82rem;color:#e2e8f0;font-family:sans-serif;line-height:1.4;flex:1;">' + d.sehirler + '</span>' +
-        '<span style="font-size:.75rem;color:#38bdf8;flex-shrink:0;margin-left:4px;">🗺️</span>' +
-        '</div>';
+  if(!sonuc) return;
+  const f=filtre.toLowerCase().trim();
+  let html='<div style="background:#0a1520;padding:10px 12px;border-bottom:1px solid #1e3a5f;font-weight:700;font-size:.88rem;color:#38bdf8;font-family:sans-serif;">'+
+    u.bayrak+' '+u.ad+' — Posta Kodu Rehberi <span style="color:#64748b;font-weight:400;">('+u.format+')</span></div>';
+  u.bolgeler.forEach(function(bolge){
+    const satirlar=bolge.detay.filter(function(d){
+      return !f||d.pref.toLowerCase().includes(f)||d.sehirler.toLowerCase().includes(f);
     });
-    html += '</div>';
+    if(!satirlar.length) return;
+    html+='<div style="padding:8px 12px;background:#0d1117;border-bottom:1px solid #1a2a3a;">'+
+      '<div style="font-size:.78rem;color:#38bdf8;font-weight:700;font-family:sans-serif;margin-bottom:4px;">📍 '+bolge.kod+' — '+bolge.bolge+'</div>';
+    satirlar.forEach(function(d){
+      const ilkSehir=d.sehirler.split(',')[0].trim().replace(/\(.*?\)/g,'').trim();
+      const hUrl='https://www.google.com/maps/search/'+encodeURIComponent(ilkSehir+', '+u.ad);
+      html+='<div onclick="window.open(\''+hUrl+'\',\'_blank\')" '+
+        'style="display:flex;gap:8px;padding:6px 4px;border-bottom:1px solid #1a2535;align-items:center;cursor:pointer;border-radius:4px;transition:background .15s;" '+
+        'onmouseover="this.style.background=\'#0a2030\'" onmouseout="this.style.background=\'transparent\'">'+
+        '<span style="font-family:monospace;font-size:.85rem;color:#fbbf24;min-width:70px;flex-shrink:0;font-weight:700;">'+d.pref+'</span>'+
+        '<span style="font-size:.82rem;color:#e2e8f0;font-family:sans-serif;line-height:1.4;flex:1;">'+d.sehirler+'</span>'+
+        '<span style="font-size:.75rem;color:#38bdf8;flex-shrink:0;">🗺️</span></div>';
+    });
+    html+='</div>';
   });
+  if(html.indexOf('color:#fbbf24')<0) html+='<div style="padding:16px;text-align:center;color:#64748b;font-size:.82rem;">Sonuç bulunamadı</div>';
+  sonuc.innerHTML=html;
+};
 
-  if(!html.includes('font-family:var(--mono)')){
-    html += '<div style="padding:16px;text-align:center;color:var(--sub);font-size:.82rem;">Sonuç bulunamadı</div>';
-  }
-
-  sonuc.innerHTML = html;
-}
-
-window.postaAra = function postaAra(val){
-  if(!_postaAktifUlke) return;
-  postaRender(POSTA_DB[_postaAktifUlke], val);
-}
-
-// Sayfa hazır olunca başlat
-if(document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', window.postaInit);
-} else {
-  window.postaInit();
-}
+window.postaAra = function(val){
+  if(!window._postaAktifUlke) return;
+  const POSTA_DB_LOCAL = POSTA_DB;
+  window.postaRender(POSTA_DB_LOCAL[window._postaAktifUlke], val);
+};
 
 })();
 
-document.addEventListener('DOMContentLoaded',init);
+document.addEventListener('DOMContentLoaded',function(){
+  try{if(window._idbKurtar) window._idbKurtar();}catch(e){}
+  init();
+});
 </script>
 
 <!-- ═══ DTCO 4.1 Motoru ═══ -->
@@ -7840,80 +7581,71 @@ function ulkeYasakKontrol(ulkeAd, tarih){
 }
 
 /* ══ KAMYON YASAK UYARI SİSTEMİ ══ */
-window.yasakDurumKontrol = function yasakDurumKontrol(ulkeAdi){
-  const u = KAMYON_YASAK[ulkeAdi];
-  if(!u) return {durum:'yok', renk:null, mesaj:''};
-
+window.yasakDurumKontrol = function(ulkeAdi){
+  const u = window.KAMYON_YASAK[ulkeAdi];
+  if(!u) return {durum:'yok'};
   const simdi = new Date();
-  const gun = simdi.getDay(); // 0=Paz, 6=Cmt
-  const saat = simdi.getHours() + simdi.getMinutes()/60;
-  const ay = simdi.getMonth() + 1; // 1-12
-  const yaz = ay >= 4 && ay <= 9; // Nisan-Eylül = yaz sezonu
-
-  // Hafta sonu yasak saatlerini parse et
-  const haftaSonu = u.haftaSonu || '';
-
-  // Bugün ve yarın yasak var mı?
-  function yasaktaMi(hedefGun, hedefSaat){
-    // Pazar yasağı
-    if(hedefGun === 0){
-      if(haftaSonu.includes('Pzr 00:00-22:00') || haftaSonu.includes('Pzr 00:00 - Pzr 22:00')) return true;
-      if(haftaSonu.includes('Pzr 06:00-22:00') || haftaSonu.includes('Pzr 06:00-23:00')) return true;
-      if(haftaSonu.includes('Pzr 08:00-21:00') || haftaSonu.includes('Pzr 09:00-22:00')) return true;
-      if(haftaSonu.includes('Pzr 13:00-22:00')) return true;
-      if(haftaSonu.includes('Pzr') && haftaSonu.length > 5) return true;
-    }
-    // Cumartesi yasağı
-    if(hedefGun === 6){
-      if(yaz && (haftaSonu.includes('Cmt') || haftaSonu.includes('Cmt 07:00') || haftaSonu.includes('Cmt 15:00') || haftaSonu.includes('Cmt 08:00'))) return true;
-    }
+  const gun = simdi.getDay();
+  const ay = simdi.getMonth()+1;
+  const yaz = ay>=4 && ay<=9;
+  const hs = u.haftaSonu || '';
+  function yasaktaMi(g){
+    if(g===0 && hs.includes('Pzr')) return true;
+    if(g===6 && yaz && hs.includes('Cmt')) return true;
     return false;
   }
-
-  // Tatil günü kontrolü
-  const bugunStr = simdi.toLocaleDateString('tr-TR',{day:'2-digit',month:'short'}).replace('.',''). toLowerCase();
-  let tatilYasak = false;
-  let tatilAdi = '';
+  // Tatil kontrolü
+  let tatilYasak=false, tatilAdi='';
   if(u.tatilGunleri2026){
-    u.tatilGunleri2026.forEach(t=>{
-      if(!t.yasak || t.yasak === 'Yasak yok' || t.yasak === '') return;
-      // Tarih string içinde bugün veya yarın var mı?
-      const tarihStr = t.tarih.toLowerCase();
-      const bugunDate = new Date();
-      const yarinDate = new Date(); yarinDate.setDate(yarinDate.getDate()+1);
-      const ovGun = bugunDate.getDate();
-      const ovAy = bugunDate.getMonth()+1;
-      const yrGun = yarinDate.getDate();
-      const yrAy = yarinDate.getMonth()+1;
-      // Basit eşleşme: tarih metninde ay numarası ve gün var mı
-      const aylar = ['','oca','şub','mar','nis','may','haz','tem','ağu','eyl','eki','kas','ara'];
-      const bugunAyStr = aylar[ovAy];
-      const yarinAyStr = aylar[yrAy];
-      if(tarihStr.includes(String(ovGun)) && tarihStr.includes(bugunAyStr)) {
-        tatilYasak = true; tatilAdi = t.ad;
-      }
-      if(tarihStr.includes(String(yrGun)) && tarihStr.includes(yarinAyStr)) {
-        tatilYasak = true; tatilAdi = '⏰ Yarın: ' + t.ad;
-      }
+    const yarin = new Date(); yarin.setDate(yarin.getDate()+1);
+    const aylar=['','oca','şub','mar','nis','may','haz','tem','ağu','eyl','eki','kas','ara'];
+    u.tatilGunleri2026.forEach(function(t){
+      if(!t.yasak||t.yasak==='Yasak yok'||t.yasak==='') return;
+      const ts=t.tarih.toLowerCase();
+      if(ts.includes(String(simdi.getDate()))&&ts.includes(aylar[ay])){tatilYasak=true;tatilAdi=t.ad;}
+      if(ts.includes(String(yarin.getDate()))&&ts.includes(aylar[yarin.getMonth()+1])){tatilYasak=true;tatilAdi='Yarın: '+t.ad;}
     });
   }
+  if(yasaktaMi(gun)||tatilYasak) return {durum:'aktif',renk:'#ef4444',glow:'0 0 10px #ef444488',mesaj:tatilAdi||'🚫 Yasak aktif!'};
+  if(yasaktaMi((gun+1)%7)) return {durum:'yakin',renk:'#f59e0b',glow:'0 0 8px #f59e0b44',mesaj:'⚠️ Yarın yasak!'};
+  if(yasaktaMi((gun+2)%7)) return {durum:'uyari',renk:'#fbbf24',glow:'0 0 6px #fbbf2433',mesaj:'📅 2 gün içinde'};
+  return {durum:'serbest'};
+};
 
-  // Şu an yasak mı?
-  const suanYasak = yasaktaMi(gun, saat) || tatilYasak;
-  // Yarın yasak mı?
-  const yarinYasak = yasaktaMi((gun+1)%7, 0);
-  // 2 gün sonra yasak mı?
-  const ikiGunYasak = yasaktaMi((gun+2)%7, 0);
-
-  if(suanYasak){
-    return {durum:'aktif', renk:'#ef4444', glow:'0 0 10px #ef444488', mesaj: tatilAdi ? tatilAdi : '🚫 Şu an yasak aktif!'};
-  } else if(yarinYasak || tatilYasak){
-    return {durum:'yakin', renk:'#f59e0b', glow:'0 0 10px #f59e0b66', mesaj:'⚠️ Yarın yasak var!'};
-  } else if(ikiGunYasak){
-    return {durum:'uyari', renk:'#fbbf24', glow:'0 0 6px #fbbf2444', mesaj:'📅 2 gün içinde yasak'};
+window.yolBilgiBaslikGuncelle=function(){
+  if(!window.yasakDurumKontrol||!window.KAMYON_YASAK) return;
+  let enKotu='serbest';
+  Object.keys(window.KAMYON_YASAK).forEach(function(ad){
+    const yd=window.yasakDurumKontrol(ad);
+    if(yd.durum==='aktif') enKotu='aktif';
+    else if(yd.durum==='yakin'&&enKotu!=='aktif') enKotu='yakin';
+    else if(yd.durum==='uyari'&&enKotu==='serbest') enKotu='uyari';
+  });
+  const baslik=document.getElementById('yol-bilgi-baslik');
+  const badge=document.getElementById('yol-bilgi-uyari-badge');
+  const kart=document.getElementById('d-yol-bilgi-card');
+  if(!baslik||!badge) return;
+  if(enKotu==='aktif'){
+    baslik.style.color='#ef4444'; if(kart) kart.style.boxShadow='0 0 12px #ef444433';
+    badge.style.display='inline-block'; badge.style.background='#ef4444'; badge.style.color='#fff'; badge.textContent='🚫 YASAK VAR';
+  } else if(enKotu==='yakin'){
+    baslik.style.color='#f59e0b'; if(kart) kart.style.boxShadow='0 0 10px #f59e0b33';
+    badge.style.display='inline-block'; badge.style.background='#f59e0b'; badge.style.color='#000'; badge.textContent='⚠️ YARIN YASAK';
+  } else if(enKotu==='uyari'){
+    baslik.style.color='#fbbf24'; badge.style.display='inline-block'; badge.style.background='#854d0e'; badge.style.color='#fbbf24'; badge.textContent='📅 2 GÜN';
+  } else {
+    baslik.style.color=''; if(kart) kart.style.boxShadow=''; badge.style.display='none';
   }
-  return {durum:'serbest', renk:null, glow:null, mesaj:''};
+};
+
+// Her dakika + açılışta güncelle
+function _yolYenile(){
+  if(window.yolBilgiBaslikGuncelle) window.yolBilgiBaslikGuncelle();
+  const ic=document.getElementById('yol-bilgi-icerik');
+  if(ic&&ic.style.display!=='none'&&window.dRenderYolBilgi) window.dRenderYolBilgi();
 }
+setInterval(_yolYenile, 60000);
+setTimeout(_yolYenile, 2500);
 
 // Yol Bilgisi panelini render et
 function dRenderYolBilgi(){
@@ -7932,54 +7664,28 @@ function dRenderYolBilgi(){
     const u = KAMYON_YASAK[ad];
     if(!u) return '';
     const aktif = (ad === window._yolBilgiSecili);
-    const yd = yasakDurumKontrol(ad);
-    // Renk: aktif > yasak durumu > normal
-    let bg, border, color, glow='', ekBadge='';
-    if(aktif){
-      bg='rgba(0,200,255,.18)'; border='#00c8ff'; color='#00c8ff';
-    } else if(yd.durum === 'aktif'){
-      bg='rgba(239,68,68,.15)'; border='#ef4444'; color='#ef4444'; glow='box-shadow:0 0 10px #ef444466;';
-      ekBadge='<span style="font-size:.65rem;background:#ef4444;color:#fff;border-radius:3px;padding:1px 4px;margin-left:4px;">YASAK</span>';
-    } else if(yd.durum === 'yakin'){
-      bg='rgba(245,158,11,.12)'; border='#f59e0b'; color='#f59e0b'; glow='box-shadow:0 0 8px #f59e0b44;';
-      ekBadge='<span style="font-size:.65rem;background:#f59e0b;color:#000;border-radius:3px;padding:1px 4px;margin-left:4px;">YARIN</span>';
-    } else if(yd.durum === 'uyari'){
-      bg='rgba(251,191,36,.08)'; border='#fbbf24'; color='#fbbf24'; glow='box-shadow:0 0 6px #fbbf2433;';
-      ekBadge='<span style="font-size:.65rem;background:#854d0e;color:#fbbf24;border-radius:3px;padding:1px 4px;margin-left:4px;">2 GÜN</span>';
-    } else {
-      bg='var(--panel2)'; border='var(--border2)'; color='#c0c0d0';
-    }
-    return '<button onclick="window.dYolBilgiUlkeAc(\''+ad+'\')" '+
-      'style="font-family:var(--sans);font-size:.85rem;font-weight:700;padding:8px 14px;border-radius:6px;cursor:pointer;'+
-      'background:'+bg+';border:1px solid '+border+';color:'+color+';'+glow+
-      'transition:all .2s;touch-action:manipulation;">'+u.flag+' '+ad+ekBadge+'</button>';
+    const yd = window.yasakDurumKontrol ? window.yasakDurumKontrol(ad) : {durum:'serbest'};
+    let bg,border,color,glow='',badge='';
+    if(aktif){ bg='rgba(0,200,255,.18)';border='#00c8ff';color='#00c8ff'; }
+    else if(yd.durum==='aktif'){ bg='rgba(239,68,68,.15)';border='#ef4444';color='#ef4444';glow='box-shadow:0 0 10px #ef444466;';badge='<span style="font-size:.62rem;background:#ef4444;color:#fff;border-radius:3px;padding:1px 4px;margin-left:3px;">YASAK</span>'; }
+    else if(yd.durum==='yakin'){ bg='rgba(245,158,11,.12)';border='#f59e0b';color='#f59e0b';glow='box-shadow:0 0 8px #f59e0b44;';badge='<span style="font-size:.62rem;background:#f59e0b;color:#000;border-radius:3px;padding:1px 4px;margin-left:3px;">YARIN</span>'; }
+    else if(yd.durum==='uyari'){ bg='rgba(251,191,36,.08)';border='#fbbf24';color='#fbbf24';badge='<span style="font-size:.62rem;color:#fbbf24;margin-left:3px;">2G</span>'; }
+    else { bg='var(--panel2)';border='var(--border2)';color='#c0c0d0'; }
+    return '<button onclick="window.dYolBilgiUlkeAc(\''+ad+'\')" style="font-family:var(--sans);font-size:.85rem;font-weight:700;padding:8px 14px;border-radius:6px;cursor:pointer;background:'+bg+';border:1px solid '+border+';color:'+color+';'+glow+'transition:all .2s;touch-action:manipulation;">'+u.flag+' '+ad+badge+'</button>';
   };
 
-  // ★ LİNK-ONLY ÜLKELER (32 diğer ülke) — DAHA SOLUK
   const linkButtonHTML = (ad) => {
     const u = KAMYON_YASAK[ad];
     if(!u) return '';
     const aktif = (ad === window._yolBilgiSecili);
-    const yd = yasakDurumKontrol(ad);
-    let bg, border, color, glow='', ekBadge='';
-    if(aktif){
-      bg='rgba(0,200,255,.18)'; border='#00c8ff'; color='#00c8ff';
-    } else if(yd.durum === 'aktif'){
-      bg='rgba(239,68,68,.12)'; border='#ef4444'; color='#ef4444'; glow='box-shadow:0 0 8px #ef444455;';
-      ekBadge='<span style="font-size:.6rem;background:#ef4444;color:#fff;border-radius:3px;padding:1px 3px;margin-left:3px;">YASAK</span>';
-    } else if(yd.durum === 'yakin'){
-      bg='rgba(245,158,11,.10)'; border='#f59e0b'; color='#f59e0b'; glow='box-shadow:0 0 6px #f59e0b33;';
-      ekBadge='<span style="font-size:.6rem;background:#f59e0b;color:#000;border-radius:3px;padding:1px 3px;margin-left:3px;">YARIN</span>';
-    } else if(yd.durum === 'uyari'){
-      bg='rgba(251,191,36,.06)'; border='#fbbf24'; color='#a16207';
-      ekBadge='<span style="font-size:.6rem;color:#fbbf24;margin-left:3px;">2G</span>';
-    } else {
-      bg='rgba(20,25,40,.6)'; border='#3a4458'; color='#8a92a8';
-    }
-    return '<button onclick="window.dYolBilgiUlkeAc(\''+ad+'\')" '+
-      'style="font-family:var(--sans);font-size:.78rem;font-weight:600;padding:6px 10px;border-radius:5px;cursor:pointer;'+
-      'background:'+bg+';border:1px dashed '+border+';color:'+color+';'+glow+
-      'transition:all .2s;touch-action:manipulation;opacity:'+(aktif?'1':'0.85')+';">'+u.flag+' '+ad+ekBadge+'</button>';
+    const yd = window.yasakDurumKontrol ? window.yasakDurumKontrol(ad) : {durum:'serbest'};
+    let bg,border,color,glow='',badge='';
+    if(aktif){ bg='rgba(0,200,255,.18)';border='#00c8ff';color='#00c8ff'; }
+    else if(yd.durum==='aktif'){ bg='rgba(239,68,68,.12)';border='#ef4444';color='#ef4444';glow='box-shadow:0 0 8px #ef444455;';badge='<span style="font-size:.6rem;background:#ef4444;color:#fff;border-radius:3px;padding:1px 3px;margin-left:2px;">YASAK</span>'; }
+    else if(yd.durum==='yakin'){ bg='rgba(245,158,11,.10)';border='#f59e0b';color='#f59e0b';badge='<span style="font-size:.6rem;background:#f59e0b;color:#000;border-radius:3px;padding:1px 3px;margin-left:2px;">YARIN</span>'; }
+    else if(yd.durum==='uyari'){ bg='rgba(251,191,36,.06)';border='#fbbf24';color='#a16207';badge='<span style="font-size:.6rem;color:#fbbf24;margin-left:2px;">2G</span>'; }
+    else { bg='rgba(20,25,40,.6)';border='#3a4458';color='#8a92a8'; }
+    return '<button onclick="window.dYolBilgiUlkeAc(\''+ad+'\')" style="font-family:var(--sans);font-size:.78rem;font-weight:600;padding:6px 10px;border-radius:5px;cursor:pointer;background:'+bg+';border:1px dashed '+border+';color:'+color+';'+glow+'transition:all .2s;touch-action:manipulation;opacity:'+(aktif?'1':'0.85')+';">'+u.flag+' '+ad+badge+'</button>';
   };
   
   // 1. Detaylı ülkeler (sırasıyla)
@@ -8169,18 +7875,6 @@ window.dYolBilgiUlkeAc = function(ulkeAd){
 };
 
 window.dRenderYolBilgi = dRenderYolBilgi;
-
-// ★ Her dakika yasak durumunu güncelle — buton renkleri + başlık rengi
-function _yolYenile(){
-  if(typeof window.yolBilgiBaslikGuncelle === 'function') window.yolBilgiBaslikGuncelle();
-  if(typeof dRenderYolBilgi === 'function'){
-    const ic = document.getElementById('yol-bilgi-icerik');
-    if(ic && ic.style.display !== 'none') dRenderYolBilgi();
-  }
-}
-setInterval(_yolYenile, 60000);
-// Sayfa açılışında hemen çalıştır
-setTimeout(_yolYenile, 2500);
 function dUpdateActBtns(act){
   Object.keys(DMOD).forEach(k=>{const el=g('dab-'+k);if(el)el.className='d-act-btn'+(act===k?' d-sel-'+k:'');});
 }
@@ -9779,9 +9473,18 @@ window.gpsAktif = false;
 function setGpsAktif(v){
   gpsAktif = !!v;
   window.gpsAktif = gpsAktif;
-  // ★ State'i localStorage'a kaydet — sayfa yenilense de bilelim
+  try { localStorage.setItem('gps_aktif', gpsAktif ? '1' : '0'); } catch(e){}
   try {
-    localStorage.setItem('gps_aktif', gpsAktif ? '1' : '0');
+    const _kb=document.getElementById('kapat-btn');
+    if(_kb){
+      if(gpsAktif){
+        _kb.style.boxShadow='0 0 0 2px #38bdf8,0 0 12px #38bdf8aa,0 0 28px #38bdf855,inset 0 1px 1px rgba(255,255,255,.15)';
+        _kb.style.background='linear-gradient(145deg,#0e4a6e,#0a2a40)';
+      } else {
+        _kb.style.boxShadow='0 0 0 2px #ef4444,0 0 12px #ef4444aa,0 0 28px #ef444455,inset 0 1px 1px rgba(255,255,255,.1)';
+        _kb.style.background='linear-gradient(145deg,#4a0e0e,#2a0a0a)';
+      }
+    }
   } catch(e){}
 }
 
@@ -9805,25 +9508,24 @@ let gpsYenidenBaslatmaSayisi = 0; // ★ Yeniden başlatma sayacı (sınırsız 
 // Mesafeyi sayfa yenilenmesinde de koru
 function gpsKayitYap(){
   try {
-    const simdi = Date.now();
-    localStorage.setItem('gps_mesafe',    String(toplamMesafe));
-    localStorage.setItem('gps_son_zaman', String(simdi));
-    // ★ Her kayıtta arka plan bilgilerini de güncelle
-    // Android Chrome sekmeyi öldürse bile son durum korunur
-    localStorage.setItem('arkapan_mesafe', String(Math.round(toplamMesafe)));
-    localStorage.setItem('arkapan_hiz',    String(sonHiz));
-    localStorage.setItem('arkapan_gps',    '1');
-    // arkapan_zamani'yi YAZMA — o sadece ekran kapanınca yazılır
-    // (eğer hiç yazılmamışsa ve sayfa öldüyse, gps_son_zaman kullanılır)
+    localStorage.setItem('gps_mesafe', String(toplamMesafe));
+    localStorage.setItem('gps_son_zaman', String(Date.now()));
   } catch(e){}
 }
 function gpsKayitOku(){
   try {
+    // gps_mesafe: GPS callback'inde her konum güncellemesinde yazılır
     const m = parseFloat(localStorage.getItem('gps_mesafe')) || 0;
     const t = parseFloat(localStorage.getItem('gps_son_zaman')) || 0;
-    // 72 saat içindeyse mesafeyi koru (uzun dinlenme molası senaryosu)
+    // arkapan_mesafe: arka plana geçince yazılır (fallback)
+    const mAlt = parseFloat(localStorage.getItem('arkapan_mesafe')) || 0;
+
+    // 72 saat içindeyse yükle (uzun dinlenme molası senaryosu)
     if(t && (Date.now() - t) < 72*60*60*1000){
-      toplamMesafe = m;
+      toplamMesafe = m > 0 ? m : mAlt;
+    } else if(mAlt > 0 && m === 0){
+      // gps_son_zaman eski ama arkapan_mesafe var — onu kullan
+      toplamMesafe = mAlt;
     } else {
       toplamMesafe = 0;
     }
