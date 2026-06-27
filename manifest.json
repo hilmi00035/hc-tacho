@@ -1,10 +1,12 @@
 {
+  "id": "/hc-tacho/",
   "name": "HÇ TACHO PRO",
   "short_name": "HÇ TACHO",
   "description": "Dijital Takograf — Sürüş, Dinlenme, GPS, İhlal Takibi. AB Yönetmeliği EC 561/2006 uyumlu profesyonel TIR şoförü uygulaması.",
   "start_url": "/hc-tacho/",
   "scope": "/hc-tacho/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#0a0e1a",
   "theme_color": "#0a0e1a",
@@ -45,6 +47,13 @@
       "type": "image/png",
       "form_factor": "narrow",
       "label": "HÇ TACHO Ana Ekran"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "HÇ TACHO Geniş Ekran"
     }
   ],
   "shortcuts": [
@@ -56,9 +65,25 @@
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     }
   ],
-  "related_applications": [],
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://hilmi00035.github.io/hc-tacho/manifest.json"
+    }
+  ],
   "prefer_related_applications": false,
   "edge_side_panel": {
     "preferred_width": 400
+  },
+  "protocol_handlers": [],
+  "file_handlers": [],
+  "share_target": {
+    "action": "/hc-tacho/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
   }
 }
