@@ -1,29 +1,21 @@
 {
-  "id": "hc-tacho-pro",
   "name": "HÇ TACHO PRO",
   "short_name": "HÇ TACHO",
-  "description": "Dijital Takograf — Sürüş, Dinlenme, GPS, İhlal Takibi",
-  "start_url": "./",
-  "scope": "./",
+  "description": "Dijital Takograf — Sürüş, Dinlenme, GPS, İhlal Takibi. AB Yönetmeliği EC 561/2006 uyumlu profesyonel TIR şoförü uygulaması.",
+  "start_url": "/hc-tacho/",
+  "scope": "/hc-tacho/",
   "display": "standalone",
-  "display_override": ["standalone", "fullscreen"],
   "orientation": "portrait",
-  "background_color": "#0a0a0f",
-  "theme_color": "#0a0a0f",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
   "lang": "tr",
   "dir": "ltr",
-  "prefer_related_applications": false,
-  "categories": ["productivity", "business", "utilities"],
+  "categories": ["navigation", "utilities", "productivity"],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
@@ -34,10 +26,39 @@
       "purpose": "maskable"
     },
     {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "HÇ TACHO Ana Ekran"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "GPS Başlat",
+      "short_name": "GPS",
+      "description": "GPS takibini başlat",
+      "url": "/hc-tacho/?action=gps",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }
