@@ -1,0 +1,1657 @@
+{
+  "Türkiye": {
+    "flag": "🇹🇷",
+    "ozet": "Genel kamyon yasağı yok. Şehir merkezlerinde (İstanbul, Ankara, İzmir) belirli saat kısıtlamaları olabilir. Bayram günlerinde otoyollarda yoğunluğa dikkat.",
+    "haftaSonu": "Yok",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "Yasak yok"
+      },
+      {
+        "tarih": "23 Nisan",
+        "ad": "Ulusal Egemenlik ve Çocuk Bayramı",
+        "yasak": "Yasak yok"
+      },
+      {
+        "tarih": "01 Mayıs",
+        "ad": "Emek ve Dayanışma Günü",
+        "yasak": "Yasak yok"
+      },
+      {
+        "tarih": "19 Mayıs",
+        "ad": "Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+        "yasak": "Yasak yok"
+      },
+      {
+        "tarih": "15 Tem",
+        "ad": "Demokrasi ve Milli Birlik Günü",
+        "yasak": "Yasak yok"
+      },
+      {
+        "tarih": "30 Ağu",
+        "ad": "Zafer Bayramı",
+        "yasak": "Yasak yok"
+      },
+      {
+        "tarih": "29 Ekim",
+        "ad": "Cumhuriyet Bayramı",
+        "yasak": "Yasak yok"
+      },
+      {
+        "tarih": "─────",
+        "ad": "DİNİ BAYRAMLAR (Hicri)",
+        "yasak": ""
+      },
+      {
+        "tarih": "19-21 Mart 2026",
+        "ad": "Ramazan Bayramı (3 gün)",
+        "yasak": "Şehir merkezlerinde yoğunluk"
+      },
+      {
+        "tarih": "26-29 May 2026",
+        "ad": "Kurban Bayramı (4 gün)",
+        "yasak": "Şehir merkezlerinde yoğunluk"
+      }
+    ],
+    "istanbulYasak": "İstanbul: Her gün 07:00-10:00 ve 16:00-22:00 — Kamyonlar şehir merkezine giremez",
+    "resmiKaynak": [
+      {
+        "ad": "KGM - Trafik Düzenlemeleri",
+        "url": "https://www.kgm.gov.tr/Sayfalar/KGM/SiteTr/Trafik/IETT.aspx"
+      },
+      {
+        "ad": "UND - Geçiş Belgeleri ve Kısıtlamalar",
+        "url": "https://www.und.org.tr/tr/yurt-disi-tasimacilik"
+      },
+      {
+        "ad": "KGM - Ana Sayfa",
+        "url": "https://www.kgm.gov.tr/"
+      }
+    ]
+  },
+  "Bulgaristan": {
+    "flag": "🇧🇬",
+    "ozet": "Yaz aylarında (Tem-Ağu) Cumartesi öğleden sonra ve Pazar yasakları. Resmi tatil arifesi ve günü için ÖZEL saatler. 12 ton üstü için.",
+    "haftaSonu": "Yaz: Cmt 16:00-22:00 + Pzr 06:00-22:00 (sadece otoyollarda).",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "03 Mart",
+        "ad": "Kurtuluş Günü",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "10 Nisan",
+        "ad": "Ortodoks Paskalya Cuması",
+        "yasak": "Otoyollarda 16:00-20:00"
+      },
+      {
+        "tarih": "13 Nisan",
+        "ad": "Ortodoks Paskalya Pazartesi",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "06 May",
+        "ad": "Aziz Yorgi Günü (Ordu Günü)",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "24 May",
+        "ad": "Eğitim ve Slav Yazı Günü",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "06 Eyl",
+        "ad": "Birleşme Günü",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "22 Eyl",
+        "ad": "Bağımsızlık Günü",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Aydınlanma Liderleri Günü",
+        "yasak": "Otoyollarda 14:00-22:00"
+      },
+      {
+        "tarih": "24-26 Ara",
+        "ad": "Noel (3 gün)",
+        "yasak": "Otoyollarda 14:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "AAP - Trafik Kısıtlamaları (EN)",
+        "url": "https://www.api.bg/index.php/en/traffic/traffic-restrictions"
+      },
+      {
+        "ad": "AAP - Anasayfa",
+        "url": "https://www.api.bg/"
+      },
+      {
+        "ad": "IRU - Bulgaristan Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/bulgaria"
+      }
+    ]
+  },
+  "Sırbistan": {
+    "flag": "🇷🇸",
+    "ozet": "Yaz aylarında (15 Haz - 1 Eyl) Pazar günleri yasak. 7 ton üstü kamyonlar için. Resmi tatil günlerinde ek kısıtlamalar.",
+    "haftaSonu": "Yaz: Pzr 06:00-23:00. Kış aylarında genelde yok.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01-02 Ocak",
+        "ad": "Yılbaşı (2 gün)",
+        "yasak": "Otoyollarda 08:00-22:00"
+      },
+      {
+        "tarih": "07 Ocak",
+        "ad": "Ortodoks Noeli",
+        "yasak": "Otoyollarda 08:00-22:00"
+      },
+      {
+        "tarih": "15-16 Şub",
+        "ad": "Devlet Günü (2 gün)",
+        "yasak": "Otoyollarda 08:00-22:00"
+      },
+      {
+        "tarih": "10-13 Nis",
+        "ad": "Ortodoks Paskalya (Cuma-Pzt)",
+        "yasak": "Otoyollarda 08:00-22:00"
+      },
+      {
+        "tarih": "01-02 May",
+        "ad": "İşçi Bayramı (2 gün)",
+        "yasak": "Otoyollarda 08:00-22:00"
+      },
+      {
+        "tarih": "11 Kas",
+        "ad": "Ateşkes Günü",
+        "yasak": "Otoyollarda 08:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "Putevi Srbije - Trafik Bilgi",
+        "url": "https://www.putevi-srbije.rs/index.php/en/traffic-information"
+      },
+      {
+        "ad": "Putevi Srbije - Anasayfa",
+        "url": "https://www.putevi-srbije.rs/"
+      },
+      {
+        "ad": "IRU - Sırbistan Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/serbia"
+      }
+    ]
+  },
+  "Hırvatistan": {
+    "flag": "🇭🇷",
+    "ozet": "Yaz dönemi (15 Haz - 15 Eyl) Cumartesi 04:00-14:00 ve Pazar/tatil 12:00-23:00 yasakları. 7,5 ton üstü için. Tüm yıl Pazar ve tatil günleri ek kısıtlamalar.",
+    "haftaSonu": "Yaz: Cmt 04:00-14:00 + Pzr/tatil 12:00-23:00. Kış: sadece bazı tatil günleri.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "06 Ocak",
+        "ad": "Epifani",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "05-06 Nis",
+        "ad": "Paskalya (Pzr-Pzt)",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "30 May",
+        "ad": "Devlet Günü",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "04 Haz",
+        "ad": "Corpus Christi",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "22 Haz",
+        "ad": "Anti-Faşizm Günü",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "05 Ağu",
+        "ad": "Zafer ve Vatandaşlık Günü",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana Günü",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "18 Kas",
+        "ad": "Anma Günü",
+        "yasak": "14:00-23:00"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "14:00-23:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "HAK - Trafik Bilgi (canlı)",
+        "url": "https://www.hak.hr/en/info/traffic-info"
+      },
+      {
+        "ad": "HAK - Kamyon Yasakları (EN)",
+        "url": "https://www.hak.hr/en/info/lorry-traffic-bans"
+      },
+      {
+        "ad": "IRU - Hırvatistan Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/croatia"
+      }
+    ]
+  },
+  "Slovenya": {
+    "flag": "🇸🇮",
+    "ozet": "Pazar 08:00-21:00 standart yasak. Yaz (Hzr-Eyl) Cumartesi 08:00-13:00 ek yasak. Resmi tatillerde 08:00-21:00. 7,5 ton üstü.",
+    "haftaSonu": "Pzr 08:00-21:00. Yaz Cmt: 08:00-13:00.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01-02 Ocak",
+        "ad": "Yılbaşı (2 gün)",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "08 Şub",
+        "ad": "Prešeren Günü (Kültür)",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "05-06 Nis",
+        "ad": "Paskalya (Pzr-Pzt)",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "27 Nis",
+        "ad": "Direniş Günü",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "01-02 May",
+        "ad": "İşçi Bayramı (2 gün)",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "25 Haz",
+        "ad": "Devlet Günü",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana Günü",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "31 Ekim",
+        "ad": "Reform Günü",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "08:00-21:00"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel ve Bağımsızlık (2 gün)",
+        "yasak": "08:00-21:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "Promet.si - Trafik (canlı)",
+        "url": "https://www.promet.si/portal/sl/promet.aspx"
+      },
+      {
+        "ad": "DARS - Anasayfa (EN)",
+        "url": "https://www.dars.si/Eng"
+      },
+      {
+        "ad": "IRU - Slovenya Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/slovenia"
+      }
+    ]
+  },
+  "Avusturya": {
+    "flag": "🇦🇹",
+    "ozet": "Cumartesi 15:00-24:00 + Pazar/tatil 00:00-22:00 yasak. 7,5 ton üstü. Tirol bölgesi: HER GECE 22:00-05:00. Yaz Cumartesi A12/A13/A14'te ek yasaklar.",
+    "haftaSonu": "Cmt 15:00-24:00 + Pzr 00:00-22:00. Tirol gece: 22:00-05:00 (her gün).",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "06 Ocak",
+        "ad": "Epifani",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "06 Nis",
+        "ad": "Paskalya Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "14 May",
+        "ad": "İsa'nın Göğe Yükselişi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "25 May",
+        "ad": "Pentekost Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "04 Haz",
+        "ad": "Corpus Christi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "26 Ekim",
+        "ad": "Ulusal Gün",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "08 Ara",
+        "ad": "Meryem Ana Mucizesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "00:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "ASFINAG - Trafik Bilgi",
+        "url": "https://www.asfinag.at/en/"
+      },
+      {
+        "ad": "WKO - Yasaklar (DE)",
+        "url": "https://www.wko.at/branchen/transport-verkehr/gueterbefoerderungsgewerbe/fahrverbote.html"
+      },
+      {
+        "ad": "IRU - Avusturya Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/austria"
+      }
+    ]
+  },
+  "Almanya": {
+    "flag": "🇩🇪",
+    "ozet": "Pazar + resmi tatil 00:00-22:00 yasak. 7,5 ton üstü ve römorklu kamyonlar. Yaz (1 Tem-31 Ağu) Cumartesi 07:00-20:00 belirli otoyollarda ek. Bölgesel ek tatiller (Corpus Christi, Reformation Day, vb.) var.",
+    "haftaSonu": "Pzr 00:00-22:00. Yaz Cmt 07:00-20:00 (belirli otoyollarda).",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "03 Nis",
+        "ad": "Good Friday (Hayırlı Cuma)",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "06 Nis",
+        "ad": "Paskalya Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "14 May",
+        "ad": "İsa'nın Göğe Yükselişi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "25 May",
+        "ad": "Pentekost Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "04 Haz",
+        "ad": "Corpus Christi (BW, BY, HE, NRW, RP, SL)",
+        "yasak": "00:00-22:00 (bölgesel)"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana Günü (BY, SL)",
+        "yasak": "00:00-22:00 (bölgesel)"
+      },
+      {
+        "tarih": "03 Ekim",
+        "ad": "Alman Birliği Günü ⭐",
+        "yasak": "00:00-22:00 (ULUSAL)"
+      },
+      {
+        "tarih": "31 Ekim",
+        "ad": "Reform Günü (BB, MV, SN, ST, TH; NI özel)",
+        "yasak": "00:00-22:00 (bölgesel)"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü (BW, BY, NRW, RP, SL)",
+        "yasak": "00:00-22:00 (bölgesel)"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "00:00-22:00"
+      }
+    ],
+    "bolgeselNot": "⚠️ Bölgesel tatillerde aynı gün bir eyalette yasak, diğerinde değil. Aşağıdaki \"BALM\" linkinden rotanız üzerindeki eyaletleri kontrol edin.",
+    "resmiKaynak": [
+      {
+        "ad": "BALM - Sürüş Yasakları (DE)",
+        "url": "https://www.balm.bund.de/DE/Themen/Strassentransport/Fahrverbote/fahrverbote_node.html"
+      },
+      {
+        "ad": "ADAC - Yaz Tatil Yasakları (DE)",
+        "url": "https://www.adac.de/verkehr/verkehrsinfos/lkw-fahrverbote/"
+      },
+      {
+        "ad": "BALM - Anasayfa",
+        "url": "https://www.balm.bund.de/"
+      }
+    ]
+  },
+  "İtalya": {
+    "flag": "🇮🇹",
+    "ozet": "Pazar/tatil 09:00-22:00 (yaz: 07:00-22:00) yasak. 7,5 ton üstü. Yaz Cumartesileri 08:00-22:00 ek. Paskalya, Noel, 1 Mayıs etrafında uzun yasaklar.",
+    "haftaSonu": "Pzr 09:00-22:00 (kış) / 07:00-22:00 (yaz). Yaz Cmt: 08:00-22:00.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "09:00-22:00"
+      },
+      {
+        "tarih": "06 Ocak",
+        "ad": "Epifani",
+        "yasak": "09:00-22:00"
+      },
+      {
+        "tarih": "05-06 Nis",
+        "ad": "Paskalya (Pzr-Pzt)",
+        "yasak": "09:00-22:00"
+      },
+      {
+        "tarih": "25 Nis",
+        "ad": "Kurtuluş Günü",
+        "yasak": "09:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "09:00-22:00"
+      },
+      {
+        "tarih": "02 Haz",
+        "ad": "Cumhuriyet Günü",
+        "yasak": "09:00-22:00"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Ferragosto (Meryem Ana)",
+        "yasak": "07:00-22:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "09:00-22:00"
+      },
+      {
+        "tarih": "08 Ara",
+        "ad": "Meryem Ana Mucizesi",
+        "yasak": "09:00-22:00"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "09:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "MIT - Bakanlık (IT)",
+        "url": "https://www.mit.gov.it/"
+      },
+      {
+        "ad": "Polizia Stradale (IT)",
+        "url": "https://www.poliziadistato.it/"
+      },
+      {
+        "ad": "IRU - İtalya Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/italy"
+      }
+    ]
+  },
+  "Macaristan": {
+    "flag": "🇭🇺",
+    "ozet": "Mart-Eylül arası Cumartesi 15:00-22:00 + Pazar 00:00-22:00 yasak (bazı yollarda). 7,5 ton üstü. Resmi tatil günlerinde 00:00-22:00 ek yasak.",
+    "haftaSonu": "Mar-Eyl: Cmt 15:00-22:00 + Pzr 00:00-22:00.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "15 Mar",
+        "ad": "Ulusal Gün (1848 Devrimi)",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "03 Nis",
+        "ad": "Good Friday",
+        "yasak": "06:00-22:00"
+      },
+      {
+        "tarih": "06 Nis",
+        "ad": "Paskalya Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "25 May",
+        "ad": "Pentekost Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "20 Ağu",
+        "ad": "Aziz Stephen Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "23 Ekim",
+        "ad": "1956 Devrimi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "00:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "Magyar Közút - Yol Bilgi (HU)",
+        "url": "https://www.kozut.hu/"
+      },
+      {
+        "ad": "NIF - Anasayfa",
+        "url": "https://nif.hu/"
+      },
+      {
+        "ad": "IRU - Macaristan Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/hungary"
+      }
+    ]
+  },
+  "Çekya": {
+    "flag": "🇨🇿",
+    "ozet": "Pazar 13:00-22:00 + tatil 13:00-22:00 yasak. 7,5 ton üstü. Yaz (Tem-Ağu) Cuma 17:00-21:00 + Cmt 07:00-13:00 ek yasaklar otoyollarda.",
+    "haftaSonu": "Pzr 13:00-22:00. Yaz: Cuma 17:00-21:00 + Cmt 07:00-13:00.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "03 Nis",
+        "ad": "Good Friday",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "06 Nis",
+        "ad": "Paskalya Pazartesi",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "08 May",
+        "ad": "Kurtuluş Günü",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "05 Tem",
+        "ad": "Aziz Cyril ve Methodius",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "06 Tem",
+        "ad": "Jan Hus Anma Günü",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "28 Eyl",
+        "ad": "Aziz Wenceslas (Devlet Günü)",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "28 Ekim",
+        "ad": "Bağımsızlık Günü",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "17 Kas",
+        "ad": "Özgürlük ve Demokrasi Günü",
+        "yasak": "13:00-22:00"
+      },
+      {
+        "tarih": "24-26 Ara",
+        "ad": "Noel (3 gün)",
+        "yasak": "13:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "CESMAD Bohemia (CZ)",
+        "url": "https://www.prodopravce.cz/"
+      },
+      {
+        "ad": "RSD - Yol İdaresi (CZ)",
+        "url": "https://www.rsd.cz/"
+      },
+      {
+        "ad": "IRU - Çekya Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/czechia"
+      }
+    ]
+  },
+  "Slovakya": {
+    "flag": "🇸🇰",
+    "ozet": "Pazar/tatil 00:00-22:00 yasak. 7,5 ton üstü. Yaz (Tem-Ağu) Cumartesi 07:00-19:00 ek yasak. Bazı uluslararası taşımacılık için sabah erken muafiyet.",
+    "haftaSonu": "Pzr 00:00-22:00. Yaz Cmt: 07:00-19:00.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Slovak Cumhuriyeti Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "06 Ocak",
+        "ad": "Epifani (3 Kral)",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "03 Nis",
+        "ad": "Good Friday",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "06 Nis",
+        "ad": "Paskalya Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "08 May",
+        "ad": "Faşizmden Kurtuluş",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "05 Tem",
+        "ad": "Aziz Cyril ve Methodius",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "29 Ağu",
+        "ad": "Slovak Ulusal Ayaklanma",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 Eyl",
+        "ad": "Anayasa Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "15 Eyl",
+        "ad": "Meryem Ana (Hüzünlü)",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "17 Kas",
+        "ad": "Özgürlük ve Demokrasi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "24-26 Ara",
+        "ad": "Noel (3 gün)",
+        "yasak": "00:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "NDS - Otoyol İdaresi (SK)",
+        "url": "https://www.ndsas.sk/"
+      },
+      {
+        "ad": "Cesmad Slovakia (SK)",
+        "url": "https://www.cesmad.sk/"
+      },
+      {
+        "ad": "IRU - Slovakya Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/slovakia"
+      }
+    ]
+  },
+  "Polonya": {
+    "flag": "🇵🇱",
+    "ozet": "Tatil günleri 08:00-22:00 yasak (12 ton üstü). Yaz (Haz sonu-Ağu sonu) Cuma 18:00-22:00 + Cmt 08:00-14:00 + Pzr 08:00-22:00 ek.",
+    "haftaSonu": "Yaz: Cuma 18:00-22:00 + Cmt 08:00-14:00 + Pzr 08:00-22:00.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "06 Ocak",
+        "ad": "Epifani",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "05-06 Nis",
+        "ad": "Paskalya (Pzr-Pzt)",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "18:00-22:00"
+      },
+      {
+        "tarih": "03 May",
+        "ad": "Anayasa Günü",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "24 May",
+        "ad": "Pentekost Pazarı",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "04 Haz",
+        "ad": "Corpus Christi",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana / Ordu Günü",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "11 Kas",
+        "ad": "Bağımsızlık Günü",
+        "yasak": "08:00-22:00"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "08:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "GDDKiA - Yol İdaresi (PL)",
+        "url": "https://www.gov.pl/web/gddkia"
+      },
+      {
+        "ad": "ZMPD - Taşımacılık Birliği",
+        "url": "https://zmpd.pl/"
+      },
+      {
+        "ad": "IRU - Polonya Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/poland"
+      }
+    ]
+  },
+  "Romanya": {
+    "flag": "🇷🇴",
+    "ozet": "Yaz (15 Haz - 31 Ağu) Cumartesi 08:00-22:00 + Pazar 00:00-22:00 yasak (A2, DN7, DN39, DN22C yollarında). 7,5 ton üstü. Tatillerde ek kısıtlamalar.",
+    "haftaSonu": "Yaz: Cmt 08:00-22:00 + Pzr 00:00-22:00 (belirli yollarda).",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01-02 Ocak",
+        "ad": "Yılbaşı (2 gün)",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "24 Ocak",
+        "ad": "Romanya'nın Birleşmesi",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "10-13 Nis",
+        "ad": "Ortodoks Paskalya (Cuma-Pzt)",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "01 Haz",
+        "ad": "Çocuk Günü",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "31 May - 01 Haz",
+        "ad": "Pentekost (Pzr-Pzt)",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana Günü",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "30 Kas",
+        "ad": "Aziz Andrew Günü",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "01 Ara",
+        "ad": "Ulusal Gün",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "06:00-22:00 (belirli yollar)"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "CNAIR - Yol İdaresi (RO)",
+        "url": "https://www.cnadnr.ro/"
+      },
+      {
+        "ad": "ARR - Yük Taşımacılığı (RO)",
+        "url": "https://www.arr.ro/"
+      },
+      {
+        "ad": "IRU - Romanya Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/romania"
+      }
+    ]
+  },
+  "Yunanistan": {
+    "flag": "🇬🇷",
+    "ozet": "Belirli yollarda Cumartesi/Pazar 08:00-13:00 yasak (çıkış yönünde). 3,5 ton üstü. Yaz aylarında daha sıkı. Bayram günlerinde ek kısıtlamalar.",
+    "haftaSonu": "Yaz: Cmt 15:00-21:00 + Pzr 15:00-21:00 (belirli yollar).",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "06 Ocak",
+        "ad": "Epifani",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "23 Şub",
+        "ad": "Temiz Pazartesi",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "25 Mar",
+        "ad": "Bağımsızlık Günü",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "10-13 Nis",
+        "ad": "Ortodoks Paskalya (Cuma-Pzt)",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "01 Haz",
+        "ad": "Pentekost Pazartesi",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana Günü",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "28 Ekim",
+        "ad": "Hayır Günü (Ohi Day)",
+        "yasak": "08:00-13:00"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "08:00-13:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "YPME - Ulaştırma Bakanlığı (EL)",
+        "url": "https://www.yme.gov.gr/"
+      },
+      {
+        "ad": "Egnatia Odos - Otoyol (EN)",
+        "url": "https://www.egnatia.gr/en/"
+      },
+      {
+        "ad": "IRU - Yunanistan Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/greece"
+      }
+    ]
+  },
+  "Fransa": {
+    "flag": "🇫🇷",
+    "ozet": "Cumartesi 22:00 - Pazar 22:00 standart yasak. Tatil günleri 00:00-22:00. 7,5 ton üstü. Yaz Cumartesi sabahları (15 Tem-15 Ağu) ek yasaklar. Tatil arifesi geceleri 21:30/22:00'dan başlayan yasaklar.",
+    "haftaSonu": "Cmt 22:00 - Pzr 22:00. Yaz: Bazı Cmt 07:00-19:00 ek.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "06 Nis",
+        "ad": "Paskalya Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "08 May",
+        "ad": "Zafer Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "14 May",
+        "ad": "İsa'nın Göğe Yükselişi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "25 May",
+        "ad": "Pentekost Pazartesi",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "14 Tem",
+        "ad": "Bastille Günü (Ulusal Gün)",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "11 Kas",
+        "ad": "Ateşkes Günü",
+        "yasak": "00:00-22:00"
+      },
+      {
+        "tarih": "25 Ara",
+        "ad": "Noel",
+        "yasak": "00:00-22:00"
+      }
+    ],
+    "resmiKaynak": [
+      {
+        "ad": "Bison Futé - Trafik (FR)",
+        "url": "https://www.bison-fute.gouv.fr/"
+      },
+      {
+        "ad": "Ministère des Transports (FR)",
+        "url": "https://www.ecologie.gouv.fr/transports"
+      },
+      {
+        "ad": "IRU - Fransa Yasakları (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/france"
+      }
+    ]
+  },
+  "Arnavutluk": {
+    "flag": "🇦🇱",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "IRU - Arnavutluk (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/albania"
+      },
+      {
+        "ad": "Albanian Road Authority",
+        "url": "https://www.arrsh.gov.al/"
+      }
+    ]
+  },
+  "Andorra": {
+    "flag": "🇦🇩",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Govern d'Andorra",
+        "url": "https://www.govern.ad/"
+      }
+    ]
+  },
+  "Azerbaycan": {
+    "flag": "🇦🇿",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "AZYOL - Yol İdaresi",
+        "url": "https://www.aaa.org.az/"
+      }
+    ]
+  },
+  "Hollanda": {
+    "flag": "🇳🇱",
+    "ozet": "Normal kamyonlar için GENEL YASAK YOK. Pazar/tatil günleri çoğu yolda serbest. Özel/büyük taşımacılık (>4m, >30m) için kısıtlamalar var. Şehir merkezlerinde düşük emisyon bölgeleri (LEZ).",
+    "haftaSonu": "Normal kamyon: yok. Büyük taşıma: Cmt 09:00 - Pzr 24:00 yasak.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "Normal: serbest"
+      },
+      {
+        "tarih": "03 Nis",
+        "ad": "Good Friday",
+        "yasak": "Normal: serbest"
+      },
+      {
+        "tarih": "05-06 Nis",
+        "ad": "Paskalya (Pzr-Pzt)",
+        "yasak": "Normal: serbest"
+      },
+      {
+        "tarih": "27 Nis",
+        "ad": "Kral Günü (King's Day)",
+        "yasak": "Şehir merkezi kapalı"
+      },
+      {
+        "tarih": "05 May",
+        "ad": "Kurtuluş Günü",
+        "yasak": "Bazı işletmeler kapalı"
+      },
+      {
+        "tarih": "14 May",
+        "ad": "İsa'nın Göğe Yükselişi",
+        "yasak": "Normal: serbest"
+      },
+      {
+        "tarih": "25 May",
+        "ad": "Pentekost Pazartesi",
+        "yasak": "Normal: serbest"
+      },
+      {
+        "tarih": "25-26 Ara",
+        "ad": "Noel (2 gün)",
+        "yasak": "Çoğu işletme kapalı"
+      }
+    ],
+    "ekKisitlamalar": "⚠️ ÖZEL KISITLAMALAR:\n• Büyük taşıma (>4m genişlik veya >30m uzunluk): Sabah rush 07:00-10:00 + Akşam rush 16:00-18:00 (batı bölgesinde 06:00-20:00)\n• Kötü hava (görüş <200m): Cmt 09:00 - Pzr 24:00 yasak\n• Şehir merkezlerinde Low Emission Zone (LEZ): Eski araçlara giriş yasak\n• Amsterdam, Rotterdam, Den Haag, Utrecht'te sıkı çevre kuralları",
+    "resmiKaynak": [
+      {
+        "ad": "Rijkswaterstaat - Yol İdaresi (NL)",
+        "url": "https://www.rijkswaterstaat.nl/"
+      },
+      {
+        "ad": "RDW - Özel İzinler",
+        "url": "https://www.rdw.nl/"
+      },
+      {
+        "ad": "IRU - Hollanda (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/netherlands"
+      },
+      {
+        "ad": "Milieuzones - Düşük Emisyon Bölgeleri",
+        "url": "https://www.milieuzones.nl/"
+      }
+    ]
+  },
+  "Belçika": {
+    "flag": "🇧🇪",
+    "ozet": "Normal kamyonlar için GENEL HAFTA SONU YASAĞI YOK. Sadece BÜYÜK TAŞIMACILIK (>4m genişlik, >30m uzunluk) ve özel taşımacılık kısıtlı. Brüksel/Antwerp çevresinde rush hour yasakları. Kötü hava (görüş <200m) yasak.",
+    "haftaSonu": "Normal kamyon: yok. Büyük taşıma: Cmt 12:00 - Pzr 24:00.",
+    "tatilGunleri2026": [
+      {
+        "tarih": "01 Ocak",
+        "ad": "Yılbaşı",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "06 Nis",
+        "ad": "Paskalya Pazartesi",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "01 May",
+        "ad": "İşçi Bayramı",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "14 May",
+        "ad": "İsa'nın Göğe Yükselişi",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "25 May",
+        "ad": "Pentekost Pazartesi",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "21 Tem",
+        "ad": "Ulusal Gün",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "15 Ağu",
+        "ad": "Meryem Ana Günü",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "01 Kas",
+        "ad": "Azizler Günü",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "11 Kas",
+        "ad": "Ateşkes Günü",
+        "yasak": "Büyük taşıma: yasak"
+      },
+      {
+        "tarih": "25 Ara",
+        "ad": "Noel",
+        "yasak": "Büyük taşıma: yasak"
+      }
+    ],
+    "ekKisitlamalar": "⚠️ RUSH HOUR YASAKLARI (Brüksel/Antwerp):\n• Antwerp R1 ring otoyolu: 06:00-09:00 ve 16:00-21:00\n• A10 (E40) Brüksel-Oostende: Sabah Brüksel'e doğru, akşam ters yöne\n• Liège A604-A15 link: peak saatlerde kısıtlı\n\n⚠️ DİĞER:\n• Genişlik >4m veya uzunluk >30m: Her gün 06:00-21:00\n• Kötü hava (görüş <200m): Tüm kamyonlar yasak\n• Karlı/buzlu yolda büyük taşıma yasak\n• Liefkenshoek Tüneli: 3m+ yüksek araçlara ek ücret",
+    "resmiKaynak": [
+      {
+        "ad": "Mobilit Belgium - Bakanlık (NL/FR)",
+        "url": "https://mobilit.belgium.be/"
+      },
+      {
+        "ad": "Vlaanderen - Trafik",
+        "url": "https://www.vlaanderen.be/mobiliteit-en-openbare-werken"
+      },
+      {
+        "ad": "IRU - Belçika (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/belgium"
+      },
+      {
+        "ad": "TruckBan - Belçika Detaylı (EN)",
+        "url": "https://truckban.eu/Belgium"
+      }
+    ]
+  },
+  "Belarus": {
+    "flag": "🇧🇾",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Belarus Roads",
+        "url": "https://www.belavtodor.by/"
+      }
+    ]
+  },
+  "Bosna Hersek": {
+    "flag": "🇧🇦",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "JP Putevi FBiH",
+        "url": "https://www.jpcfbih.ba/"
+      },
+      {
+        "ad": "IRU - Bosna (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/bosnia-herzegovina"
+      }
+    ]
+  },
+  "Danimarka": {
+    "flag": "🇩🇰",
+    "ozet": "AB ülkesi - genelde haftalık yasak yok. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Genelde yok",
+    "resmiKaynak": [
+      {
+        "ad": "Vejdirektoratet",
+        "url": "https://www.vejdirektoratet.dk/"
+      },
+      {
+        "ad": "IRU - Danimarka (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/denmark"
+      }
+    ]
+  },
+  "Estonya": {
+    "flag": "🇪🇪",
+    "ozet": "AB ülkesi. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Maanteeamet (EE)",
+        "url": "https://www.transpordiamet.ee/"
+      },
+      {
+        "ad": "IRU - Estonya (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/estonia"
+      }
+    ]
+  },
+  "Finlandiya": {
+    "flag": "🇫🇮",
+    "ozet": "AB ülkesi - genelde haftalık yasak yok. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Genelde yok",
+    "resmiKaynak": [
+      {
+        "ad": "Väylävirasto (FI)",
+        "url": "https://vayla.fi/"
+      },
+      {
+        "ad": "IRU - Finlandiya (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/finland"
+      }
+    ]
+  },
+  "Gürcistan": {
+    "flag": "🇬🇪",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Gürcistan Yol İdaresi",
+        "url": "https://www.georoad.ge/"
+      }
+    ]
+  },
+  "İngiltere": {
+    "flag": "🇬🇧",
+    "ozet": "Genelde haftalık yasak yok. Londra için özel ULEZ saatleri var. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Genelde yok",
+    "resmiKaynak": [
+      {
+        "ad": "Gov.uk - HGV",
+        "url": "https://www.gov.uk/government/organisations/driver-and-vehicle-standards-agency"
+      },
+      {
+        "ad": "IRU - UK (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/united-kingdom"
+      }
+    ]
+  },
+  "İrlanda": {
+    "flag": "🇮🇪",
+    "ozet": "AB ülkesi. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Transport Ireland",
+        "url": "https://www.gov.ie/en/organisation/department-of-transport/"
+      },
+      {
+        "ad": "IRU - İrlanda (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/ireland"
+      }
+    ]
+  },
+  "İspanya": {
+    "flag": "🇪🇸",
+    "ozet": "Cumartesi ve Pazar günleri bazı yollarda yasaklar olabilir. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bölgeye göre değişir",
+    "resmiKaynak": [
+      {
+        "ad": "DGT - Trafik Genel Müdürlüğü (ES)",
+        "url": "https://www.dgt.es/"
+      },
+      {
+        "ad": "IRU - İspanya (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/spain"
+      }
+    ]
+  },
+  "İsveç": {
+    "flag": "🇸🇪",
+    "ozet": "AB ülkesi - genelde haftalık yasak yok. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Genelde yok",
+    "resmiKaynak": [
+      {
+        "ad": "Trafikverket (SE)",
+        "url": "https://www.trafikverket.se/"
+      },
+      {
+        "ad": "IRU - İsveç (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/sweden"
+      }
+    ]
+  },
+  "İsviçre": {
+    "flag": "🇨🇭",
+    "ozet": "Pazar ve gece yasakları çok sıkı. 22:00-05:00 gece yasağı. 7,5 ton üstü için. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Pzr 00:00-22:00 + her gece 22:00-05:00",
+    "resmiKaynak": [
+      {
+        "ad": "ASTRA - Federal Yol İdaresi (DE)",
+        "url": "https://www.astra.admin.ch/"
+      },
+      {
+        "ad": "IRU - İsviçre (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/switzerland"
+      }
+    ]
+  },
+  "İzlanda": {
+    "flag": "🇮🇸",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Vegagerðin (IS)",
+        "url": "https://www.vegagerdin.is/"
+      }
+    ]
+  },
+  "Karadağ": {
+    "flag": "🇲🇪",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Uprava za Saobraćaj",
+        "url": "https://www.usaobracaj.me/"
+      }
+    ]
+  },
+  "Kosova": {
+    "flag": "🇽🇰",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Kosova Yol İdaresi",
+        "url": "https://mit.rks-gov.net/"
+      }
+    ]
+  },
+  "Letonya": {
+    "flag": "🇱🇻",
+    "ozet": "AB ülkesi. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "LVCeli (LV)",
+        "url": "https://www.lvceli.lv/"
+      },
+      {
+        "ad": "IRU - Letonya (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/latvia"
+      }
+    ]
+  },
+  "Lihtenştayn": {
+    "flag": "🇱🇮",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Lihtenştayn Hükümeti",
+        "url": "https://www.llv.li/"
+      }
+    ]
+  },
+  "Litvanya": {
+    "flag": "🇱🇹",
+    "ozet": "AB ülkesi. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Lietuvos automobilių keliai (LT)",
+        "url": "https://lakd.lrv.lt/"
+      },
+      {
+        "ad": "IRU - Litvanya (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/lithuania"
+      }
+    ]
+  },
+  "Lüksemburg": {
+    "flag": "🇱🇺",
+    "ozet": "AB ülkesi - Pazar ve tatil günlerinde yasak. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Pzr ve tatil günü",
+    "resmiKaynak": [
+      {
+        "ad": "Lux Government",
+        "url": "https://transports.public.lu/"
+      },
+      {
+        "ad": "IRU - Lüksemburg (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/luxembourg"
+      }
+    ]
+  },
+  "Makedonya": {
+    "flag": "🇲🇰",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Public Enterprise State Roads",
+        "url": "https://www.roads.org.mk/"
+      }
+    ]
+  },
+  "Malta": {
+    "flag": "🇲🇹",
+    "ozet": "AB ülkesi - küçük ada. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Transport Malta",
+        "url": "https://www.transport.gov.mt/"
+      }
+    ]
+  },
+  "Moldova": {
+    "flag": "🇲🇩",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Moldova Yol İdaresi",
+        "url": "https://www.asd.md/"
+      }
+    ]
+  },
+  "Monako": {
+    "flag": "🇲🇨",
+    "ozet": "Çok küçük ülke. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Monako Devlet",
+        "url": "https://www.gouv.mc/"
+      }
+    ]
+  },
+  "Norveç": {
+    "flag": "🇳🇴",
+    "ozet": "Genelde haftalık yasak yok. Kış aylarında zincir/lastik kuralları çok sıkı. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Genelde yok",
+    "resmiKaynak": [
+      {
+        "ad": "Statens Vegvesen (NO)",
+        "url": "https://www.vegvesen.no/"
+      },
+      {
+        "ad": "IRU - Norveç (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/norway"
+      }
+    ]
+  },
+  "Portekiz": {
+    "flag": "🇵🇹",
+    "ozet": "AB ülkesi. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Infraestruturas de Portugal",
+        "url": "https://www.infraestruturasdeportugal.pt/"
+      },
+      {
+        "ad": "IRU - Portekiz (EN)",
+        "url": "https://www.iru.org/where-we-work/europe/portugal"
+      }
+    ]
+  },
+  "Rusya": {
+    "flag": "🇷🇺",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Rosavtodor",
+        "url": "https://rosavtodor.ru/"
+      }
+    ]
+  },
+  "San Marino": {
+    "flag": "🇸🇲",
+    "ozet": "Çok küçük ülke. Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Repubblica di San Marino",
+        "url": "https://www.gov.sm/"
+      }
+    ]
+  },
+  "Ukrayna": {
+    "flag": "🇺🇦",
+    "ozet": "Detaylı bilgi için resmi kaynaklara bakın.",
+    "haftaSonu": "Bilinmiyor",
+    "resmiKaynak": [
+      {
+        "ad": "Ukravtodor",
+        "url": "https://ukravtodor.gov.ua/"
+      }
+    ]
+  },
+  "Vatikan": {
+    "flag": "🇻🇦",
+    "ozet": "Çok küçük ülke - kamyon trafiği yok denecek kadar az.",
+    "haftaSonu": "—",
+    "resmiKaynak": [
+      {
+        "ad": "Vatican.va",
+        "url": "https://www.vatican.va/"
+      }
+    ]
+  }
+}

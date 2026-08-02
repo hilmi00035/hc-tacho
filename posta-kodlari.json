@@ -1,0 +1,1949 @@
+{
+  "DE": {
+    "ad": "Almanya",
+    "bayrak": "🇩🇪",
+    "format": "5 haneli",
+    "bolgeler": [
+      {
+        "kod": "00-09",
+        "bolge": "Leitzone 0 — Saksonya, Saksonya-Anhalt, Thüringen",
+        "detay": [
+          {
+            "pref": "01",
+            "sehirler": "Dresden, Görlitz, Riesa, Meißen, Pirna, Freital"
+          },
+          {
+            "pref": "02",
+            "sehirler": "Bautzen, Zittau, Hoyerswerda, Löbau"
+          },
+          {
+            "pref": "03",
+            "sehirler": "Cottbus, Spremberg, Guben, Forst"
+          },
+          {
+            "pref": "04",
+            "sehirler": "Leipzig, Altenburg, Torgau, Grimma, Borna"
+          },
+          {
+            "pref": "05",
+            "sehirler": "— (rezerv, kullanılmıyor)"
+          },
+          {
+            "pref": "06",
+            "sehirler": "Halle (Saale), Dessau-Roßlau, Wittenberg, Merseburg, Bitterfeld"
+          },
+          {
+            "pref": "07",
+            "sehirler": "Jena, Gera, Plauen, Weimar, Rudolstadt, Pößneck"
+          },
+          {
+            "pref": "08",
+            "sehirler": "Zwickau, Plauen (Vogtl.), Aue, Oelsnitz, Stollberg"
+          },
+          {
+            "pref": "09",
+            "sehirler": "Chemnitz, Freiberg, Annaberg-Buchholz, Mittweida"
+          }
+        ]
+      },
+      {
+        "kod": "10-19",
+        "bolge": "Leitzone 1 — Berlin, Brandenburg, Mecklenburg-Vorpommern",
+        "detay": [
+          {
+            "pref": "10",
+            "sehirler": "Berlin: Mitte, Prenzlauer Berg, Kreuzberg, Friedrichshain, Charlottenburg"
+          },
+          {
+            "pref": "11",
+            "sehirler": "Berlin: Posta kutuları, büyük kurumlar"
+          },
+          {
+            "pref": "12",
+            "sehirler": "Berlin: Tempelhof, Neukölln, Treptow, Köpenick"
+          },
+          {
+            "pref": "13",
+            "sehirler": "Berlin: Reinickendorf, Wedding, Spandau, Tegel"
+          },
+          {
+            "pref": "14",
+            "sehirler": "Berlin Güney + Potsdam, Brandenburg an der Havel"
+          },
+          {
+            "pref": "15",
+            "sehirler": "Frankfurt (Oder), Eisenhüttenstadt, Fürstenwalde"
+          },
+          {
+            "pref": "16",
+            "sehirler": "Oranienburg, Eberswalde, Schwedt, Neuruppin"
+          },
+          {
+            "pref": "17",
+            "sehirler": "Neubrandenburg, Greifswald, Stralsund, Anklam"
+          },
+          {
+            "pref": "18",
+            "sehirler": "Rostock, Wismar, Güstrow, Warnemünde"
+          },
+          {
+            "pref": "19",
+            "sehirler": "Schwerin, Wittenberge, Parchim, Hagenow"
+          }
+        ]
+      },
+      {
+        "kod": "20-29",
+        "bolge": "Leitzone 2 — Hamburg, Schleswig-Holstein, Bremen",
+        "detay": [
+          {
+            "pref": "20",
+            "sehirler": "Hamburg: Mitte, Altona, Eimsbüttel, Barmbek"
+          },
+          {
+            "pref": "21",
+            "sehirler": "Hamburg: Bergedorf, Harburg — Buchholz, Stade"
+          },
+          {
+            "pref": "22",
+            "sehirler": "Hamburg: Wandsbek — Norderstedt, Ahrensburg"
+          },
+          {
+            "pref": "23",
+            "sehirler": "Lübeck, Bad Segeberg, Eutin, Ratzeburg"
+          },
+          {
+            "pref": "24",
+            "sehirler": "Kiel, Flensburg, Neumünster, Schleswig"
+          },
+          {
+            "pref": "25",
+            "sehirler": "Elmshorn, Heide, Husum, Itzehoe"
+          },
+          {
+            "pref": "26",
+            "sehirler": "Oldenburg, Wilhelmshaven, Emden, Aurich, Leer"
+          },
+          {
+            "pref": "27",
+            "sehirler": "Bremerhaven, Cuxhaven, Rotenburg"
+          },
+          {
+            "pref": "28",
+            "sehirler": "Bremen: Mitte, Neustadt, Walle, Hemelingen"
+          },
+          {
+            "pref": "29",
+            "sehirler": "Lüneburg, Celle, Uelzen, Soltau"
+          }
+        ]
+      },
+      {
+        "kod": "30-39",
+        "bolge": "Leitzone 3 — Hannover, Braunschweig, Magdeburg, Kassel",
+        "detay": [
+          {
+            "pref": "30",
+            "sehirler": "Hannover: Mitte, List, Linden, Südstadt"
+          },
+          {
+            "pref": "31",
+            "sehirler": "Hildesheim, Hameln, Peine, Alfeld"
+          },
+          {
+            "pref": "32",
+            "sehirler": "Herford, Minden, Bad Oeynhausen"
+          },
+          {
+            "pref": "33",
+            "sehirler": "Paderborn, Bielefeld (Doğu), Detmold, Gütersloh"
+          },
+          {
+            "pref": "34",
+            "sehirler": "Kassel, Bad Wildungen, Bad Hersfeld"
+          },
+          {
+            "pref": "35",
+            "sehirler": "Marburg, Gießen, Wetzlar, Dillenburg"
+          },
+          {
+            "pref": "36",
+            "sehirler": "Fulda, Bad Hersfeld, Lauterbach"
+          },
+          {
+            "pref": "37",
+            "sehirler": "Göttingen, Northeim, Duderstadt, Einbeck"
+          },
+          {
+            "pref": "38",
+            "sehirler": "Braunschweig, Wolfsburg, Salzgitter, Helmstedt"
+          },
+          {
+            "pref": "39",
+            "sehirler": "Magdeburg, Halberstadt, Stendal, Schönebeck"
+          }
+        ]
+      },
+      {
+        "kod": "40-49",
+        "bolge": "Leitzone 4 — NRW: Düsseldorf, Dortmund, Essen, Münster",
+        "detay": [
+          {
+            "pref": "40",
+            "sehirler": "Düsseldorf: Altstadt, Friedrichstadt, Bilk, Derendorf"
+          },
+          {
+            "pref": "41",
+            "sehirler": "Krefeld, Mönchengladbach, Neuss, Viersen"
+          },
+          {
+            "pref": "42",
+            "sehirler": "Wuppertal, Solingen, Remscheid, Velbert"
+          },
+          {
+            "pref": "43",
+            "sehirler": "— (rezerv)"
+          },
+          {
+            "pref": "44",
+            "sehirler": "Dortmund: Mitte, Aplerbeck — Castrop-Rauxel"
+          },
+          {
+            "pref": "45",
+            "sehirler": "Essen: Mitte — Mülheim, Oberhausen, Bottrop"
+          },
+          {
+            "pref": "46",
+            "sehirler": "Wesel, Dinslaken, Moers (Kuzey), Xanten"
+          },
+          {
+            "pref": "47",
+            "sehirler": "Duisburg: Mitte, Hamborn — Kleve, Emmerich"
+          },
+          {
+            "pref": "48",
+            "sehirler": "Münster: Mitte — Steinfurt, Warendorf, Coesfeld"
+          },
+          {
+            "pref": "49",
+            "sehirler": "Osnabrück, Lingen, Nordhorn, Meppen"
+          }
+        ]
+      },
+      {
+        "kod": "50-59",
+        "bolge": "Leitzone 5 — Köln, Bonn, Aachen, Koblenz, Trier",
+        "detay": [
+          {
+            "pref": "50",
+            "sehirler": "Köln: Innenstadt, Ehrenfeld, Nippes, Rodenkirchen"
+          },
+          {
+            "pref": "51",
+            "sehirler": "Köln: Mülheim, Kalk — Bergisch Gladbach, Leverkusen"
+          },
+          {
+            "pref": "52",
+            "sehirler": "Aachen, Düren, Jülich, Eschweiler, Stolberg"
+          },
+          {
+            "pref": "53",
+            "sehirler": "Bonn: Zentrum, Bad Godesberg — Siegburg, Euskirchen"
+          },
+          {
+            "pref": "54",
+            "sehirler": "Trier, Bitburg, Wittlich, Prüm"
+          },
+          {
+            "pref": "55",
+            "sehirler": "Mainz, Ingelheim, Bingen, Bad Kreuznach"
+          },
+          {
+            "pref": "56",
+            "sehirler": "Koblenz, Neuwied, Andernach, Mayen"
+          },
+          {
+            "pref": "57",
+            "sehirler": "Siegen, Olpe, Betzdorf, Freudenberg"
+          },
+          {
+            "pref": "58",
+            "sehirler": "Hagen, Lüdenscheid, Iserlohn, Menden"
+          },
+          {
+            "pref": "59",
+            "sehirler": "Hamm, Unna, Soest, Lippstadt, Arnsberg"
+          }
+        ]
+      },
+      {
+        "kod": "60-69",
+        "bolge": "Leitzone 6 — Frankfurt, Wiesbaden, Mannheim, Saarbrücken",
+        "detay": [
+          {
+            "pref": "60",
+            "sehirler": "Frankfurt am Main: Innenstadt, Sachsenhausen, Nordend"
+          },
+          {
+            "pref": "61",
+            "sehirler": "Frankfurt: Höchst — Bad Homburg, Friedberg, Oberursel"
+          },
+          {
+            "pref": "63",
+            "sehirler": "Offenbach am Main, Hanau, Seligenstadt"
+          },
+          {
+            "pref": "64",
+            "sehirler": "Darmstadt, Rüsselsheim, Bensheim, Erbach"
+          },
+          {
+            "pref": "65",
+            "sehirler": "Wiesbaden, Rüdesheim, Geisenheim"
+          },
+          {
+            "pref": "66",
+            "sehirler": "Saarbrücken, Neunkirchen, Homburg, Völklingen"
+          },
+          {
+            "pref": "67",
+            "sehirler": "Kaiserslautern, Ludwigshafen, Neustadt, Speyer, Worms"
+          },
+          {
+            "pref": "68",
+            "sehirler": "Mannheim: Innenstadt, Neckarstadt"
+          },
+          {
+            "pref": "69",
+            "sehirler": "Heidelberg: Altstadt — Weinheim, Wiesloch, Sinsheim"
+          }
+        ]
+      },
+      {
+        "kod": "70-79",
+        "bolge": "Leitzone 7 — Baden-Württemberg: Stuttgart, Karlsruhe, Freiburg",
+        "detay": [
+          {
+            "pref": "70",
+            "sehirler": "Stuttgart: Mitte, Süd, West, Nord, Feuerbach"
+          },
+          {
+            "pref": "71",
+            "sehirler": "Stuttgart çevresi: Waiblingen, Ludwigsburg, Böblingen"
+          },
+          {
+            "pref": "72",
+            "sehirler": "Reutlingen, Tübingen, Balingen, Albstadt"
+          },
+          {
+            "pref": "73",
+            "sehirler": "Göppingen, Schwäbisch Gmünd, Aalen, Geislingen"
+          },
+          {
+            "pref": "74",
+            "sehirler": "Heilbronn, Schwäbisch Hall, Crailsheim, Öhringen"
+          },
+          {
+            "pref": "75",
+            "sehirler": "Pforzheim, Bruchsal, Bretten, Mühlacker"
+          },
+          {
+            "pref": "76",
+            "sehirler": "Karlsruhe, Baden-Baden, Rastatt, Ettlingen"
+          },
+          {
+            "pref": "77",
+            "sehirler": "Offenburg, Lahr, Kehl, Gengenbach"
+          },
+          {
+            "pref": "78",
+            "sehirler": "Konstanz, Villingen-Schwenningen, Singen, Tuttlingen"
+          },
+          {
+            "pref": "79",
+            "sehirler": "Freiburg im Breisgau, Müllheim, Breisach"
+          }
+        ]
+      },
+      {
+        "kod": "80-89",
+        "bolge": "Leitzone 8 — Bavyera Güney: München, Augsburg, Ulm",
+        "detay": [
+          {
+            "pref": "80",
+            "sehirler": "München: Altstadt, Schwabing, Maxvorstadt, Bogenhausen"
+          },
+          {
+            "pref": "81",
+            "sehirler": "München: Pasing, Sendling, Giesing, Riem"
+          },
+          {
+            "pref": "82",
+            "sehirler": "Fürstenfeldbruck, Weilheim, Garmisch-Partenkirchen"
+          },
+          {
+            "pref": "83",
+            "sehirler": "Rosenheim, Traunstein, Mühldorf am Inn"
+          },
+          {
+            "pref": "84",
+            "sehirler": "Landshut, Dingolfing, Eggenfelden"
+          },
+          {
+            "pref": "85",
+            "sehirler": "Ingolstadt, Freising, Erding, Dachau"
+          },
+          {
+            "pref": "86",
+            "sehirler": "Augsburg, Günzburg, Dillingen, Donauwörth"
+          },
+          {
+            "pref": "87",
+            "sehirler": "Kempten, Kaufbeuren, Memmingen"
+          },
+          {
+            "pref": "88",
+            "sehirler": "Ravensburg, Friedrichshafen, Biberach"
+          },
+          {
+            "pref": "89",
+            "sehirler": "Ulm, Neu-Ulm, Heidenheim"
+          }
+        ]
+      },
+      {
+        "kod": "90-99",
+        "bolge": "Leitzone 9 — Bavyera Kuzey: Nürnberg, Würzburg, Erfurt",
+        "detay": [
+          {
+            "pref": "90",
+            "sehirler": "Nürnberg: Altstadt, Gostenhof, Maxfeld"
+          },
+          {
+            "pref": "91",
+            "sehirler": "Erlangen, Fürth, Schwabach, Ansbach"
+          },
+          {
+            "pref": "92",
+            "sehirler": "Amberg, Weiden in der Oberpfalz, Schwandorf"
+          },
+          {
+            "pref": "93",
+            "sehirler": "Regensburg, Straubing, Cham, Kelheim"
+          },
+          {
+            "pref": "94",
+            "sehirler": "Passau, Deggendorf, Freyung, Waldkirchen"
+          },
+          {
+            "pref": "95",
+            "sehirler": "Hof, Bayreuth, Wunsiedel, Marktredwitz"
+          },
+          {
+            "pref": "96",
+            "sehirler": "Bamberg, Coburg, Lichtenfels, Kronach"
+          },
+          {
+            "pref": "97",
+            "sehirler": "Würzburg, Schweinfurt, Bad Kissingen, Kitzingen"
+          },
+          {
+            "pref": "98",
+            "sehirler": "Meiningen, Suhl, Schmalkalden, Sonneberg"
+          },
+          {
+            "pref": "99",
+            "sehirler": "Erfurt, Gotha, Weimar, Eisenach, Apolda"
+          }
+        ]
+      }
+    ]
+  },
+  "AT": {
+    "ad": "Avusturya",
+    "bayrak": "🇦🇹",
+    "format": "4 haneli",
+    "bolgeler": [
+      {
+        "kod": "1xxx",
+        "bolge": "Viyana (Wien)",
+        "detay": [
+          {
+            "pref": "1010-1090",
+            "sehirler": "Wien Merkez, Innere Stadt, Leopoldstadt, Landstraße"
+          },
+          {
+            "pref": "1100-1230",
+            "sehirler": "Wien dış ilçeler: Favoriten, Simmering, Meidling, Hietzing"
+          },
+          {
+            "pref": "1220-1230",
+            "sehirler": "Wien: Donaustadt, Liesing"
+          }
+        ]
+      },
+      {
+        "kod": "2xxx-3xxx",
+        "bolge": "Aşağı Avusturya (Niederösterreich)",
+        "detay": [
+          {
+            "pref": "2100-2490",
+            "sehirler": "Klosterneuburg, Korneuburg, Stockerau, Mistelbach"
+          },
+          {
+            "pref": "2500-2700",
+            "sehirler": "Baden, Wiener Neustadt, Neunkirchen"
+          },
+          {
+            "pref": "3100-3500",
+            "sehirler": "St. Pölten, Krems, Tulln, Zwettl"
+          },
+          {
+            "pref": "3500-3900",
+            "sehirler": "Krems (Batı), Waidhofen, Horn, Melk"
+          }
+        ]
+      },
+      {
+        "kod": "4xxx",
+        "bolge": "Yukarı Avusturya (Oberösterreich)",
+        "detay": [
+          {
+            "pref": "4020-4100",
+            "sehirler": "Linz (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "4300-4600",
+            "sehirler": "Perg, Steyr, Kirchdorf"
+          },
+          {
+            "pref": "4700-4900",
+            "sehirler": "Braunau, Ried im Innkreis, Schärding"
+          },
+          {
+            "pref": "4800-5000",
+            "sehirler": "Gmunden, Vöcklabruck, Wels"
+          }
+        ]
+      },
+      {
+        "kod": "5xxx",
+        "bolge": "Salzburg",
+        "detay": [
+          {
+            "pref": "5020-5100",
+            "sehirler": "Salzburg (Merkez, Maxglan, Gnigl)"
+          },
+          {
+            "pref": "5110-5400",
+            "sehirler": "Hallein, St. Johann, Zell am See"
+          },
+          {
+            "pref": "5500-5700",
+            "sehirler": "Bischofshofen, Radstadt, Tamsweg"
+          }
+        ]
+      },
+      {
+        "kod": "6xxx",
+        "bolge": "Tirol + Vorarlberg",
+        "detay": [
+          {
+            "pref": "6020-6100",
+            "sehirler": "Innsbruck (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "6200-6500",
+            "sehirler": "Schwaz, Kufstein, Wörgl, Kitzbühel"
+          },
+          {
+            "pref": "6700-6900",
+            "sehirler": "Bludenz, Feldkirch, Dornbirn, Bregenz (Vorarlberg)"
+          }
+        ]
+      },
+      {
+        "kod": "7xxx",
+        "bolge": "Burgenland",
+        "detay": [
+          {
+            "pref": "7000-7100",
+            "sehirler": "Eisenstadt, Rust, Mörbisch"
+          },
+          {
+            "pref": "7200-7540",
+            "sehirler": "Mattersburg, Oberpullendorf, Oberwart"
+          },
+          {
+            "pref": "7400-7540",
+            "sehirler": "Oberwart, Güssing, Jennersdorf"
+          }
+        ]
+      },
+      {
+        "kod": "8xxx",
+        "bolge": "Steiermark (Stirya)",
+        "detay": [
+          {
+            "pref": "8010-8100",
+            "sehirler": "Graz (Merkez, Gries, Jakomini)"
+          },
+          {
+            "pref": "8200-8600",
+            "sehirler": "Gleisdorf, Weiz, Bruck an der Mur, Leoben"
+          },
+          {
+            "pref": "8700-8990",
+            "sehirler": "Leoben, Judenburg, Knittelfeld, Mürzzuschlag"
+          }
+        ]
+      },
+      {
+        "kod": "9xxx",
+        "bolge": "Kärnten (Karintya)",
+        "detay": [
+          {
+            "pref": "9020-9100",
+            "sehirler": "Klagenfurt (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "9200-9500",
+            "sehirler": "Wolfsberg, St. Veit, Feldkirchen, Spittal"
+          },
+          {
+            "pref": "9500-9900",
+            "sehirler": "Villach, Hermagor, Lienz (Doğu Tirol)"
+          }
+        ]
+      }
+    ]
+  },
+  "BG": {
+    "ad": "Bulgaristan",
+    "bayrak": "🇧🇬",
+    "format": "4 haneli",
+    "bolgeler": [
+      {
+        "kod": "1xxx",
+        "bolge": "Sofya (Sofia)",
+        "detay": [
+          {
+            "pref": "1000-1700",
+            "sehirler": "Sofia Merkez, Ovcha Kupel, Lyulin, Studentski, Mladost"
+          },
+          {
+            "pref": "1800-1900",
+            "sehirler": "Sofia Doğu: Nadezhda, Slatina, Iskur"
+          }
+        ]
+      },
+      {
+        "kod": "2xxx",
+        "bolge": "Pernik, Kyustendil, Blagoevgrad",
+        "detay": [
+          {
+            "pref": "2300-2400",
+            "sehirler": "Pernik, Radomir, Breznik"
+          },
+          {
+            "pref": "2500-2700",
+            "sehirler": "Kyustendil, Dupnitsa, Blagoevgrad (Kuzey)"
+          },
+          {
+            "pref": "2700-2900",
+            "sehirler": "Blagoevgrad, Razlog, Bansko, Sandanski"
+          }
+        ]
+      },
+      {
+        "kod": "3xxx",
+        "bolge": "Montana, Vidin, Vratsa",
+        "detay": [
+          {
+            "pref": "3000-3200",
+            "sehirler": "Vratsa, Mezdra, Byala Slatina"
+          },
+          {
+            "pref": "3400-3700",
+            "sehirler": "Montana, Berkovitsa, Lom"
+          },
+          {
+            "pref": "3700-3900",
+            "sehirler": "Vidin, Belogradchik, Kula"
+          }
+        ]
+      },
+      {
+        "kod": "4xxx",
+        "bolge": "Plovdiv, Smolyan, Pazardzhik",
+        "detay": [
+          {
+            "pref": "4000-4200",
+            "sehirler": "Plovdiv (Merkez, Krichim, Perushtitsa)"
+          },
+          {
+            "pref": "4200-4400",
+            "sehirler": "Asenovgrad, Hisarya, Karlovo"
+          },
+          {
+            "pref": "4400-4700",
+            "sehirler": "Pazardzhik, Panagyurishte, Peshtera"
+          },
+          {
+            "pref": "4700-4900",
+            "sehirler": "Smolyan, Madan, Rudozem"
+          }
+        ]
+      },
+      {
+        "kod": "5xxx",
+        "bolge": "Veliko Tarnovo, Lovech, Pleven",
+        "detay": [
+          {
+            "pref": "5000-5300",
+            "sehirler": "Veliko Tarnovo, Gorna Oryahovitsa, Svishtov"
+          },
+          {
+            "pref": "5300-5500",
+            "sehirler": "Gabrovo, Sevlievo, Dryanovo"
+          },
+          {
+            "pref": "5500-5800",
+            "sehirler": "Lovech, Teteven, Lukovit"
+          },
+          {
+            "pref": "5800-5900",
+            "sehirler": "Pleven, Levski, Nikopol"
+          }
+        ]
+      },
+      {
+        "kod": "6xxx",
+        "bolge": "Stara Zagora, Haskovo, Kardzhali",
+        "detay": [
+          {
+            "pref": "6000-6200",
+            "sehirler": "Stara Zagora, Kazanlak, Chirpan"
+          },
+          {
+            "pref": "6200-6400",
+            "sehirler": "Dimitrovgrad, Haskovo, Harmanli"
+          },
+          {
+            "pref": "6400-6600",
+            "sehirler": "Kardzhali, Momchilgrad, Krumovgrad"
+          }
+        ]
+      },
+      {
+        "kod": "7xxx",
+        "bolge": "Ruse, Razgrad, Silistra, Targovishte",
+        "detay": [
+          {
+            "pref": "7000-7200",
+            "sehirler": "Ruse (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "7200-7500",
+            "sehirler": "Razgrad, Isperih, Kubrat"
+          },
+          {
+            "pref": "7500-7700",
+            "sehirler": "Silistra, Dulovo, Tutrakan"
+          },
+          {
+            "pref": "7700-7900",
+            "sehirler": "Targovishte, Popovo, Omurtag"
+          }
+        ]
+      },
+      {
+        "kod": "8xxx",
+        "bolge": "Burgas, Sliven, Yambol",
+        "detay": [
+          {
+            "pref": "8000-8200",
+            "sehirler": "Burgas (Merkez), Nesebar, Aytos"
+          },
+          {
+            "pref": "8200-8400",
+            "sehirler": "Pomorie, Karnobat, Sunny Beach"
+          },
+          {
+            "pref": "8400-8600",
+            "sehirler": "Sliven, Nova Zagora, Kotel"
+          },
+          {
+            "pref": "8600-8800",
+            "sehirler": "Yambol, Elhovo, Straldzha"
+          }
+        ]
+      },
+      {
+        "kod": "9xxx",
+        "bolge": "Varna, Shumen, Dobrich",
+        "detay": [
+          {
+            "pref": "9000-9300",
+            "sehirler": "Varna (Merkez, Asparuhovo, Mladost)"
+          },
+          {
+            "pref": "9300-9500",
+            "sehirler": "Shumen, Preslav, Kaspichan"
+          },
+          {
+            "pref": "9500-9700",
+            "sehirler": "Dobrich, Balchik, General Toshevo"
+          }
+        ]
+      }
+    ]
+  },
+  "RS": {
+    "ad": "Sırbistan",
+    "bayrak": "🇷🇸",
+    "format": "5 haneli",
+    "bolgeler": [
+      {
+        "kod": "11xxx",
+        "bolge": "Belgrad (Beograd)",
+        "detay": [
+          {
+            "pref": "11000-11080",
+            "sehirler": "Beograd Merkez, Stari Grad, Vračar, Savski venac"
+          },
+          {
+            "pref": "11050-11300",
+            "sehirler": "Palilula, Zvezdara, Voždovac, Rakovica"
+          },
+          {
+            "pref": "11080-11500",
+            "sehirler": "Zemun, Novi Beograd, Surčin"
+          }
+        ]
+      },
+      {
+        "kod": "21xxx",
+        "bolge": "Vojvodina (Novi Sad)",
+        "detay": [
+          {
+            "pref": "21000",
+            "sehirler": "Novi Sad (Vojvodina başkenti)"
+          },
+          {
+            "pref": "22000-24000",
+            "sehirler": "Sremska Mitrovica, Šabac, Valjevo"
+          }
+        ]
+      },
+      {
+        "kod": "18xxx",
+        "bolge": "Güney Sırbistan (Niš)",
+        "detay": [
+          {
+            "pref": "18000",
+            "sehirler": "Niš, Aleksinac, Svrljig"
+          },
+          {
+            "pref": "16000-17000",
+            "sehirler": "Leskovac, Vranje, Surdulica"
+          },
+          {
+            "pref": "34000-35000",
+            "sehirler": "Kragujevac, Jagodina, Paraćin"
+          }
+        ]
+      }
+    ]
+  },
+  "HU": {
+    "ad": "Macaristan",
+    "bayrak": "🇭🇺",
+    "format": "4 haneli",
+    "bolgeler": [
+      {
+        "kod": "1xxx",
+        "bolge": "Budapeşte (Budapest)",
+        "detay": [
+          {
+            "pref": "1011-1145",
+            "sehirler": "Budapest I-XIV. ilçe (Merkez, Buda, Pest)"
+          },
+          {
+            "pref": "1151-1239",
+            "sehirler": "Budapest XV-XXIII. ilçe (Dış bölgeler)"
+          }
+        ]
+      },
+      {
+        "kod": "2xxx",
+        "bolge": "Pest Çevresi",
+        "detay": [
+          {
+            "pref": "2000-2100",
+            "sehirler": "Szentendre, Vác, Pomáz, Dunakeszi"
+          },
+          {
+            "pref": "2100-2400",
+            "sehirler": "Gödöllő, Aszód, Cegléd"
+          }
+        ]
+      },
+      {
+        "kod": "3xxx",
+        "bolge": "Hatvan, Eger, Miskolc",
+        "detay": [
+          {
+            "pref": "3000-3200",
+            "sehirler": "Hatvan, Gyöngyös, Eger"
+          },
+          {
+            "pref": "3500-3900",
+            "sehirler": "Miskolc, Ózd, Kazincbarcika, Sárospatak"
+          }
+        ]
+      },
+      {
+        "kod": "4xxx",
+        "bolge": "Debrecen, Nyíregyháza",
+        "detay": [
+          {
+            "pref": "4000-4100",
+            "sehirler": "Debrecen (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "4400-4800",
+            "sehirler": "Nyíregyháza, Kisvárda, Nyírbátor"
+          }
+        ]
+      },
+      {
+        "kod": "6xxx",
+        "bolge": "Kecskemét, Szeged",
+        "detay": [
+          {
+            "pref": "6000-6100",
+            "sehirler": "Kecskemét, Kiskunfélegyháza"
+          },
+          {
+            "pref": "6700-6900",
+            "sehirler": "Szeged, Makó, Hódmezővásárhely"
+          }
+        ]
+      },
+      {
+        "kod": "7xxx",
+        "bolge": "Pécs, Kaposvár",
+        "detay": [
+          {
+            "pref": "7400-7700",
+            "sehirler": "Kaposvár, Dombóvár, Bonyhád"
+          },
+          {
+            "pref": "7600-7900",
+            "sehirler": "Pécs, Mohács, Siklós, Szigetvár"
+          }
+        ]
+      },
+      {
+        "kod": "8xxx",
+        "bolge": "Székesfehérvár, Balaton",
+        "detay": [
+          {
+            "pref": "8000-8100",
+            "sehirler": "Székesfehérvár, Bicske, Mór"
+          },
+          {
+            "pref": "8200-8700",
+            "sehirler": "Veszprém, Balatonfüred, Siófok, Marcali"
+          }
+        ]
+      },
+      {
+        "kod": "9xxx",
+        "bolge": "Győr, Sopron",
+        "detay": [
+          {
+            "pref": "9000-9100",
+            "sehirler": "Győr (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "9200-9500",
+            "sehirler": "Mosonmagyaróvár, Sopron, Kapuvár"
+          },
+          {
+            "pref": "9700-9900",
+            "sehirler": "Szombathely, Körmend, Szentgotthárd"
+          }
+        ]
+      }
+    ]
+  },
+  "TR": {
+    "ad": "Türkiye",
+    "bayrak": "🇹🇷",
+    "format": "5 haneli (il kodu)",
+    "bolgeler": [
+      {
+        "kod": "01-09",
+        "bolge": "Akdeniz & Ege İlleri",
+        "detay": [
+          {
+            "pref": "01xxx",
+            "sehirler": "Adana"
+          },
+          {
+            "pref": "03xxx",
+            "sehirler": "Afyonkarahisar"
+          },
+          {
+            "pref": "06xxx",
+            "sehirler": "Ankara"
+          },
+          {
+            "pref": "07xxx",
+            "sehirler": "Antalya"
+          },
+          {
+            "pref": "09xxx",
+            "sehirler": "Aydın"
+          }
+        ]
+      },
+      {
+        "kod": "22, 59",
+        "bolge": "Trakya (TIR Koridoru)",
+        "detay": [
+          {
+            "pref": "22xxx",
+            "sehirler": "Edirne (Kapıkule sınır kapısı, Uzunköprü)"
+          },
+          {
+            "pref": "59xxx",
+            "sehirler": "Tekirdağ (TIR parkı, Çorlu, Çerkezköy)"
+          }
+        ]
+      },
+      {
+        "kod": "34, 41",
+        "bolge": "İstanbul ve Kocaeli",
+        "detay": [
+          {
+            "pref": "34xxx",
+            "sehirler": "İstanbul (Avrupa: 34000-34499, Anadolu: 34500-34999)"
+          },
+          {
+            "pref": "41xxx",
+            "sehirler": "Kocaeli (İzmit, Gebze, Körfez, Dilovası)"
+          }
+        ]
+      },
+      {
+        "kod": "06",
+        "bolge": "Ankara",
+        "detay": [
+          {
+            "pref": "06010-06490",
+            "sehirler": "Ankara Merkez ilçeler"
+          },
+          {
+            "pref": "06500-06980",
+            "sehirler": "Ankara dış ilçeler: Sincan, Etimesgut, Yenimahalle"
+          }
+        ]
+      },
+      {
+        "kod": "16, 26",
+        "bolge": "Bursa ve Eskişehir",
+        "detay": [
+          {
+            "pref": "16xxx",
+            "sehirler": "Bursa"
+          },
+          {
+            "pref": "26xxx",
+            "sehirler": "Eskişehir"
+          }
+        ]
+      }
+    ]
+  },
+  "NL": {
+    "ad": "Hollanda",
+    "bayrak": "🇳🇱",
+    "format": "4 rakam + 2 harf",
+    "bolgeler": [
+      {
+        "kod": "1xxx-2xxx",
+        "bolge": "Amsterdam, Den Haag",
+        "detay": [
+          {
+            "pref": "1000-1109",
+            "sehirler": "Amsterdam Merkez (Centrum, Jordaan, De Pijp)"
+          },
+          {
+            "pref": "1110-1500",
+            "sehirler": "Amsterdam Doğu, Diemen, Almere"
+          },
+          {
+            "pref": "2500-2599",
+            "sehirler": "Den Haag (Merkez ve ilçeleri)"
+          }
+        ]
+      },
+      {
+        "kod": "3xxx",
+        "bolge": "Rotterdam, Utrecht",
+        "detay": [
+          {
+            "pref": "3000-3099",
+            "sehirler": "Rotterdam Merkez (Centrum, Kralingen)"
+          },
+          {
+            "pref": "3100-3500",
+            "sehirler": "Schiedam, Vlaardingen, Delft"
+          },
+          {
+            "pref": "3500-3999",
+            "sehirler": "Utrecht (Merkez), Nieuwegein"
+          }
+        ]
+      },
+      {
+        "kod": "5xxx-6xxx",
+        "bolge": "Noord-Brabant, Limburg",
+        "detay": [
+          {
+            "pref": "5000-5199",
+            "sehirler": "Tilburg (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "5600-5900",
+            "sehirler": "Eindhoven (Merkez ve ilçeleri), Helmond"
+          },
+          {
+            "pref": "6200-6229",
+            "sehirler": "Maastricht"
+          },
+          {
+            "pref": "6500-6600",
+            "sehirler": "Nijmegen, Arnhem (Güney)"
+          }
+        ]
+      },
+      {
+        "kod": "7xxx-9xxx",
+        "bolge": "Kuzey (Zwolle, Groningen)",
+        "detay": [
+          {
+            "pref": "8000-8200",
+            "sehirler": "Zwolle, Kampen, Hardenberg"
+          },
+          {
+            "pref": "9700-9999",
+            "sehirler": "Groningen (Merkez ve ilçeleri)"
+          }
+        ]
+      }
+    ]
+  },
+  "PL": {
+    "ad": "Polonya",
+    "bayrak": "🇵🇱",
+    "format": "2 rakam - 3 rakam",
+    "bolgeler": [
+      {
+        "kod": "00-09",
+        "bolge": "Warszawa (Varşova)",
+        "detay": [
+          {
+            "pref": "00-09",
+            "sehirler": "Warszawa Merkez, Śródmieście, Wola, Praga"
+          }
+        ]
+      },
+      {
+        "kod": "30-49",
+        "bolge": "Kraków, Katowice, Śląsk",
+        "detay": [
+          {
+            "pref": "30-34",
+            "sehirler": "Kraków (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "40-44",
+            "sehirler": "Katowice, Sosnowiec, Gliwice, Bytom"
+          },
+          {
+            "pref": "50-55",
+            "sehirler": "Wrocław (Merkez ve ilçeleri)"
+          }
+        ]
+      },
+      {
+        "kod": "60-79",
+        "bolge": "Poznań, Szczecin, Gdańsk",
+        "detay": [
+          {
+            "pref": "60-62",
+            "sehirler": "Poznań (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "70-72",
+            "sehirler": "Szczecin (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "80-82",
+            "sehirler": "Gdańsk (Merkez), Gdynia, Sopot"
+          }
+        ]
+      },
+      {
+        "kod": "90-99",
+        "bolge": "Łódź, Orta Polonya",
+        "detay": [
+          {
+            "pref": "90-94",
+            "sehirler": "Łódź (Merkez ve ilçeleri)"
+          },
+          {
+            "pref": "95-99",
+            "sehirler": "Skierniewice, Piotrków Trybunalski"
+          }
+        ]
+      }
+    ]
+  },
+  "HR": {
+    "ad": "Hırvatistan",
+    "bayrak": "🇭🇷",
+    "format": "5 haneli",
+    "bolgeler": [
+      {
+        "kod": "10xxx",
+        "bolge": "Zagreb",
+        "detay": [
+          {
+            "pref": "10000",
+            "sehirler": "Zagreb Merkez (Grad Zagreb)"
+          },
+          {
+            "pref": "10020-10431",
+            "sehirler": "Zagreb ilçeleri: Sesvete, Stenjevec, Novi Zagreb"
+          }
+        ]
+      },
+      {
+        "kod": "2xxxx",
+        "bolge": "Dalmaçya",
+        "detay": [
+          {
+            "pref": "21xxx",
+            "sehirler": "Split-Dalmatia: Split, Kaštela, Trogir, Makarska"
+          },
+          {
+            "pref": "20xxx",
+            "sehirler": "Dubrovnik-Neretva: Dubrovnik, Korčula"
+          },
+          {
+            "pref": "23xxx",
+            "sehirler": "Zadar: Zadar, Biograd, Benkovac"
+          }
+        ]
+      },
+      {
+        "kod": "3xxxx-5xxxx",
+        "bolge": "Slavonya, İstriya",
+        "detay": [
+          {
+            "pref": "31xxx",
+            "sehirler": "Osijek, Đakovo, Beli Manastir"
+          },
+          {
+            "pref": "51xxx",
+            "sehirler": "Rijeka, Opatija, Crikvenica, Krk"
+          },
+          {
+            "pref": "52xxx",
+            "sehirler": "İstriya: Pula, Rovinj, Poreč, Umag"
+          }
+        ]
+      }
+    ]
+  },
+  "SI": {
+    "ad": "Slovenya",
+    "bayrak": "🇸🇮",
+    "format": "4 haneli",
+    "bolgeler": [
+      {
+        "kod": "1xxx",
+        "bolge": "Ljubljana",
+        "detay": [
+          {
+            "pref": "1000",
+            "sehirler": "Ljubljana Merkez"
+          },
+          {
+            "pref": "1001-1420",
+            "sehirler": "Ljubljana ilçeleri: Šiška, Vič, Moste, Polje"
+          }
+        ]
+      },
+      {
+        "kod": "2xxx-4xxx",
+        "bolge": "Maribor, Celje, Kranj",
+        "detay": [
+          {
+            "pref": "2000",
+            "sehirler": "Maribor Merkez"
+          },
+          {
+            "pref": "3000",
+            "sehirler": "Celje Merkez"
+          },
+          {
+            "pref": "4000",
+            "sehirler": "Kranj Merkez"
+          },
+          {
+            "pref": "4260",
+            "sehirler": "Bled"
+          }
+        ]
+      },
+      {
+        "kod": "5xxx-6xxx",
+        "bolge": "Nova Gorica, Koper",
+        "detay": [
+          {
+            "pref": "5000",
+            "sehirler": "Nova Gorica Merkez"
+          },
+          {
+            "pref": "6000",
+            "sehirler": "Koper (Capodistria), Portorož, Piran, Izola"
+          }
+        ]
+      }
+    ]
+  },
+  "RO": {
+    "ad": "Romanya",
+    "bayrak": "🇷🇴",
+    "format": "6 haneli",
+    "bolgeler": [
+      {
+        "kod": "01-06xxxx",
+        "bolge": "Bükreş (Bucharest)",
+        "detay": [
+          {
+            "pref": "01xxxx",
+            "sehirler": "Bükreş Sektör 1: Aviatorilor, Dorobanți, Floreasca"
+          },
+          {
+            "pref": "02xxxx",
+            "sehirler": "Bükreş Sektör 2: Colentina, Pantelimon"
+          },
+          {
+            "pref": "03xxxx",
+            "sehirler": "Bükreş Sektör 3: Titan, Dristor, Vitan"
+          },
+          {
+            "pref": "04xxxx",
+            "sehirler": "Bükreş Sektör 4: Berceni, Giurgiului"
+          },
+          {
+            "pref": "05xxxx",
+            "sehirler": "Bükreş Sektör 5: Rahova, Ferentari"
+          },
+          {
+            "pref": "06xxxx",
+            "sehirler": "Bükreş Sektör 6: Drumul Taberei, Militari"
+          }
+        ]
+      },
+      {
+        "kod": "10-50xxxx",
+        "bolge": "Büyük Şehirler",
+        "detay": [
+          {
+            "pref": "10xxxx",
+            "sehirler": "Prahova: Ploiești, Câmpina, Sinaia"
+          },
+          {
+            "pref": "20xxxx",
+            "sehirler": "Constanța: Constanța, Mangalia, Mamaia"
+          },
+          {
+            "pref": "30xxxx",
+            "sehirler": "Timiș: Timișoara, Lugoj"
+          },
+          {
+            "pref": "40xxxx",
+            "sehirler": "Cluj-Napoca Merkez ve ilçeleri"
+          },
+          {
+            "pref": "50xxxx",
+            "sehirler": "Brașov: Brașov, Sinaia, Predeal"
+          }
+        ]
+      },
+      {
+        "kod": "70-79xxxx",
+        "bolge": "Diğer İller",
+        "detay": [
+          {
+            "pref": "70xxxx",
+            "sehirler": "Bacău"
+          },
+          {
+            "pref": "71xxxx",
+            "sehirler": "Suceava"
+          },
+          {
+            "pref": "72xxxx",
+            "sehirler": "Iași"
+          },
+          {
+            "pref": "73xxxx",
+            "sehirler": "Galați"
+          },
+          {
+            "pref": "77xxxx",
+            "sehirler": "Sibiu"
+          },
+          {
+            "pref": "78xxxx",
+            "sehirler": "Alba Iulia"
+          },
+          {
+            "pref": "79xxxx",
+            "sehirler": "Târgu Mureș"
+          }
+        ]
+      }
+    ]
+  },
+  "GR": {
+    "ad": "Yunanistan",
+    "bayrak": "🇬🇷",
+    "format": "5 haneli",
+    "bolgeler": [
+      {
+        "kod": "100-199",
+        "bolge": "Atina (Attika)",
+        "detay": [
+          {
+            "pref": "100-115",
+            "sehirler": "Atina Merkez: Kolonaki, Exarchia, Pangrati, Kypseli"
+          },
+          {
+            "pref": "116-124",
+            "sehirler": "Atina Güney: Kallithea, Moschato, Tavros"
+          },
+          {
+            "pref": "130-145",
+            "sehirler": "Atina Kuzey: Kifisia, Marousi, Chalandri"
+          },
+          {
+            "pref": "185",
+            "sehirler": "Piraeus (Pire) Merkez"
+          },
+          {
+            "pref": "190-199",
+            "sehirler": "Elefsina, Marathon, Rafina, Spata (Havaalanı)"
+          }
+        ]
+      },
+      {
+        "kod": "540-570",
+        "bolge": "Selanik (Thessaloniki)",
+        "detay": [
+          {
+            "pref": "541-570",
+            "sehirler": "Selanik: Merkez, Kalamaria, Panorama, Thermi"
+          }
+        ]
+      },
+      {
+        "kod": "600-641",
+        "bolge": "Kuzey Yunanistan",
+        "detay": [
+          {
+            "pref": "600-641",
+            "sehirler": "Kavala, Drama, Serres, Xanthi, Komotini, Alexandroupoli"
+          }
+        ]
+      },
+      {
+        "kod": "700-745",
+        "bolge": "Girit ve Adalar",
+        "detay": [
+          {
+            "pref": "700-745",
+            "sehirler": "Girit: Heraklion, Chania, Rethymno"
+          },
+          {
+            "pref": "851-855",
+            "sehirler": "Rhodes (Rodos), Kos, Samos"
+          }
+        ]
+      }
+    ]
+  },
+  "IT": {
+    "ad": "İtalya",
+    "bayrak": "🇮🇹",
+    "format": "5 haneli (CAP)",
+    "bolgeler": [
+      {
+        "kod": "00-09",
+        "bolge": "Roma, Sardegna",
+        "detay": [
+          {
+            "pref": "00",
+            "sehirler": "Roma: Merkez (00100), Parioli, Prati, Trastevere, EUR, Ostia"
+          },
+          {
+            "pref": "01",
+            "sehirler": "Viterbo, Rieti, Civitavecchia"
+          },
+          {
+            "pref": "04",
+            "sehirler": "Latina, Terracina, Formia"
+          },
+          {
+            "pref": "09",
+            "sehirler": "Cagliari (Sardegna Güney)"
+          }
+        ]
+      },
+      {
+        "kod": "10-19",
+        "bolge": "Piemonte, Liguria (Torino, Genova)",
+        "detay": [
+          {
+            "pref": "10",
+            "sehirler": "Torino: Merkez, Mirafiori, Lingotto"
+          },
+          {
+            "pref": "12",
+            "sehirler": "Cuneo, Alba, Savigliano"
+          },
+          {
+            "pref": "16",
+            "sehirler": "Genova: Merkez, Sampierdarena"
+          },
+          {
+            "pref": "18",
+            "sehirler": "Imperia, Sanremo, Ventimiglia"
+          },
+          {
+            "pref": "19",
+            "sehirler": "La Spezia, Sarzana"
+          }
+        ]
+      },
+      {
+        "kod": "20-29",
+        "bolge": "Lombardia (Milano)",
+        "detay": [
+          {
+            "pref": "20",
+            "sehirler": "Milano: Merkez, Navigli, Brera, Isola, Bicocca"
+          },
+          {
+            "pref": "21",
+            "sehirler": "Varese, Busto Arsizio, Gallarate"
+          },
+          {
+            "pref": "22",
+            "sehirler": "Como, Lecco, Cantù"
+          },
+          {
+            "pref": "24",
+            "sehirler": "Bergamo: Merkez, Dalmine, Treviglio"
+          },
+          {
+            "pref": "25",
+            "sehirler": "Brescia: Merkez, Desenzano (Garda)"
+          }
+        ]
+      },
+      {
+        "kod": "30-39",
+        "bolge": "Veneto, Trentino (Venezia, Verona)",
+        "detay": [
+          {
+            "pref": "30",
+            "sehirler": "Venezia (Venedik): Mestre, Marghera, Chioggia"
+          },
+          {
+            "pref": "35",
+            "sehirler": "Padova (Padua): Merkez, Abano Terme"
+          },
+          {
+            "pref": "37",
+            "sehirler": "Verona: Merkez, Villafranca"
+          },
+          {
+            "pref": "38",
+            "sehirler": "Trento, Rovereto (Trentino)"
+          },
+          {
+            "pref": "39",
+            "sehirler": "Bolzano/Bozen, Merano/Meran (Güney Tirol)"
+          }
+        ]
+      },
+      {
+        "kod": "40-59",
+        "bolge": "Emilia-Romagna, Toscana",
+        "detay": [
+          {
+            "pref": "40",
+            "sehirler": "Bologna: Merkez, Imola"
+          },
+          {
+            "pref": "41",
+            "sehirler": "Modena, Carpi, Sassuolo"
+          },
+          {
+            "pref": "43",
+            "sehirler": "Parma, Fidenza"
+          },
+          {
+            "pref": "47",
+            "sehirler": "Forlì-Cesena, Rimini"
+          },
+          {
+            "pref": "50",
+            "sehirler": "Firenze (Floransa): Merkez, Scandicci"
+          },
+          {
+            "pref": "56",
+            "sehirler": "Pisa, Pontedera, Volterra"
+          },
+          {
+            "pref": "57",
+            "sehirler": "Livorno, Piombino"
+          }
+        ]
+      },
+      {
+        "kod": "70-89",
+        "bolge": "Güney İtalya, Sicilya",
+        "detay": [
+          {
+            "pref": "70",
+            "sehirler": "Bari: Merkez, Altamura, Molfetta"
+          },
+          {
+            "pref": "80",
+            "sehirler": "Napoli: Merkez, Posillipo, Bagnoli"
+          },
+          {
+            "pref": "84",
+            "sehirler": "Salerno, Amalfi, Positano"
+          },
+          {
+            "pref": "87",
+            "sehirler": "Cosenza, Rende (Calabria)"
+          },
+          {
+            "pref": "90",
+            "sehirler": "Palermo: Merkez, Monreale (Sicilya)"
+          },
+          {
+            "pref": "95",
+            "sehirler": "Catania: Merkez, Acireale (Sicilya)"
+          }
+        ]
+      }
+    ]
+  },
+  "CZ": {
+    "ad": "Çekya",
+    "bayrak": "🇨🇿",
+    "format": "5 haneli (PSČ)",
+    "bolgeler": [
+      {
+        "kod": "1xx",
+        "bolge": "Praha (Prag)",
+        "detay": [
+          {
+            "pref": "100-109",
+            "sehirler": "Praha 1-9: Staré Město, Nové Město, Vinohrady"
+          },
+          {
+            "pref": "110-149",
+            "sehirler": "Praha 10-21: Vršovice, Nusle, Smíchov"
+          }
+        ]
+      },
+      {
+        "kod": "3xx-4xx",
+        "bolge": "Bohemya (Plzeň, Liberec)",
+        "detay": [
+          {
+            "pref": "301-340",
+            "sehirler": "Plzeň (Pilsen): Merkez ve ilçeleri"
+          },
+          {
+            "pref": "370-399",
+            "sehirler": "České Budějovice, Třeboň, Písek"
+          },
+          {
+            "pref": "400-418",
+            "sehirler": "Ústí nad Labem, Děčín, Teplice, Most"
+          }
+        ]
+      },
+      {
+        "kod": "6xx",
+        "bolge": "Güney Moravya (Brno)",
+        "detay": [
+          {
+            "pref": "600-620",
+            "sehirler": "Brno: Merkez, Žabovřesky, Bystrc, Líšeň"
+          },
+          {
+            "pref": "621-699",
+            "sehirler": "Znojmo, Třebíč, Jihlava, Břeclav"
+          }
+        ]
+      },
+      {
+        "kod": "7xx",
+        "bolge": "Kuzey Moravya (Ostrava)",
+        "detay": [
+          {
+            "pref": "700-720",
+            "sehirler": "Ostrava: Merkez, Poruba, Vítkovice"
+          },
+          {
+            "pref": "741-799",
+            "sehirler": "Opava, Karviná, Frýdek-Místek, Havířov"
+          }
+        ]
+      }
+    ]
+  },
+  "SK": {
+    "ad": "Slovakya",
+    "bayrak": "🇸🇰",
+    "format": "5 haneli (PSČ)",
+    "bolgeler": [
+      {
+        "kod": "8xx",
+        "bolge": "Bratislava",
+        "detay": [
+          {
+            "pref": "811-841",
+            "sehirler": "Bratislava: Staré Mesto, Petržalka, Ružinov"
+          },
+          {
+            "pref": "842-899",
+            "sehirler": "Bratislava çevresi: Senec, Malacky, Pezinok"
+          }
+        ]
+      },
+      {
+        "kod": "9xx",
+        "bolge": "Batı ve Orta Slovakya",
+        "detay": [
+          {
+            "pref": "917",
+            "sehirler": "Trnava, Hlohovec, Piešťany"
+          },
+          {
+            "pref": "949",
+            "sehirler": "Nitra, Zlaté Moravce"
+          },
+          {
+            "pref": "974",
+            "sehirler": "Banská Bystrica, Brezno"
+          }
+        ]
+      },
+      {
+        "kod": "0xx",
+        "bolge": "Kuzey ve Doğu Slovakya",
+        "detay": [
+          {
+            "pref": "010",
+            "sehirler": "Žilina, Bytča"
+          },
+          {
+            "pref": "040-044",
+            "sehirler": "Košice: Merkez, Sever, Juh"
+          },
+          {
+            "pref": "058",
+            "sehirler": "Poprad, Tatry, Kežmarok"
+          },
+          {
+            "pref": "080",
+            "sehirler": "Prešov, Sabinov, Bardejov"
+          }
+        ]
+      }
+    ]
+  },
+  "FR": {
+    "ad": "Fransa",
+    "bayrak": "🇫🇷",
+    "format": "5 haneli",
+    "bolgeler": [
+      {
+        "kod": "06, 13",
+        "bolge": "Güney Fransa (Nice, Marseille)",
+        "detay": [
+          {
+            "pref": "06",
+            "sehirler": "Alpes-Maritimes: Nice, Cannes, Antibes, Menton"
+          },
+          {
+            "pref": "13001-13016",
+            "sehirler": "Marseille 1.-16. arrondissement"
+          },
+          {
+            "pref": "13100-13960",
+            "sehirler": "Aix-en-Provence, Arles, Martigues"
+          }
+        ]
+      },
+      {
+        "kod": "31, 33",
+        "bolge": "Toulouse, Bordeaux",
+        "detay": [
+          {
+            "pref": "31",
+            "sehirler": "Haute-Garonne: Toulouse, Colomiers, Muret"
+          },
+          {
+            "pref": "33",
+            "sehirler": "Gironde: Bordeaux, Mérignac, Pessac, Arcachon"
+          }
+        ]
+      },
+      {
+        "kod": "38, 69",
+        "bolge": "Lyon, Grenoble",
+        "detay": [
+          {
+            "pref": "38",
+            "sehirler": "Isère: Grenoble, Bourgoin-Jallieu, Vienne"
+          },
+          {
+            "pref": "69",
+            "sehirler": "Rhône: Lyon (1-9. arr.), Villeurbanne, Bron"
+          }
+        ]
+      },
+      {
+        "kod": "44, 67, 75",
+        "bolge": "Paris, Nantes, Strasbourg",
+        "detay": [
+          {
+            "pref": "44",
+            "sehirler": "Loire-Atlantique: Nantes, Saint-Nazaire"
+          },
+          {
+            "pref": "67",
+            "sehirler": "Bas-Rhin: Strasbourg, Haguenau, Saverne"
+          },
+          {
+            "pref": "75",
+            "sehirler": "Paris: 75001-75020 (1.-20. arrondissement)"
+          }
+        ]
+      },
+      {
+        "kod": "59, 62",
+        "bolge": "Kuzey Fransa (Lille)",
+        "detay": [
+          {
+            "pref": "59",
+            "sehirler": "Nord: Lille, Roubaix, Tourcoing, Dunkerque"
+          },
+          {
+            "pref": "62",
+            "sehirler": "Pas-de-Calais: Arras, Calais, Boulogne-sur-Mer"
+          }
+        ]
+      }
+    ]
+  },
+  "BE": {
+    "ad": "Belçika",
+    "bayrak": "🇧🇪",
+    "format": "4 haneli",
+    "bolgeler": [
+      {
+        "kod": "1xxx",
+        "bolge": "Brüksel ve Brabant",
+        "detay": [
+          {
+            "pref": "1000-1099",
+            "sehirler": "Brüksel: Merkez, Ixelles, Etterbeek, Uccle"
+          },
+          {
+            "pref": "1500-1999",
+            "sehirler": "Flemish Brabant: Halle, Vilvoorde, Leuven"
+          }
+        ]
+      },
+      {
+        "kod": "2xxx",
+        "bolge": "Antwerpen",
+        "detay": [
+          {
+            "pref": "2000-2099",
+            "sehirler": "Antwerpen: Merkez, Berchem, Borgerhout"
+          },
+          {
+            "pref": "2100-2990",
+            "sehirler": "Mechelen, Turnhout, Herentals, Geel, Mol"
+          }
+        ]
+      },
+      {
+        "kod": "4xxx",
+        "bolge": "Liège",
+        "detay": [
+          {
+            "pref": "4000-4099",
+            "sehirler": "Liège: Merkez, Guillemins, Outremeuse"
+          },
+          {
+            "pref": "4100-4990",
+            "sehirler": "Huy, Seraing, Verviers, Eupen, Spa"
+          }
+        ]
+      },
+      {
+        "kod": "8xxx-9xxx",
+        "bolge": "Gent, Brugge (Vlaanderen)",
+        "detay": [
+          {
+            "pref": "8000-8099",
+            "sehirler": "Brugge (Bruges): Merkez, Sint-Michiels"
+          },
+          {
+            "pref": "8200-8990",
+            "sehirler": "Oostende, Kortrijk, Roeselare, Ieper"
+          },
+          {
+            "pref": "9000-9099",
+            "sehirler": "Gent: Merkez, Ledeberg, Sint-Amandsberg"
+          },
+          {
+            "pref": "9100-9999",
+            "sehirler": "Sint-Niklaas, Aalst, Dendermonde, Ronse"
+          }
+        ]
+      }
+    ]
+  }
+}
