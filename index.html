@@ -3111,8 +3111,15 @@ select{font:inherit}
     </div>
     <div class="d-form-row">
       <div class="dfg"><label>Plaka</label><input type="text" id="d-s-plate" placeholder="34 ABC 123"></div>
+      <div class="dfg"><label>Dorse Plaka</label><input type="text" id="d-s-trailer" placeholder="34 XYZ 456"></div>
+    </div>
+    <div class="d-form-row">
       <div class="dfg"><label>Araç Tipi</label>
         <select id="d-s-vehicle"><option value="truck">🚛 Kamyon</option><option value="bus">🚌 Otobüs</option><option value="van">🚐 Van</option></select></div>
+      <div class="dfg"></div>
+    </div>
+    <div style="font-family:var(--sans);font-size:.72rem;color:#7a92b0;margin:-6px 0 10px;">
+      🔗 Plaka ve Dorse Plaka, Mazot Takip uygulamasından otomatik senkronize edilir. Orada güncellersen burada da otomatik güncellenir.
     </div>
     <div class="d-form-row">
       <div class="dfg"><label>Araç Muayene Tarihi</label><input type="date" id="d-s-inspection-exp"></div>
@@ -6085,6 +6092,22 @@ let D={
   curAct:null, curActStart:null,
   lastCountry:'TR',
 };
+// Mazot Takip uygulaması (aynı adreste barınan ayrı bir uygulama) ile plaka/dorse plaka
+// bilgisini paylaşır. Mazot Takip, plaka her değiştiğinde bu ortak alana yazıyor;
+// HÇ TACHO da her açılışta buradan okuyup kendi Sürücü Bilgileri'ni günceller.
+// Mazot Takip "kaynak" kabul edilir — oradaki değer burada da geçerli olur.
+function mazotTakipPlakaSenkronizeEt(){
+  try{
+    const paylasilan = localStorage.getItem('hc_paylasilan_arac');
+    if(!paylasilan) return;
+    const veri = JSON.parse(paylasilan);
+    if(!veri) return;
+    if(veri.aracPlaka) D.driver.plate = veri.aracPlaka;
+    if(veri.dorsePlaka) D.driver.trailerPlate = veri.dorsePlaka;
+    dSave();
+  }catch(e){ console.warn('[Plaka Senkronizasyonu] hata:', e); }
+}
+
 function dLoad(){
   try{
     const r=localStorage.getItem(DSK);
@@ -7956,7 +7979,7 @@ window.dGenerateReport=function(){
 
 /* ────────────────── AYARLAR ────────────────── */
 function dLoadSettings(){
-  const fields=[['d-s-name','name'],['d-s-card','card'],['d-s-plate','plate'],['d-s-company','company']];
+  const fields=[['d-s-name','name'],['d-s-card','card'],['d-s-plate','plate'],['d-s-trailer','trailerPlate'],['d-s-company','company']];
   fields.forEach(([id,key])=>{const el=g(id);if(el)el.value=D.driver[key]||'';});
   const sv=g('d-s-vehicle');if(sv)sv.value=D.driver.vehicle||'truck';
   const sc=g('d-s-home-country');if(sc)sc.value=D.driver.homeCountry||'TR';
@@ -7980,7 +8003,7 @@ function dLoadSettings(){
 }
 window.dSaveSettings=function(){
   D.driver.name=(g('d-s-name')||{}).value;D.driver.card=(g('d-s-card')||{}).value;
-  D.driver.plate=(g('d-s-plate')||{}).value;D.driver.vehicle=(g('d-s-vehicle')||{}).value;
+  D.driver.plate=(g('d-s-plate')||{}).value;D.driver.trailerPlate=(g('d-s-trailer')||{}).value;D.driver.vehicle=(g('d-s-vehicle')||{}).value;
   D.driver.company=(g('d-s-company')||{}).value;D.driver.homeCountry=(g('d-s-home-country')||{}).value;
   // ★ Belge tarihleri
   D.driver.cardExp=(g('d-s-card-exp')||{}).value || '';
@@ -8440,7 +8463,9 @@ window.dortHaftaRaporOlustur = function(){
 
 /* ────────────────── SEL-START / SEL-END HOOK ────────────────── */
 document.addEventListener('DOMContentLoaded',function(){
-  dLoad();fillCountrySelects();dLoadSettings();
+  dLoad();
+  mazotTakipPlakaSenkronizeEt();
+  fillCountrySelects();dLoadSettings();
 
   // Tarih alanlarını doldur
   const now=new Date(),td=now.toISOString().slice(0,10),tdl=now.toISOString().slice(0,16);
