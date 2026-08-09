@@ -1629,6 +1629,7 @@ select{font:inherit}
 .d-gauge{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:12px}
 .d-g-lbl{font-size:.78rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7a92b0;margin-bottom:6px}
 .d-g-val{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1;color:#00c8ff}
+.d-g-val-buyuk{font-size:2.3rem;}
 .d-g-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:8px;overflow:hidden}
 .d-g-fill{height:100%;border-radius:2px;transition:width .5s}
 .d-g-sub{font-size:.78rem;color:#7a92b0;margin-top:5px;font-weight:600}
@@ -1814,6 +1815,7 @@ select{font:inherit}
 .d-gauge{background:#16202e;border:1px solid #2a3850;border-radius:6px;padding:12px}
 .d-g-lbl{font-size:.78rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#7a92b0;margin-bottom:6px}
 .d-g-val{font-family:var(--mono);font-size:1.65rem;font-weight:700;line-height:1;color:#00c8ff}
+.d-g-val-buyuk{font-size:2.3rem;}
 .d-g-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:8px;overflow:hidden}
 .d-g-fill{height:100%;border-radius:2px;transition:width .5s}
 .d-g-sub{font-size:.78rem;color:#7a92b0;margin-top:5px;font-weight:600}
@@ -1879,7 +1881,7 @@ select{font:inherit}
 #gps-durum-bar.aktif{display:flex}
 #gps-nokta{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:gps-blink 1s infinite}
 @keyframes gps-blink{0%,100%{opacity:1}50%{opacity:.2}}
-#gps-hiz{font-family:var(--mono);font-size:1rem;color:#22c55e;font-weight:700}
+#gps-hiz{font-family:var(--mono);font-size:1.5rem;color:#22c55e;font-weight:700}
 #gps-bilgi{color:var(--text2);font-size:.7rem;flex:1;margin-left:8px}
 #gps-kapat-btn{font-size:.7rem;color:var(--sub);padding:3px 8px;border:1px solid var(--border);border-radius:3px;cursor:pointer}
 </style>
@@ -2417,8 +2419,8 @@ select{font:inherit}
     <div class="d-s-timer" id="d-stimer">00:00:00</div>
   </div>
   <div class="d-gauge-grid">
-    <div class="d-gauge"><div class="d-g-lbl">Günlük Sürüş</div><div class="d-g-val" id="dg-dd">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dgf-dd" style="width:0%"></div></div><div class="d-g-sub">Limit 9:00</div></div>
-    <div class="d-gauge"><div class="d-g-lbl">Kesintisiz</div><div class="d-g-val" id="dg-cd">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dgf-cd" style="width:0%"></div></div><div class="d-g-sub">Limit 4:30</div></div>
+    <div class="d-gauge"><div class="d-g-lbl">Günlük Sürüş</div><div class="d-g-val d-g-val-buyuk" id="dg-dd">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dgf-dd" style="width:0%"></div></div><div class="d-g-sub">Limit 9:00</div></div>
+    <div class="d-gauge"><div class="d-g-lbl">Kesintisiz</div><div class="d-g-val d-g-val-buyuk" id="dg-cd">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dgf-cd" style="width:0%"></div></div><div class="d-g-sub">Limit 4:30</div></div>
     <div class="d-gauge"><div class="d-g-lbl">Haftalık</div><div class="d-g-val" id="dg-wd">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dgf-wd" style="width:0%"></div></div><div class="d-g-sub">Limit 56:00</div></div>
     <div class="d-gauge"><div class="d-g-lbl">Dinlenme</div><div class="d-g-val" id="dg-rd">0:00</div><div class="d-g-bar"><div class="d-g-fill" id="dgf-rd" style="width:0%"></div></div><div class="d-g-sub">Gerekli 11:00</div></div>
   </div>
